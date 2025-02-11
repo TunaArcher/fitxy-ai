@@ -60,11 +60,11 @@ class CustomerModel
         return $builder->where('Customername', $Customername)->get()->getResult();
     }
 
-    public function getCustomerByUIDAndPlatform($UID, $platform)
+    public function getCustomerByUID($UID)
     {
         $builder = $this->db->table('customers');
 
-        return $builder->where('uid', $UID)->where('platform', $platform)->get()->getRow();
+        return $builder->where('uid', $UID)->get()->getRow();
     }
 
     public function insertMessageSetting($data)

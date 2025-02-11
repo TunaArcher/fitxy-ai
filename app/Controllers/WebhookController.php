@@ -3,22 +3,27 @@
 namespace App\Controllers;
 
 use App\Factories\HandlerFactory;
+use App\Handlers\LineHandler;
+use App\Integrations\Line\LineClient;
+use App\Libraries\ChatGPT;
 use App\Models\MessageModel;
 use App\Models\MessageRoomModel;
 use App\Models\SubscriptionModel;
 use App\Models\UserModel;
-use App\Models\UserSocialModel;
+use App\Models\AccountModel;
 use App\Services\MessageService;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Libraries\RabbitMQPublisher;
+use App\Models\CustomerModel;
 
 class WebhookController extends BaseController
 {
     private MessageService $messageService;
 
     private UserModel $userModel;
-    private UserSocialModel $userSocialModel;
+    private AccountModel $accountModel;
     private SubscriptionModel $subscriptionModel;
+    private CustomerModel $customerModel;
 
     private RabbitMQPublisher $rabbitMQPublisher;
 
@@ -26,8 +31,8 @@ class WebhookController extends BaseController
     {
         $this->messageService = new MessageService();
 
-        $this->userModel = new UserModel();
-        $this->userSocialModel = new UserSocialModel();
+        $this->customerModel = new CustomerModel();
+        $this->accountModel = new AccountModel();
         $this->subscriptionModel = new SubscriptionModel();
 
         $this->rabbitMQPublisher = new RabbitMQPublisher();
@@ -38,42 +43,8 @@ class WebhookController extends BaseController
      */
     public function verifyWebhook($slug)
     {
-        $hubMode = $this->request->getGet('hub_mode');
-        $hubVerifyToken = $this->request->getGet('hub_verify_token');
-        $hubChallenge = $this->request->getGet('hub_challenge');
-
-        switch ($slug) {
-            case 'facebook':
-                if ($hubVerifyToken === 'HAPPY_FACEBOOK') {
-                    // ตอบกลับสำหรับ Facebook
-                    return $this->response
-                        ->setStatusCode(ResponseInterface::HTTP_OK)
-                        ->setBody($hubChallenge);
-                }
-                break;
-
-            case 'instagram':
-                if ($hubVerifyToken === 'HAPPY_INSTAGRAM') {
-                    // ตอบกลับสำหรับ Instagram
-                    return $this->response
-                        ->setStatusCode(ResponseInterface::HTTP_OK)
-                        ->setBody($hubChallenge);
-                }
-                break;
-
-            case 'whatsapp':
-                if ($hubVerifyToken === 'HAPPY_WHATSAPP') {
-                    // ตอบกลับสำหรับ WhatsApp
-                    echo $hubChallenge; // ส่ง Challenge กลับไป
-                    http_response_code(200);
-                    exit;
-                }
-                break;
-            default:
-                break;
-        }
-
-        return $this->response->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST);
+        echo "what's up yo!";
+        exit();
     }
 
     /**
@@ -83,139 +54,272 @@ class WebhookController extends BaseController
     {
         $input = $this->request->getJSON();
 
-        // debug
-        // log_message('info', "ข้อความเข้า Webhook  " . json_encode($input, JSON_PRETTY_PRINT));
+        if ($slug == 'x') $this->handleWebhook($input);
+    }
 
-        try {
-            // กำหนด $userSocial ไว้ใน scope เพื่อใช้งานในภายหลัง
-            $userSocial = null;
+    public function handleWebhook()
+    {
+        if (getenv('CI_ENVIRONMENT') === 'development') {
+            $input = $this->getMockLineWebhookData();
+        }
 
-            switch ($slug) {
-                case 'facebook':
-                    $userSocial = $this->handleFacebook($input);
-                    break;
+        // ดึงข้อมูล Platform ที่ Webhook เข้ามา
+        // ตรวจสอบว่าเป็น Message ข้อความ, รูปภาพ, เสียง และจัดการ
+        $message = $this->processMessage($input);
 
-                case 'instagram':
-                    $userSocial = $this->handleInstagram($input);
-                    break;
+        // ตรวจสอบหรือสร้างลูกค้า
+        $customer = $this->getOrCreateCustomer($message['UID']);
 
-                case 'whatsapp':
-                    $userSocial = $this->handleWhatsApp($input);
-                    break;
+        // ข้อความตอบกลับ
+        $chatGPT = new ChatGPT(['GPTToken' => getenv('GPT_TOKEN')]);
 
-                default:
-                    $userSocial = $this->handleLine($slug);
-                    break;
-            }
+        $repyleMessage = $message['img_url'] == ''
+            ? $chatGPT->askChatGPT($messageRoom->id, $message['message'], $dataMessage)
+            : $chatGPT->askChatGPT($messageRoom->id, $message['message'], $dataMessage, $message['img_url']);
 
-            // ดำเนินการหากพบ $userSocial
-            if ($userSocial) {
+        $line =  new LineClient([
+            'userSocialID' => $userSocial->id,
+            'accessToken' => $userSocial->line_channel_access_token,
+            'channelID' => $userSocial->line_channel_id,
+            'channelSecret' => $userSocial->line_channel_secret,
+        ]);
 
-                log_message('info', "ข้อความเข้า Webhook {$userSocial->platform}: " . json_encode($input, JSON_PRETTY_PRINT));
+        $line->pushMessage($UID, $message, $messageType);
+    }
 
-                $handler = HandlerFactory::createHandler($userSocial->platform, $this->messageService);
-                $messageRoom = $handler->handleWebhook($input, $userSocial);
+    // -----------------------------------------------------------------------------
+    // Helper
+    // -----------------------------------------------------------------------------
 
-                // กรณีเปิดใช้งานให้ AI ช่วยตอบ
-                if ($userSocial->ai === 'on' && $messageRoom) {
+    private function processMessage($input)
+    {
+        $event = $input->events[0];
+        $UID = $event->source->userId;
+        // $message = $event->message->text;
 
-                    $user = $this->userModel->getUserByID($userSocial->user_id);
-                    $subscription = $this->subscriptionModel->getUserSubscription($user->id);
+        $eventType = $event->message->type;
 
-                    if (!$subscription) {
-                        if ($user->free_request_limit < 10) {
-                            // ส่งข้อความไปที่ RabbitMQ แทนการรอ 5 วินาที
-                            $this->rabbitMQPublisher->publishMessage($messageRoom, $userSocial);
-                            $this->userModel->updateUserByID($user->id, [
-                                'free_request_limit' => $user->free_request_limit + 1
-                            ]);
-                        }
-                    } elseif ($subscription->status == 'active' && $subscription->current_period_end > time()) {
-                        // ส่งข้อความไปที่ RabbitMQ แทนการรอ 5 วินาที
-                        $this->rabbitMQPublisher->publishMessage($messageRoom, $userSocial);
-                    }
+        switch ($eventType) {
+
+                // เคสข้อความ
+            case 'text':
+                $messageType = 'text';
+                $message = $event->message->text;
+                break;
+
+                // เคสรูปภาพหรือ attachment อื่น ๆ
+            case 'image':
+
+                $messageType = 'image';
+
+                $messageId = $event->message->id;
+                $lineAccessToken = $userSocial->line_channel_access_token;
+
+                $url = "https://api-data.line.me/v2/bot/message/{$messageId}/content";
+                $headers = ["Authorization: Bearer {$lineAccessToken}"];
+
+                // ดึงข้อมูลไฟล์จาก Webhook LINE
+                $fileContent = fetchFileFromWebhook($url, $headers);
+
+                // ตั้งชื่อไฟล์แบบสุ่ม
+                $fileName = uniqid('line_') . '.jpg';
+
+                // อัปโหลดไปยัง Spaces
+                $message = uploadToSpaces(
+                    $fileContent,
+                    $fileName,
+                    $messageType,
+                    $this->platform
+                );
+
+                break;
+
+                // เคสเสียง
+            case 'audio':
+                $messageType = 'audio';
+
+                $messageId = $event->message->id;
+                $lineAccessToken = $userSocial->line_channel_access_token;
+
+                $url = "https://api-data.line.me/v2/bot/message/{$messageId}/content";
+                $headers = ["Authorization: Bearer {$lineAccessToken}"];
+
+                // ดึงข้อมูลไฟล์จาก Webhook LINE
+                $fileContent = fetchFileFromWebhook($url, $headers);
+
+                // ตั้งชื่อไฟล์แบบสุ่ม
+                $fileName = uniqid('line_') . '.m4a';
+
+                // อัปโหลดไปยัง DigitalOcean Spaces
+                $message = uploadToSpaces(
+                    $fileContent,
+                    $fileName,
+                    $messageType,
+                    $this->platform
+                );
+
+                break;
+
+            default;
+        }
+
+        return [
+            'UID' => $UID,
+            'type' => $messageType,
+            'content' => $message,
+        ];
+    }
+
+    // Logic การสร้างหรือดึงข้อมูลลูกค้า
+    public function getOrCreateCustomer($UID)
+    {
+
+        $customer = $this->customerModel->getCustomerByUID($UID);
+
+        if (!$customer) {
+
+            $account = $this->accountModel->getAccountByID(128);
+
+            $lineAPI = new LineClient([
+                'id' => $account->id,
+                'accessToken' => $account->line_channel_access_token,
+                'channelID' => $account->line_channel_id,
+                'channelSecret' => $account->line_channel_secret,
+            ]);
+            
+            $profile = $lineAPI->getUserProfile($UID);
+
+            $customerID = $this->customerModel->insertCustomer([
+                'uid' => $UID,
+                'name' => $profile->displayName,
+                'profile' => $profile->pictureUrl
+            ]);
+
+            return $this->customerModel->getCustomerByID($customerID);
+        }
+
+        return $customer;
+    }
+
+    private function getMockLineWebhookData()
+    {
+        // TEXT
+        return json_decode(
+            '{
+            "destination": "U3cc700ae815f9f7e37ea930b7b66b2c1",
+            "events": [
+                {
+                    "type": "message",
+                    "message": {
+                        "type": "text",
+                        "id": "545655842000077303",
+                        "quoteToken": "cGR08Boi4mUH0aJ2IPb11MNt7guGiglOO3XlF2-JDmUxbTXzexfqvXiiHZ3TPfUwhlheSMslhGk-eQPiGsvziGNo4AXvbDhokDglNTnzR0gB0jIkDvCWQQbgIzVyv6D2P-k6zVQXgYl0tyyWNOFMdA",
+                        "text": "\u0e23\u0e16"
+                    },
+                    "webhookEventId": "01JJPEBMSMCCAS02MPW7RGXZWQ",
+                    "deliveryContext": {
+                        "isRedelivery": false
+                    },
+                    "timestamp": 1738067530428,
+                    "source": {
+                        "type": "user",
+                        "userId": "U793093e057eb0dcdecc34012361d0217"
+                    },
+                    "replyToken": "d618defc144e43278bf2d6715ef701e2",
+                    "mode": "active"
                 }
+            ]
+        }'
+        );
 
-                return $this->response->setJSON(['status' => 'success']);
-            }
-        } catch (\InvalidArgumentException $e) {
+        // return json_decode(
+        //     '{
+        //     "destination": "U3cc700ae815f9f7e37ea930b7b66b2c1",
+        //     "events": [
+        //         {
+        //             "type": "message",
+        //             "message": {
+        //                 "type": "text",
+        //                 "id": "545655859934921237",
+        //                 "quoteToken": "kKZh_dz7HIZBv-ZjBsMUbeKbaGDCyPs9dNff0zcQkGlgmA9l-1PMsg6PLRQtteMGrufJtv2_fdLC0qRSJX_tbu5LQ3gjs4G3QDQJUWwAYiFcvIRV6fD49a_A16xhHvhKv0NTI68dNW0_YG8CWo6l0g",
+        //                 "text": "\u0e04\u0e31\u0e19\u0e19\u0e35\u0e49\u0e2d\u0e30\u0e44\u0e23"
+        //             },
+        //             "webhookEventId": "01JJPEBZHJCEMYFMJXD2WAPNX6",
+        //             "deliveryContext": {
+        //                 "isRedelivery": false
+        //             },
+        //             "timestamp": 1738067541066,
+        //             "source": {
+        //                 "type": "user",
+        //                 "userId": "U793093e057eb0dcdecc34012361d0217"
+        //             },
+        //             "replyToken": "a2edad6d122747cb96c331832e984be5",
+        //             "mode": "active"
+        //         }
+        //     ]
+        // }'
+        // );
 
-            log_message('error', "WebhookController error: " . $e->getMessage());
+        // Image
+        // return json_decode(
+        //     '{
+        //     "destination": "U3cc700ae815f9f7e37ea930b7b66b2c1",
+        //     "events": [
+        //         {
+        //             "type": "message",
+        //             "message": {
+        //                 "type": "image",
+        //                 "id": "545609780438499330",
+        //                 "quoteToken": "2hTD5_GTcCNcOLqEXWrPFD7wqV1mRtIysYrI8USZF7dAoCJeN-tpaoi8b--yRZvrZecvrEZilPtSL75nC8bTPLh2xb_ZiVe_FmbKXZ7_nF8f_sLWreBKDDNB6j6WOUJBe3iABJv1GVv5FFPQIb-fPA",
+        //                 "contentProvider": {
+        //                     "type": "line"
+        //                 }
+        //             },
+        //             "webhookEventId": "01JJNM5SM145NRFJ1V6KYJQMN8",
+        //             "deliveryContext": {
+        //                 "isRedelivery": false
+        //             },
+        //             "timestamp": 1738040075709,
+        //             "source": {
+        //                 "type": "user",
+        //                 "userId": "U793093e057eb0dcdecc34012361d0217"
+        //             },
+        //             "replyToken": "934747a8fd95442f9b8cfcd032d7dd97",
+        //             "mode": "active"
+        //         }
+        //     ]
+        // }'
+        // );
 
-            return $this->response
-                ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST)
-                ->setJSON(['status' => 'error', 'message' => $e->getMessage()]);
-        }
-    }
-
-    /**
-     * จัดการ Webhook สำหรับ Facebook
-     */
-    private function handleFacebook($input)
-    {
-        if (getenv('CI_ENVIRONMENT') == 'development') {
-            return $this->userSocialModel->getUserSocialByPageID('Facebook', '1741273556202429');
-        }
-
-        if (isset($input->object) && $input->object == 'page') {
-            return $this->userSocialModel->getUserSocialByPageID('Facebook', $input->entry[0]->id);
-        }
-        return null;
-    }
-
-    /**
-     * จัดการ Webhook สำหรับ Instagram
-     */
-    private function handleInstagram($input)
-    {
-        if (isset($input->object) && $input->object == 'instagram') {
-            return $this->userSocialModel->getUserSocialByPageID('Instagram', $input->entry[0]->id);
-        }
-        return null;
-    }
-
-    /**
-     * จัดการ Webhook สำหรับ WhatsApp
-     */
-    private function handleWhatsApp($input)
-    {
-        if (isset($input->object) && $input->object == 'whatsapp_business_account') {
-            return $this->userSocialModel->getUserSocialByPageID('WhatsApp', $input->entry[0]->id);
-        }
-        return null;
-    }
-
-    /**
-     * จัดการ Webhook สำหรับ Line
-     */
-    private function handleLine($slug)
-    {
-        $userSocialID = $slug;
-        return $this->userSocialModel->getUserSocialByID(hashidsDecrypt($userSocialID));
-    }
-
-    /**
-     * จัดการการตอบกลับโดย AI
-     */
-    private function handleAIResponse($messageRoom, $userSocial)
-    {
-        $user = $this->userModel->getUserByID($userSocial->user_id);
-
-        if (!$user) throw new \InvalidArgumentException('User not found');
-
-        $subscription = $this->subscriptionModel->getUserSubscription($user->id);
-
-        if (!$subscription) {
-            if ($user->free_request_limit <= 10) {
-                $handler = HandlerFactory::createHandler($userSocial->platform, $this->messageService);
-                $handler->handleReplyByAI($messageRoom, $userSocial);
-                $this->userModel->updateUserByID($user->id, [
-                    'free_request_limit' => $user->free_request_limit + 1
-                ]);
-            }
-        } elseif ($subscription->status == 'active' && $subscription->current_period_end > time()) {
-            $handler = HandlerFactory::createHandler($userSocial->platform, $this->messageService);
-            $handler->handleReplyByAI($messageRoom, $userSocial);
-        }
+        // Audio
+        //         return json_decode(
+        //             '{
+        //     "destination": "U3cc700ae815f9f7e37ea930b7b66b2c1",
+        //     "events": [
+        //         {
+        //             "type": "message",
+        //             "message": {
+        //                 "type": "audio",
+        //                 "id": "546929768709488706",
+        //                 "duration": 7534,
+        //                 "contentProvider": {
+        //                     "type": "line"
+        //                 }
+        //             },
+        //             "webhookEventId": "01JKD2G7T7HGHNR79HYQYR6E71",
+        //             "deliveryContext": {
+        //                 "isRedelivery": false
+        //             },
+        //             "timestamp": 1738826850049,
+        //             "source": {
+        //                 "type": "user",
+        //                 "userId": "U793093e057eb0dcdecc34012361d0217"
+        //             },
+        //             "replyToken": "bd94a1406d99401e8a6934635ef6e317",
+        //             "mode": "active"
+        //         }
+        //     ]
+        // }'
+        //         );
     }
 }

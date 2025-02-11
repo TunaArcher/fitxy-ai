@@ -2,7 +2,7 @@
 
 namespace App\Integrations\Line;
 
-use App\Models\UserSocialModel;
+use App\Models\AccountModel;
 use \GuzzleHttp\Client;
 use \GuzzleHttp\Handler\CurlHandler;
 use \GuzzleHttp\HandlerStack;
@@ -14,7 +14,7 @@ class LineClient
 {
     private $http;
     private $baseURL;
-    private $userSocialID;
+    private $id;
     private $accessToken;
     private $channelID;
     private $channelSecret;
@@ -24,7 +24,7 @@ class LineClient
     {
         $this->baseURL = 'https://api.line.me/v2';
 
-        $this->userSocialID = $config['userSocialID'] ?? '';
+        $this->id = $config['id'] ?? '';
 
         $this->accessToken = $config['accessToken'] ?? '';
 
@@ -54,8 +54,8 @@ class LineClient
 
                 if ($getAccessToken) {
 
-                    $userSocialModel = new UserSocialModel();
-                    $userSocialModel->updateUserSocialByID($this->userSocialID, [
+                    $accountModel = new AccountModel();
+                    $accountModel->updateAccountByID($this->id, [
                         'line_channel_access_token' => $getAccessToken->access_token,
                         'is_connect' => '1',
                         'updated_at' => date('Y-m-d H:i:s')
@@ -77,8 +77,8 @@ class LineClient
 
                     return $response;
                 } else {
-                    $userSocialModel = new UserSocialModel();
-                    $userSocialModel->updateUserSocialByID($this->userSocialID, [
+                    $accountModel = new AccountModel();
+                    $accountModel->updateAccountByID($this->id, [
                         'is_connect' => '0',
                         'updated_at' => date('Y-m-d H:i:s')
                     ]);

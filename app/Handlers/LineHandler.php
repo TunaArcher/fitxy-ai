@@ -23,7 +23,7 @@ class LineHandler
     private UserModel $userModel;
     private UserSocialModel $userSocialModel;
 
-    public function __construct(MessageService $messageService)
+    public function __construct()
     {
         $this->messageService = $messageService;
 

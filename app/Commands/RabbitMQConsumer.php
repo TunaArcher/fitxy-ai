@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Handlers\LineHandler;
 use CodeIgniter\CLI\BaseCommand;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
@@ -30,7 +31,7 @@ class RabbitMQConsumer extends BaseCommand
 
             // แปลง JSON เป็น Array
             $data = json_decode($msg->body, true);
-            $this->processAIResponse($data['message_room'], $data['user_social']);
+            $this->processAIResponse($data['UID'], $data['message_room']);
 
             echo " [✓] AI Response sent successfully!\n";
         };
@@ -50,13 +51,12 @@ class RabbitMQConsumer extends BaseCommand
         $connection->close();
     }
 
-    private function processAIResponse($messageRoom, $userSocial)
+    private function processAIResponse($UID, $messageRoom)
     {
         helper('my_hashids');
 
         $messageRoom = json_decode(json_encode($messageRoom));
         $messageRoomID = $messageRoom->id;
-        $userSocial = json_decode(json_encode($userSocial));
 
         $messageModel = new MessageModel();
         $messageRoomModel = new MessageRoomModel();
@@ -68,7 +68,7 @@ class RabbitMQConsumer extends BaseCommand
 
         if (!$lastContextTimestamp) return;
 
-        $timeoutSeconds = 5;
+        $timeoutSeconds = 30;
         sleep($timeoutSeconds);
 
         // ตรวจสอบว่ามีข้อความใหม่หรือไม่
@@ -83,9 +83,7 @@ class RabbitMQConsumer extends BaseCommand
         }
 
         // AI ตอบ และ ลบบริบทหลังจากใช้งาน
-        // $this->handleAIResponse($messageRoom, $userSocial);
-        (new \App\Factories\HandlerFactory())
-            ->createHandler($userSocial->platform, new \App\Services\MessageService())
-            ->handleReplyByAI($messageRoom, $userSocial);
+        $handler = new LineHandler();
+        $handler->handleReplyByAI($UID, $messageRoom);
     }
 }

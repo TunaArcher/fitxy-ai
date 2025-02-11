@@ -7,7 +7,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 class RabbitMQPublisher
 {
-    public function publishMessage($messageRoom, $userSocial)
+    public function publishMessage($UID,$messageRoom)
     {
         $connection = RabbitMQ::getConnection();
         $channel = $connection->channel();
@@ -17,8 +17,8 @@ class RabbitMQPublisher
 
         // ✅ ป้องกันปัญหา Null Bytes และ JSON Encode
         $data = json_encode([
-            'message_room' => (array) $messageRoom,
-            'user_social' => (array) $userSocial
+            'UID' => (array) $UID,
+            'message_room' => (array) $messageRoom
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
         // ✅ ตรวจสอบ JSON Encode ถูกต้อง

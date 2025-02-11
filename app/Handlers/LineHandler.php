@@ -4,157 +4,105 @@ namespace App\Handlers;
 
 use App\Integrations\Line\LineClient;
 use App\Libraries\ChatGPT;
+use App\Models\AccountModel;
 use App\Models\CustomerModel;
 use App\Models\MessageModel;
 use App\Models\MessageRoomModel;
 use App\Models\UserModel;
-use App\Models\UserSocialModel;
-use App\Services\MessageService;
 
 class LineHandler
 {
     private $platform = 'Line';
 
-    private MessageService $messageService;
-
+    private AccountModel $accountModel;
     private CustomerModel $customerModel;
     private MessageModel $messageModel;
     private MessageRoomModel $messageRoomModel;
     private UserModel $userModel;
-    private UserSocialModel $userSocialModel;
+
+    private $account;
 
     public function __construct()
     {
-        $this->messageService = $messageService;
-
+        $this->accountModel = new AccountModel();
         $this->customerModel = new CustomerModel();
         $this->messageModel = new MessageModel();
         $this->messageRoomModel = new MessageRoomModel();
-        $this->userModel = new UserModel();
-        $this->userSocialModel = new UserSocialModel();
     }
 
-    public function handleWebhook($input, $userSocial)
+    public function handleWebhook($input)
     {
-        $input = $this->prepareWebhookInput($input, $userSocial);
+        $this->account = $this->accountModel->getAccountByID('128');
+
+        if (getenv('CI_ENVIRONMENT') === 'development') $input = $this->getMockLineWebhookData();
 
         // ดึงข้อมูล Platform ที่ Webhook เข้ามา
         // ตรวจสอบว่าเป็น Message ข้อความ, รูปภาพ, เสียง และจัดการ
-        $message = $this->processMessage($input, $userSocial);
+        $message = $this->processMessage($input);
 
         // ตรวจสอบหรือสร้างลูกค้า
-        $customer = $this->messageService->getOrCreateCustomer($message['UID'], $this->platform, $userSocial);
+        $customer = $this->getOrCreateCustomer($message['UID']);
 
         // ตรวจสอบหรือสร้างห้องสนทนา
-        $messageRoom = $this->messageService->getOrCreateMessageRoom($this->platform, $customer, $userSocial);
+        $messageRoom = $this->getOrCreateMessageRoom($customer);
 
-        // บันทึกข้อความและส่งต่อ WebSocket
-        $this->processIncomingMessage(
-            $messageRoom,
-            $customer,
-            $message['type'],
-            $message['content'],
-            'Customer',
-        );
+        // บันทึกข้อความ
+        $this->messageModel->insertMessage([
+            'room_id' => $messageRoom->id,
+            'send_by' => 'Customer',
+            'sender_id' => $customer->id,
+            'message_type' => $message['type'],
+            'message' => $message['content'],
+            'is_context' => '1'
+        ]);
 
-        return $messageRoom;
+        return [
+            'UID' => $message['UID'],
+            'message_room' => $messageRoom,
+            'message_type' => $message['type']
+        ];
     }
 
-    public function handleReplyByManual($input)
+    public function handleReplyByAI($UID, $messageRoom)
     {
-        $messageReply = $input['message'];
-        $messageType = $input['message_type'];
-
-        $userID = hashidsDecrypt(session()->get('userID'));
-        $messageRoom = $this->messageRoomModel->getMessageRoomByID($input['room_id']);
-        $UID = $this->getCustomerUID($messageRoom);
-
-        $platformClient = $this->preparePlatformClient($messageRoom);
-
-        $this->sendMessageToPlatform(
-            $platformClient,
-            $UID,
-            $messageType,
-            $messageReply,
-            $messageRoom,
-            $userID,
-            'Admin',
-            'MANUAL'
-        );
-
-        $this->messageModel->clearUserContext($messageRoom->id);
-    }
-
-    public function handleReplyByAI($messageRoom, $userSocial)
-    {
-        $userID =  $userSocial->user_id;
-        $dataMessage = $this->userModel->getMessageTraningByID($userID);
-
-        $customer = $this->customerModel->getCustomerByID($messageRoom->customer_id);
-        $UID = $customer->uid;
+        $this->account = $this->accountModel->getAccountByID('128');
 
         $messages = $this->messageModel->getMessageNotReplyBySendByAndRoomID('Customer', $messageRoom->id);
         $message = $this->getUserContext($messages);
 
         // ข้อความตอบกลับ
         $chatGPT = new ChatGPT(['GPTToken' => getenv('GPT_TOKEN')]);
-        $dataMessage = $dataMessage ? $dataMessage->message : '';
+        $repyleMessage = $message['img_url'] == ''
+            ? $chatGPT->askChatGPT($messageRoom->id, $message['message'])
+            : $chatGPT->askChatGPT($messageRoom->id, $message['message'], $message['img_url']);
 
-        $messageReply = $message['img_url'] == ''
-            ? $chatGPT->askChatGPT($messageRoom->id, $message['message'], $dataMessage)
-            : $chatGPT->askChatGPT($messageRoom->id, $message['message'], $dataMessage, $message['img_url']);
+        $line =  new LineClient([
+            'id' => $this->account->id,
+            'accessToken' =>  $this->account->line_channel_access_token,
+            'channelID' =>  $this->account->line_channel_id,
+            'channelSecret' =>  $this->account->line_channel_secret,
+        ]);
 
-        $customer = $this->customerModel->getCustomerByUIDAndPlatform($UID, $this->platform);
-        $messageRoom = $this->messageRoomModel->getMessageRoomByCustomerID($customer->id);
+        $this->messageModel->insertMessage([
+            'send_by' => 'ADMIN',
+            // 'sender_id' => $senderId,
+            'message_type' => 'text',
+            'message' => $repyleMessage,
+            // 'is_context' => '1',
+            'reply_by' => 'AI'
+        ]);
 
-        $platformClient = $this->preparePlatformClient($messageRoom);
-
-        $this->sendMessageToPlatform(
-            $platformClient,
-            $UID,
-            $messageType = 'text',
-            $messageReply,
-            $messageRoom,
-            $userID,
-            'Admin',
-            'AI'
-        );
+        $line->pushMessage($UID, $repyleMessage, 'text');
 
         $this->messageModel->clearUserContext($messageRoom->id);
-    }
-
-    private function getUserContext($messages)
-    {
-        helper('function');
-
-        $contextText = '';
-        $imageUrl = '';
-
-        foreach ($messages as $message) {
-            switch ($message->message_type) {
-                case 'text':
-                    $contextText .= $message->message . ' ';
-                    break;
-                case 'image':
-                    $imageUrl .= $message->message . ',';
-                    break;
-                case 'audio':
-                    $contextText .= convertAudioToText($message->message, $this->platform) . ' ';
-                    break;
-            }
-        }
-
-        return  [
-            'message' => $contextText,
-            'img_url' => $imageUrl,
-        ];
     }
 
     // -----------------------------------------------------------------------------
     // Helper
     // -----------------------------------------------------------------------------
 
-    private function processMessage($input, $userSocial)
+
+    private function processMessage($input)
     {
         $event = $input->events[0];
         $UID = $event->source->userId;
@@ -176,7 +124,7 @@ class LineHandler
                 $messageType = 'image';
 
                 $messageId = $event->message->id;
-                $lineAccessToken = $userSocial->line_channel_access_token;
+                $lineAccessToken = $this->account->line_channel_access_token;
 
                 $url = "https://api-data.line.me/v2/bot/message/{$messageId}/content";
                 $headers = ["Authorization: Bearer {$lineAccessToken}"];
@@ -191,8 +139,7 @@ class LineHandler
                 $message = uploadToSpaces(
                     $fileContent,
                     $fileName,
-                    $messageType,
-                    $this->platform
+                    $messageType
                 );
 
                 break;
@@ -202,7 +149,7 @@ class LineHandler
                 $messageType = 'audio';
 
                 $messageId = $event->message->id;
-                $lineAccessToken = $userSocial->line_channel_access_token;
+                $lineAccessToken = $this->account->line_channel_access_token;
 
                 $url = "https://api-data.line.me/v2/bot/message/{$messageId}/content";
                 $headers = ["Authorization: Bearer {$lineAccessToken}"];
@@ -218,7 +165,6 @@ class LineHandler
                     $fileContent,
                     $fileName,
                     $messageType,
-                    $this->platform
                 );
 
                 break;
@@ -233,135 +179,111 @@ class LineHandler
         ];
     }
 
-    private function processIncomingMessage($messageRoom, $customer, $messageType, $message, $sender)
+    public function getOrCreateCustomer($UID)
     {
-        $this->messageService->saveMessage(
-            $messageRoom->id,
-            $customer->id,
-            $messageType,
-            $message,
-            $this->platform,
-            $sender,
-        );
 
-        $this->messageService->sendToWebSocket([
-            'messageRoom' => $messageRoom,
+        $customer = $this->customerModel->getCustomerByUID($UID);
 
-            'room_id' => $messageRoom->id,
+        if (!$customer) {
 
-            'send_by' => $sender,
+            $this->account = $this->accountModel->getAccountByID('128');
 
-            'sender_id' => $customer->id,
-            'sender_name' => $customer->name,
-            'sender_avatar' => $customer->profile,
-
-            'platform' => $this->platform,
-            'message_type' => $messageType,
-            'message' => $message,
-
-            'receiver_id' => hashidsEncrypt($messageRoom->user_id),
-            'receiver_name' => 'Admin',
-            'receiver_avatar' => '',
-
-            'created_at' => date('Y-m-d H:i:s'),
-        ]);
-    }
-
-    private function sendMessageToPlatform($platformClient, $UID, $messageType, $message, $messageRoom, $userID, $sender, $replyBy)
-    {
-        $send = $platformClient->pushMessage($UID, $message, $messageType);
-        log_message('info', "ข้อความตอบไปที่ลูกค้า Message Room ID $messageRoom->id $this->platform: " . $message);
-
-        if ($send) {
-
-            $this->messageService->saveMessage($messageRoom->id, $userID, $messageType, $message, $this->platform, $sender, $replyBy);
-
-            $customer = $this->customerModel->getCustomerByID($messageRoom->customer_id);
-
-            $this->messageService->sendToWebSocket([
-                'messageRoom' => $messageRoom,
-
-                'room_id' => $messageRoom->id,
-
-                'send_by' => $sender,
-
-                'sender_id' => $userID,
-                'sender_name' => 'Admin',
-                'sender_avatar' => '',
-
-                'platform' => $this->platform,
-                'message_type' => $messageType,
-                'message' => $message,
-
-                'receiver_id' => hashidsEncrypt($customer->id),
-                'receiver_name' => $customer->name,
-                'receiver_avatar' => $customer->profile,
-
-                'created_at' => date('Y-m-d H:i:s'),
+            $lineAPI = new LineClient([
+                'id' => $this->account->id,
+                'accessToken' =>  $this->account->line_channel_access_token,
+                'channelID' =>  $this->account->line_channel_id,
+                'channelSecret' => $this->account->line_channel_secret,
             ]);
+
+            $profile = $lineAPI->getUserProfile($UID);
+
+            $customerID = $this->customerModel->insertCustomer([
+                'uid' => $UID,
+                'name' => $profile->displayName,
+                'profile' => $profile->pictureUrl
+            ]);
+
+            return $this->customerModel->getCustomerByID($customerID);
         }
+
+        return $customer;
     }
 
-    private function prepareWebhookInput($input, $userSocial)
+    public function getOrCreateMessageRoom($customer)
     {
-        if (getenv('CI_ENVIRONMENT') === 'development') {
-            $input = $this->getMockLineWebhookData();
-            $userSocial->line_channel_access_token = 'U7mJfRwa6hGDA32w883lebP2xc+Shhc9go6eb0X5kEsPKWY4Yyb2PdpOoPx7QgMq5Zh+NUB431dT8JB01f/x7qkC6kJ0r8caM4z2dbIdSa3ZcJzTe6mElEG6W9oWQHeW2d9vI/6Ic4jetEUyiL69sY9PbdgDzCFqoOLOYbqAITQ=';
+        $messageRoom = $this->messageRoomModel->getMessageRoomByCustomerID($customer->id);
+
+        if (!$messageRoom) {
+
+            $roomId = $this->messageRoomModel->insertMessageRoom([
+                'account_id' => '128',
+                'account_name' => 'UNITYxTDEE',
+                'customer_id' => $customer->id,
+            ]);
+
+            return $this->messageRoomModel->getMessageRoomByID($roomId);
         }
 
-        return $input;
+        return $messageRoom;
     }
 
-    private function preparePlatformClient($messageRoom)
+    private function getUserContext($messages)
     {
-        $userSocial = $this->userSocialModel->getUserSocialByID($messageRoom->user_social_id);
+        helper('function');
 
-        return new LineClient([
-            'userSocialID' => $userSocial->id,
-            'accessToken' => $userSocial->line_channel_access_token,
-            'channelID' => $userSocial->line_channel_id,
-            'channelSecret' => $userSocial->line_channel_secret,
-        ]);
-    }
+        $contextText = '';
+        $imageUrl = '';
 
-    private function getCustomerUID($messageRoom)
-    {
-        $customer = $this->customerModel->getCustomerByID($messageRoom->customer_id);
-        $UID = $customer->uid;
+        foreach ($messages as $message) {
+            switch ($message->message_type) {
+                case 'text':
+                    $contextText .= $message->message . ' ';
+                    break;
+                case 'image':
+                    $imageUrl .= $message->message . ',';
+                    break;
+                case 'audio':
+                    $contextText .= convertAudioToText($message->message) . ' ';
+                    break;
+            }
+        }
 
-        return $UID;
+        return  [
+            'message' => $contextText,
+            'img_url' => $imageUrl,
+        ];
     }
 
     private function getMockLineWebhookData()
     {
         // TEXT
-        // return json_decode(
-        //     '{
-        //     "destination": "U3cc700ae815f9f7e37ea930b7b66b2c1",
+        //         return json_decode(
+        //             '{
+        //     "destination": "U4289200c7269074fb51b326a7fa30cdf",
         //     "events": [
         //         {
         //             "type": "message",
         //             "message": {
         //                 "type": "text",
-        //                 "id": "545655842000077303",
-        //                 "quoteToken": "cGR08Boi4mUH0aJ2IPb11MNt7guGiglOO3XlF2-JDmUxbTXzexfqvXiiHZ3TPfUwhlheSMslhGk-eQPiGsvziGNo4AXvbDhokDglNTnzR0gB0jIkDvCWQQbgIzVyv6D2P-k6zVQXgYl0tyyWNOFMdA",
-        //                 "text": "\u0e23\u0e16"
+        //                 "id": "547666636904595686",
+        //                 "quoteToken": "Uj6pC-mig81A7SiH2_WOH_aZ7XouukaC7gBYPSOfmqPAlLsWRADY1qhQZ5GfBXpTOScqr5kfRVSkli37u4FRV27zUXLaaYQ1EKDnvLzdCkvsmSnqDxIdpcQLXQ0ZZiXIGaOFJicaam65Y2ZW9swVlg",
+        //                 "text": "อยากอ้วง"
         //             },
-        //             "webhookEventId": "01JJPEBMSMCCAS02MPW7RGXZWQ",
+        //             "webhookEventId": "01JKT5BSV10VCPYF2AZ6QPPGGJ",
         //             "deliveryContext": {
         //                 "isRedelivery": false
         //             },
-        //             "timestamp": 1738067530428,
+        //             "timestamp": 1739266057672,
         //             "source": {
         //                 "type": "user",
-        //                 "userId": "U793093e057eb0dcdecc34012361d0217"
+        //                 "userId": "U8bf2cbdb6cbbdb8709dc268512abd4a3"
         //             },
-        //             "replyToken": "d618defc144e43278bf2d6715ef701e2",
+        //             "replyToken": "846857eb08e642ae8c019f579fc3e3c2",
         //             "mode": "active"
         //         }
         //     ]
         // }'
-        // );
+        //         );
 
         // return json_decode(
         //     '{

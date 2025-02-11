@@ -87,9 +87,9 @@ function _uploadToSpaces($fileContent, $fileName)
 }
 
 // อัปโหลดไฟล์ไปยัง DigitalOcean Spaces และแยกโฟลเดอร์ตามประเภทไฟล์และแพลตฟอร์ม
-function uploadToSpaces($fileContent, $fileName, $fileType, $platform)
+function uploadToSpaces($fileContent, $fileName, $fileType)
 {
-    $platform = strtolower($platform);
+    $platform = strtolower('line_agent');
 
     $s3 = new S3Client([
         'version' => 'latest',
@@ -231,7 +231,7 @@ function _convertAudioToText($audioUrl)
     return $text;
 }
 
-function convertAudioToText($audioUrl, $platform)
+function convertAudioToText($audioUrl)
 {
     // สร้างโฟลเดอร์ audio ถ้ายังไม่มี
     if (!file_exists('audio')) {
@@ -242,21 +242,7 @@ function convertAudioToText($audioUrl, $platform)
     $uniqueId = uniqid('audio_');
 
     // ตรวจสอบประเภทไฟล์ตามแพลตฟอร์ม
-    switch (strtolower($platform)) {
-        case 'line':
-            $audioExtension = 'm4a';
-            break;
-        case 'facebook':
-            $audioExtension = 'mp4';
-            break;
-        case 'whatsapp':
-        case 'instagram':
-            $audioExtension = 'ogg'; // กำหนดค่าเริ่มต้นที่สามารถเปลี่ยนแปลงได้ในอนาคต
-            break;
-        default:
-            return "ไม่รองรับแพลตฟอร์ม: {$platform}";
-    }
-
+    $audioExtension = 'm4a';
     $sourceFile = "audio/{$uniqueId}.{$audioExtension}";
     $wavFile = "audio/{$uniqueId}.wav";
 
@@ -275,7 +261,7 @@ function convertAudioToText($audioUrl, $platform)
 
     if ($returnCode !== 0) {
         unlink($sourceFile); // ลบไฟล์ที่ดาวน์โหลดมา
-        return "เกิดข้อผิดพลาดในการแปลงไฟล์เสียงจาก {$platform}";
+        return "เกิดข้อผิดพลาดในการแปลงไฟล์เสียง";
     }
 
     // ✅ แปลงเสียงเป็นข้อความโดยใช้ Google Speech-to-Text API

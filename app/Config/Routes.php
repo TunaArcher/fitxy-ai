@@ -34,6 +34,8 @@ $routes->set404Override('App\Controllers\Errors::show404');
  * --------------------------------------------------------------------
  */
 
+ $routes->get('/register', 'HomeController::register'); // Webhook สำหรับรับข้อมูลจากแพลตฟอร์ม
+
 // -----------------------------------------------------------------------------
 // Webhook
 // -----------------------------------------------------------------------------
@@ -41,6 +43,8 @@ $routes->set404Override('App\Controllers\Errors::show404');
 // Meta & Line
 $routes->get('/webhook/(:any)', 'WebhookController::verifyWebhook/$1'); // Webhook สำหรับยืนยัน Meta Developer
 $routes->post('/webhook/(:any)', 'WebhookController::webhook/$1'); // Webhook สำหรับรับข้อมูลจากแพลตฟอร์ม
+
+
 
 
 /*

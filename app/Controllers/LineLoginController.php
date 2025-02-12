@@ -2,10 +2,19 @@
 
 namespace App\Controllers;
 
+use App\Models\CustomerModel;
 use CodeIgniter\Controller;
 
 class LineLoginController extends Controller
 {
+
+    private CustomerModel $customerModel;
+
+    public function __construct()
+    {
+        $this->customerModel = new CustomerModel();
+    }
+
     public function callback()
     {
         session_start(); // ใช้ session เพื่อเก็บ state
@@ -35,8 +44,9 @@ class LineLoginController extends Controller
         // บันทึกข้อมูลผู้ใช้ หรือทำการ Login
         $_SESSION['line_user'] = $userInfo;
 
-        echo "Login Successful!";
-        print_r($userInfo); // แสดงข้อมูลผู้ใช้ (ทดสอบ)
+        $customer = $this->getOrCreateCustomer($userInfo);
+
+        if ($customer) return redirect()->to('/');
     }
 
     private function getAccessToken($code)
@@ -76,5 +86,24 @@ class LineLoginController extends Controller
         ]);
 
         return json_decode($response->getBody(), true);
+    }
+
+    public function getOrCreateCustomer($userInfo)
+    {
+
+        $customer = $this->customerModel->getCustomerByUID($userInfo['userId']);
+
+        if (!$customer) {
+
+            $customerID = $this->customerModel->insertCustomer([
+                'uid' => $userInfo['userId'],
+                'name' => $userInfo['displayName'],
+                'profile' => $userInfo['pictureUrl']
+            ]);
+
+            return $this->customerModel->getCustomerByID($customerID);
+        }
+
+        return $customer;
     }
 }

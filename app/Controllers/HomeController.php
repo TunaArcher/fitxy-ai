@@ -35,6 +35,20 @@ class HomeController extends BaseController
         $this->userModel = new UserModel();
     }
 
+    public function index()
+    {
+        $data = [
+            'content' => 'home/index',
+            'title' => 'Home',
+            'css_critical' => '',
+            'js_critical' => ''
+        ];
+
+        // $data['line_user'] = session()->get('line_user');
+
+        echo view('/app', $data);
+    }
+
     public function register()
     {
         session_start(); // เริ่ม Session เพื่อเก็บค่า state

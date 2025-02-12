@@ -41,26 +41,30 @@ class LineHandler
         $message = $this->processMessage($input);
 
         // ตรวจสอบหรือสร้างลูกค้า
-        $customer = $this->getOrCreateCustomer($message['UID']);
+        $customer = $this->customerModel->getCustomerByUID($message['UID']);
 
-        // ตรวจสอบหรือสร้างห้องสนทนา
-        $messageRoom = $this->getOrCreateMessageRoom($customer);
+        if ($customer) {
+            // ตรวจสอบหรือสร้างห้องสนทนา
+            $messageRoom = $this->getOrCreateMessageRoom($customer);
 
-        // บันทึกข้อความ
-        $this->messageModel->insertMessage([
-            'room_id' => $messageRoom->id,
-            'send_by' => 'Customer',
-            'sender_id' => $customer->id,
-            'message_type' => $message['type'],
-            'message' => $message['content'],
-            'is_context' => '1'
-        ]);
+            // บันทึกข้อความ
+            $this->messageModel->insertMessage([
+                'room_id' => $messageRoom->id,
+                'send_by' => 'Customer',
+                'sender_id' => $customer->id,
+                'message_type' => $message['type'],
+                'message' => $message['content'],
+                'is_context' => '1'
+            ]);
 
-        return [
-            'UID' => $message['UID'],
-            'message_room' => $messageRoom,
-            'message_type' => $message['type']
-        ];
+            return [
+                'UID' => $message['UID'],
+                'message_room' => $messageRoom,
+                'message_type' => $message['type']
+            ];
+        } else {
+            // TODO:: จัดการเมื่อไม่มียูสเซอร์ให้ทำการสมัครสมาชิก
+        }
     }
 
     public function handleReplyByAI($UID, $messageRoom)
@@ -100,7 +104,6 @@ class LineHandler
     // -----------------------------------------------------------------------------
     // Helper
     // -----------------------------------------------------------------------------
-
 
     private function processMessage($input)
     {
@@ -179,35 +182,35 @@ class LineHandler
         ];
     }
 
-    public function getOrCreateCustomer($UID)
-    {
+    // public function getOrCreateCustomer($UID)
+    // {
 
-        $customer = $this->customerModel->getCustomerByUID($UID);
+    //     $customer = $this->customerModel->getCustomerByUID($UID);
 
-        if (!$customer) {
+    //     if (!$customer) {
 
-            $this->account = $this->accountModel->getAccountByID('128');
+    //         $this->account = $this->accountModel->getAccountByID('128');
 
-            $lineAPI = new LineClient([
-                'id' => $this->account->id,
-                'accessToken' =>  $this->account->line_channel_access_token,
-                'channelID' =>  $this->account->line_channel_id,
-                'channelSecret' => $this->account->line_channel_secret,
-            ]);
+    //         $lineAPI = new LineClient([
+    //             'id' => $this->account->id,
+    //             'accessToken' =>  $this->account->line_channel_access_token,
+    //             'channelID' =>  $this->account->line_channel_id,
+    //             'channelSecret' => $this->account->line_channel_secret,
+    //         ]);
 
-            $profile = $lineAPI->getUserProfile($UID);
+    //         $profile = $lineAPI->getUserProfile($UID);
 
-            $customerID = $this->customerModel->insertCustomer([
-                'uid' => $UID,
-                'name' => $profile->displayName,
-                'profile' => $profile->pictureUrl
-            ]);
+    //         $customerID = $this->customerModel->insertCustomer([
+    //             'uid' => $UID,
+    //             'name' => $profile->displayName,
+    //             'profile' => $profile->pictureUrl
+    //         ]);
 
-            return $this->customerModel->getCustomerByID($customerID);
-        }
+    //         return $this->customerModel->getCustomerByID($customerID);
+    //     }
 
-        return $customer;
-    }
+    //     return $customer;
+    // }
 
     public function getOrCreateMessageRoom($customer)
     {

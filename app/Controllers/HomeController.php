@@ -79,4 +79,17 @@ class HomeController extends BaseController
         return redirect()->to($line_login_url);
     }
     
+    public function calculate()
+    {
+        $data = [
+            'content' => 'home/calculate',
+            'title' => 'Home',
+            'css_critical' => '',
+            'js_critical' => ''
+        ];
+
+        $data['line_user'] = session()->get('line_user');
+
+        echo view('/app', $data);
+    }
 }

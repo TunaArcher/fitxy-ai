@@ -36,6 +36,7 @@ $routes->set404Override('App\Controllers\Errors::show404');
 
 $routes->get('/', 'HomeController::index');
 $routes->get('/register', 'HomeController::register');
+$routes->get('/calculate', 'HomeController::calculate');
 $routes->get('/callback', 'LineLoginController::callback');
 
 // -----------------------------------------------------------------------------

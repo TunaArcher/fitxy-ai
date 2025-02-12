@@ -54,7 +54,7 @@ class HomeController extends BaseController
         // ใช้ค่า $state ใน URL ของ LINE Login
         $line_login_url = "https://access.line.me/oauth2/v2.1/authorize?" . http_build_query([
             "response_type" => "code",
-            "client_id" => $client_id,
+            "client_id" => getenv('LINE_CLIENT_ID'),
             "redirect_uri" =>  base_url('/callback'),
             "scope" => "profile openid email",
             "state" => $state

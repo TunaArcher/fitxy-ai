@@ -60,8 +60,8 @@ class HomeController extends BaseController
             "state" => $state
         ]);
 
-        // แสดงปุ่ม Login
-        echo '<a href="' . $line_login_url . '">Login with LINE</a>';
+        // // แสดงปุ่ม Login
+        // echo '<a href="' . $line_login_url . '">Login with LINE</a>';
 
         return redirect()->to($line_login_url);
     }

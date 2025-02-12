@@ -44,7 +44,7 @@ class HomeController extends BaseController
             'js_critical' => ''
         ];
 
-        // $data['line_user'] = session()->get('line_user');
+        $data['line_user'] = session()->get('line_user');
 
         echo view('/app', $data);
     }
@@ -52,6 +52,10 @@ class HomeController extends BaseController
     public function register()
     {
         session_start(); // เริ่ม Session เพื่อเก็บค่า state
+
+        if (session()->get('line_user')) {
+            return redirect()->to('/');
+        }
 
         $grant_type = "authorization_code";
         $code = "CODE_FROM_LINE";

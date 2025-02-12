@@ -17,36 +17,46 @@ class LineLoginController extends Controller
 
     public function callback()
     {
-        session_start(); // ใช้ session เพื่อเก็บ state
+        $session = session(); // ใช้ Session ของ CI4
 
         // ตรวจสอบว่ามี code และ state ส่งกลับมาหรือไม่
-        if (!isset($_GET['code']) || !isset($_GET['state'])) {
-            die('Invalid request');
+        $code = $this->request->getGet('code');
+        $state = $this->request->getGet('state');
+
+        if (!$code || !$state) {
+            return $this->fail('Invalid request: Missing parameters', 400);
         }
 
         // ตรวจสอบว่า state ที่ได้รับมาตรงกับที่ส่งไปตอนแรกหรือไม่ (ป้องกัน CSRF)
-        if ($_GET['state'] !== $_SESSION['oauth_state']) {
-            die('State does not match! Possible CSRF attack.');
+        if ($state !== $session->get('oauth_state')) {
+            return $this->fail('State does not match! Possible CSRF attack.', 403);
         }
-
-        $code = $_GET['code'];
 
         // แลกเปลี่ยน Code เป็น Access Token
         $token = $this->getAccessToken($code);
 
         if (!$token) {
-            die('Failed to get access token');
+            return $this->fail('Failed to get access token', 500);
         }
 
         // ใช้ Access Token ดึงข้อมูลโปรไฟล์ผู้ใช้
         $userInfo = $this->getUserProfile($token);
 
-        // บันทึกข้อมูลผู้ใช้ หรือทำการ Login
-        $_SESSION['line_user'] = $userInfo;
+        if (!$userInfo) {
+            return $this->fail('Failed to get user profile', 500);
+        }
 
+        // บันทึกข้อมูลผู้ใช้ลงใน Session
+        $session->set('line_user', $userInfo);
+
+        // ตรวจสอบหรือสร้างบัญชีผู้ใช้
         $customer = $this->getOrCreateCustomer($userInfo);
 
-        if ($customer) return redirect()->to('/');
+        if ($customer) {
+            return redirect()->to('/');
+        }
+
+        return $this->fail('Failed to login user', 500);
     }
 
     private function getAccessToken($code)

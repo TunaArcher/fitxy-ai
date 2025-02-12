@@ -51,8 +51,6 @@ class HomeController extends BaseController
 
     public function register()
     {
-        session_start(); // เริ่ม Session เพื่อเก็บค่า state
-
         if (session()->get('line_user')) {
             return redirect()->to('/');
         }
@@ -62,25 +60,23 @@ class HomeController extends BaseController
         $callback_uri = base_url('/callback');
         $client_id = "2006891812";
         $client_secret = "9fb3a0f44a76c91f40bc2971b57e1066";
-
+    
         // สร้างค่า state แบบสุ่ม
         $state = bin2hex(random_bytes(16));
-
-        // เก็บค่า state ไว้ใน Session เพื่อใช้ตรวจสอบภายหลัง
-        $_SESSION['oauth_state'] = $state;
-
+    
+        // เก็บค่า state ไว้ใน Session โดยใช้ CI4
+        session()->set('oauth_state', $state);
+    
         // ใช้ค่า $state ใน URL ของ LINE Login
         $line_login_url = "https://access.line.me/oauth2/v2.1/authorize?" . http_build_query([
             "response_type" => "code",
             "client_id" => getenv('LINE_CLIENT_ID'),
-            "redirect_uri" =>  base_url('/callback'),
+            "redirect_uri" => base_url('/callback'),
             "scope" => "profile openid email",
             "state" => $state
         ]);
-
-        // // แสดงปุ่ม Login
-        // echo '<a href="' . $line_login_url . '">Login with LINE</a>';
-
+    
         return redirect()->to($line_login_url);
     }
+    
 }

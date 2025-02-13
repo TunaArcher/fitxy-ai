@@ -109,7 +109,6 @@ class LineClient
             $message = [];
 
             if ($message_type == 'image') {
-
                 $message = [
                     "type" => "image",
                     "originalContentUrl" => $messages,

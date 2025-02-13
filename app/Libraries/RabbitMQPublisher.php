@@ -17,7 +17,7 @@ class RabbitMQPublisher
 
         // ✅ ป้องกันปัญหา Null Bytes และ JSON Encode
         $data = json_encode([
-            'UID' => (array) $UID,
+            'UID' => $UID,
             'message_room' => (array) $messageRoom
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 

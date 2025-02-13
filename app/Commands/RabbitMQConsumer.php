@@ -66,7 +66,7 @@ class RabbitMQConsumer extends BaseCommand
 
         if (!$lastContextTimestamp) return;
 
-        $timeoutSeconds = 30;
+        $timeoutSeconds = 20;
         sleep($timeoutSeconds);
 
         // ตรวจสอบว่ามีข้อความใหม่หรือไม่

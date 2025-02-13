@@ -22,7 +22,7 @@ class RabbitMQConsumer extends BaseCommand
         $channel = $connection->channel();
 
         // ประกาศ Queue
-        $channel->queue_declare('ai_response_queue', false, true, false, false);
+        $channel->queue_declare('line_ai_response_queue', false, true, false, false);
 
         echo " [*] Waiting for messages. To exit press CTRL+C\n";
 
@@ -38,7 +38,7 @@ class RabbitMQConsumer extends BaseCommand
         };
 
         // Consumer รอรับข้อความ
-        $channel->basic_consume('ai_response_queue', '', false, true, false, false, $callback);
+        $channel->basic_consume('line_ai_response_queue', '', false, true, false, false, $callback);
 
         while ($channel->is_consuming()) {
             try {

@@ -13,7 +13,7 @@ class RabbitMQPublisher
         $channel = $connection->channel();
 
         // ประกาศ Queue
-        $channel->queue_declare('ai_response_queue', false, true, false, false);
+        $channel->queue_declare('line_ai_response_queue', false, true, false, false);
 
         // ✅ ป้องกันปัญหา Null Bytes และ JSON Encode
         $data = json_encode([
@@ -31,7 +31,7 @@ class RabbitMQPublisher
         $msg = new AMQPMessage($data, ['delivery_mode' => 2]);
 
         // ส่งไปที่ Queue
-        $channel->basic_publish($msg, '', 'ai_response_queue');
+        $channel->basic_publish($msg, '', 'line_ai_response_queue');
 
         echo " [x] Sent to queue: $data\n";
 

@@ -22,40 +22,54 @@ class LineLoginController extends Controller
         $state = $this->request->getGet('state');
 
         if (!$code || !$state) {
-            return $this->fail('Invalid request: Missing parameters', 400);
+            return $this->response->setStatusCode(400)->setJSON([
+                'status' => 'error',
+                'message' => 'Invalid request: Missing parameters'
+            ]);
         }
 
         // ตรวจสอบว่า state ที่ได้รับมาตรงกับที่ส่งไปตอนแรกหรือไม่ (ป้องกัน CSRF)
         if ($state !== session()->get('oauth_state')) {
-            return $this->fail('State does not match! Possible CSRF attack.', 403);
+            return $this->response->setStatusCode(403)->setJSON([
+                'status' => 'error',
+                'message' => 'State does not match! Possible CSRF attack.'
+            ]);
         }
 
         // แลกเปลี่ยน Code เป็น Access Token
         $token = $this->getAccessToken($code);
 
         if (!$token) {
-            return $this->fail('Failed to get access token', 500);
+            return $this->response->setStatusCode(500)->setJSON([
+                'status' => 'error',
+                'message' => 'Failed to get access token'
+            ]);
         }
 
         // ใช้ Access Token ดึงข้อมูลโปรไฟล์ผู้ใช้
         $userInfo = $this->getUserProfile($token);
 
         if (!$userInfo) {
-            return $this->fail('Failed to get user profile', 500);
+            return $this->response->setStatusCode(500)->setJSON([
+                'status' => 'error',
+                'message' => 'Failed to get user profile'
+            ]);
         }
 
         // ตรวจสอบหรือสร้างบัญชีผู้ใช้
         $customer = $this->getOrCreateCustomer($userInfo);
 
         if ($customer) {
-            // บันทึกข้อมูลผู้ใช้ลงใน Session
             session()->set('customer', $customer);
-
             return redirect()->to('/');
         }
 
-        return $this->fail('Failed to login user', 500);
+        return $this->response->setStatusCode(500)->setJSON([
+            'status' => 'error',
+            'message' => 'Failed to login user'
+        ]);
     }
+
 
     private function getAccessToken($code)
     {

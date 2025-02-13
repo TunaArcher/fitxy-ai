@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Database\ConnectionInterface;
 
-class PurchaseModel
+class MenuModel
 {
 
     protected $db;
@@ -15,9 +15,9 @@ class PurchaseModel
         $this->db = &$db;
     }
 
-    public function getPurchasesAll()
+    public function getMenuAll()
     {
-        $builder = $this->db->table('purchases');
+        $builder = $this->db->table('menus');
 
         return $builder
             ->orderBy('created_at', 'DESC')
@@ -25,37 +25,37 @@ class PurchaseModel
             ->getResult();
     }
 
-    public function getPurchasesByID($id)
+    public function getMenuByID($id)
     {
-        $builder = $this->db->table('purchases');
+        $builder = $this->db->table('menus');
 
         return $builder->where('id', $id)->get()->getRow();
     }
 
-    public function insertPurchases($data)
+    public function insertMenu($data)
     {
-        $builder = $this->db->table('purchases');
+        $builder = $this->db->table('menus');
 
         return $builder->insert($data) ? $this->db->insertID() : false;
     }
 
-    public function updatePurchasesByID($id, $data)
+    public function updateMenuByID($id, $data)
     {
-        $builder = $this->db->table('purchases');
+        $builder = $this->db->table('menus');
 
         return $builder->where('id', $id)->update($data);
     }
 
-    public function deletePurchasesByID($id)
+    public function deleteMenuByID($id)
     {
-        $builder = $this->db->table('purchases');
+        $builder = $this->db->table('menus');
 
         return $builder->where('id', $id)->delete();
     }
 
-    public function getPurchasesByUserID($userID)
+    public function getMenuByUserID($userID)
     {
-        $builder = $this->db->table('purchases');
+        $builder = $this->db->table('menus');
 
         return $builder
             ->where('user_id', $userID) 
@@ -65,10 +65,10 @@ class PurchaseModel
             ->getResult();
     }
 
-    public function getPurchasesByPlatformAndToken($platform, $data)
+    public function getMenuByPlatformAndToken($platform, $data)
     {
 
-        $builder = $this->db->table('purchases');
+        $builder = $this->db->table('menus');
 
         switch ($platform) {
             case 'Facebook':
@@ -107,9 +107,9 @@ class PurchaseModel
         }
     }
 
-    public function getPurchasesByPageID($platform, $pageID)
+    public function getMenuByPageID($platform, $pageID)
     {
-        $builder = $this->db->table('purchases');
+        $builder = $this->db->table('menus');
 
         return $builder
         ->where('platform', $platform)
@@ -117,4 +117,17 @@ class PurchaseModel
         ->get()
         ->getRow();
     }
+
+    public function getMenuByTeamID($teamID)
+    {
+        $builder = $this->db->table('menus');
+
+        return $builder
+            ->where('team_id', $teamID) 
+            ->where('deleted_at', null)
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->getResult();
+    }
+
 }

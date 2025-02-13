@@ -6,6 +6,7 @@ use App\Integrations\Line\LineClient;
 use App\Libraries\ChatGPT;
 use App\Models\AccountModel;
 use App\Models\CustomerModel;
+use App\Models\MenuModel;
 use App\Models\MessageModel;
 use App\Models\MessageRoomModel;
 use App\Models\UserModel;
@@ -16,6 +17,7 @@ class LineHandler
 
     private AccountModel $accountModel;
     private CustomerModel $customerModel;
+    private MenuModel $menuModel;
     private MessageModel $messageModel;
     private MessageRoomModel $messageRoomModel;
     private UserModel $userModel;
@@ -26,6 +28,7 @@ class LineHandler
     {
         $this->accountModel = new AccountModel();
         $this->customerModel = new CustomerModel();
+        $this->menuModel = new MenuModel();
         $this->messageModel = new MessageModel();
         $this->messageRoomModel = new MessageRoomModel();
     }
@@ -80,6 +83,8 @@ class LineHandler
             ? $chatGPT->askChatGPT($messageRoom->id, $message['message'])
             : $chatGPT->askChatGPT($messageRoom->id, $message['message'], $message['img_url']);
 
+        $repyleMessage = $this->filterMessage($repyleMessage);
+
         $line =  new LineClient([
             'id' => $this->account->id,
             'accessToken' =>  $this->account->line_channel_access_token,
@@ -91,12 +96,21 @@ class LineHandler
             'send_by' => 'ADMIN',
             // 'sender_id' => $senderId,
             'message_type' => 'text',
-            'message' => $repyleMessage,
+            'message' => $repyleMessage['repyleMessage'],
             // 'is_context' => '1',
             'reply_by' => 'AI'
         ]);
 
-        $line->pushMessage($UID, $repyleMessage, 'text');
+        if ($repyleMessage['json']) {
+            $this->menuModel->insertMenu([
+                'customer_id' => $messageRoom->customer_id,
+                'content' => $message['img_url'],
+                'note' => $repyleMessage['repyleMessage'],
+                'cal' => $repyleMessage['json'],
+            ]);
+        }
+
+        $line->pushMessage($UID, $repyleMessage['repyleMessage'], 'text');
 
         $this->messageModel->clearUserContext($messageRoom->id);
     }
@@ -104,6 +118,32 @@ class LineHandler
     // -----------------------------------------------------------------------------
     // Helper
     // -----------------------------------------------------------------------------
+
+    private function filterMessage($inputText)
+    {
+        // ใช้ regex แยก JSON ออกมา
+        preg_match('/\{.*\}/s', $inputText, $jsonMatch);
+        $json = !empty($jsonMatch) ? json_decode($jsonMatch[0], true) : null;
+
+        // ตรวจสอบว่ามีข้อความ "พลังงานรวมของมื้ออาหาร" และ JSON ที่มี key "totalcal" หรือไม่
+        if (strpos($inputText, 'พลังงานรวมของมื้ออาหาร') !== false && is_array($json) && isset($json['totalcal'])) {
+            // แยกเฉพาะส่วนของข้อความที่ไม่รวม JSON
+            $message = trim(str_replace($jsonMatch[0], '', $inputText));
+        } else {
+            // เก็บทุกอย่างลงใน $message และให้ $json ว่างเปล่า
+            $message = $inputText;
+            $json = [];
+        }
+
+        // // แสดงผลลัพธ์
+        // echo "Message: \n$message\n\n";
+        // echo "JSON: \n" . json_encode($json, JSON_PRETTY_PRINT) . "\n";
+
+        return [
+            'repyleMessage' => $message,
+            'json' => $json
+        ];
+    }
 
     private function processMessage($input)
     {

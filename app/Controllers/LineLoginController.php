@@ -26,7 +26,7 @@ class LineLoginController extends Controller
         }
 
         // ตรวจสอบว่า state ที่ได้รับมาตรงกับที่ส่งไปตอนแรกหรือไม่ (ป้องกัน CSRF)
-        if ($state !== $session->get('oauth_state')) {
+        if ($state !== session()->get('oauth_state')) {
             return $this->fail('State does not match! Possible CSRF attack.', 403);
         }
 

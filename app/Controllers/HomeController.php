@@ -78,8 +78,6 @@ class HomeController extends BaseController
             ];
     
             echo view('/app', $data);
-
-            return redirect()->to('/');
         }
 
         return redirect()->to($this->Auth());

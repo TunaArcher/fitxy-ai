@@ -38,7 +38,7 @@ class HomeController extends BaseController
     public function index()
     {
         
-        if (session()->get('line_user')) {
+        if (session()->get('customer')) {
             return redirect()->to('/');
         }
 
@@ -52,9 +52,6 @@ class HomeController extends BaseController
                 <script src="assets/js/fitness/fitness-dashboard.js"></script>
             '
         ];
-
-        $data['line_user'] = session()->get('line_user');
-        // px($data['line_user']);
 
         echo view('/app', $data);
     }

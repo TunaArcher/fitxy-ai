@@ -37,7 +37,6 @@ class HomeController extends BaseController
 
     private function Auth() 
     {
-        
         $grant_type = "authorization_code";
         $code = "CODE_FROM_LINE";
         $callback_uri = base_url('/callback');
@@ -59,14 +58,14 @@ class HomeController extends BaseController
             "state" => $state
         ]);
     
-        return redirect()->to($line_login_url);
+        return $line_login_url;
     }
 
     public function index()
     {
         
         if (session()->get('customer')) {
-            
+
             $data = [
                 'content' => 'home/index',
                 'title' => 'Home',
@@ -83,7 +82,7 @@ class HomeController extends BaseController
             return redirect()->to('/');
         }
 
-        $this->Auth();
+        return redirect()->to($this->Auth());
     }
 
     // public function register()

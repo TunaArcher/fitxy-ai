@@ -125,9 +125,17 @@ class LineHandler
         $cleanText = preg_replace('/```json|```/', '', $inputText);
         $cleanText = trim($cleanText); // ลบช่องว่างที่ไม่จำเป็น
 
-        // ใช้ regex แยก JSON ออกมา
+        // ใช้ regex แยก JSON ที่มี single quote หรือ double quote ออกมา
         preg_match('/\{.*\}/s', $cleanText, $jsonMatch);
-        $json = !empty($jsonMatch) ? json_decode($jsonMatch[0], true) : null;
+
+        $json = null;
+        if (!empty($jsonMatch)) {
+            // แปลง ' (single quote) เป็น " (double quote) เพื่อให้ json_decode() ใช้ได้
+            $jsonString = str_replace("'", '"', $jsonMatch[0]);
+
+            // ถอดรหัส JSON
+            $json = json_decode($jsonString, true);
+        }
 
         // ตรวจสอบว่ามีข้อความ "พลังงานรวมของมื้ออาหาร" และ JSON ที่มี key "totalcal" หรือไม่
         if (strpos($cleanText, 'พลังงานรวมของมื้ออาหาร') !== false && is_array($json) && isset($json['totalcal'])) {

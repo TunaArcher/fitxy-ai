@@ -35,20 +35,20 @@ class HomeController extends BaseController
         $this->userModel = new UserModel();
     }
 
-    private function Auth() 
+    private function Auth()
     {
         $grant_type = "authorization_code";
         $code = "CODE_FROM_LINE";
         $callback_uri = base_url('/callback');
         $client_id = "2006891812";
         $client_secret = "9fb3a0f44a76c91f40bc2971b57e1066";
-    
+
         // สร้างค่า state แบบสุ่ม
         $state = bin2hex(random_bytes(16));
-    
+
         // เก็บค่า state ไว้ใน Session โดยใช้ CI4
         session()->set('oauth_state', $state);
-    
+
         // ใช้ค่า $state ใน URL ของ LINE Login
         $line_login_url = "https://access.line.me/oauth2/v2.1/authorize?" . http_build_query([
             "response_type" => "code",
@@ -57,13 +57,14 @@ class HomeController extends BaseController
             "scope" => "profile openid email",
             "state" => $state
         ]);
-    
+
         return $line_login_url;
     }
 
     public function index()
     {
-        
+
+
         if (session()->get('customer')) {
 
             $data = [
@@ -76,11 +77,11 @@ class HomeController extends BaseController
                     <script src="assets/js/fitness/fitness-dashboard.js"></script>
                 '
             ];
-    
-            echo view('/app', $data);
-        }
 
-        return redirect()->to($this->Auth());
+            echo view('/app', $data);
+        } else {
+            return redirect()->to($this->Auth());
+        }
     }
 
     // public function register()

@@ -85,7 +85,7 @@ class LineHandler
 
         $repyleMessage = $this->filterMessage($repyleMessage);
 
-        $line =  new LineClient([
+        $line = new LineClient([
             'id' => $this->account->id,
             'accessToken' =>  $this->account->line_channel_access_token,
             'channelID' =>  $this->account->line_channel_id,

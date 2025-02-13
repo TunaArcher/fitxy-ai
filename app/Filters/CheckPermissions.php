@@ -19,7 +19,7 @@ class CheckPermissions implements FilterInterface
 
     public function before(RequestInterface $request, $arguments = null)
     {
-        if (getenv('CI_ENVIRONMENT') === 'development') {
+        if (getenv('CI_ENVIRONMENT') === 'development' || getenv('CI_ENVIRONMENT') === 'production') {
 
             $customer = $this->customerModel->getCustomerByUID('U8bf2cbdb6cbbdb8709dc268512abd4a3');
 

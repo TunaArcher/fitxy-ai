@@ -67,20 +67,6 @@ class CustomerModel
         return $builder->where('uid', $UID)->get()->getRow();
     }
 
-    public function insertMessageSetting($data)
-    {
-        $builder = $this->db->table('message_setting');
-
-        return $builder->insert($data) ? $this->db->insertID() : false;
-    }
-
-    public function updateMessageSetting($id, $data)
-    {
-        $builder = $this->db->table('message_setting');
-
-        return $builder->where('user_id', $id)->update($data);
-    }
-
     public function insertMessageTraning($data)
     {
         $builder = $this->db->table('message_setting_training');
@@ -88,28 +74,5 @@ class CustomerModel
         return $builder->insert($data) ? $this->db->insertID() : false;
     }
 
-    public function getMessageToPromt($user_id)
-    {
-        $builder = $this->db->table('message_setting_training');
-        return $builder->where('user_id', $user_id)->where('message_state', 'Q')->get()->getResult();
-    }
 
-    public function getMessageTraningByID($user_id)
-    {
-        $builder = $this->db->table('message_setting_training');
-        return $builder->where('user_id', $user_id)->get()->getResult();
-    }
-
-    public function getMessageSettingByID($user_id)
-    {
-        $builder = $this->db->table('message_setting');
-        return $builder->where('user_id', $user_id)->get()->getRow();
-    }
-
-    public function deletesMessageTraining($user_id)
-    {
-        $builder = $this->db->table('message_setting_training');
-
-        return $builder->where('user_id', $user_id)->delete();
-    }
 }

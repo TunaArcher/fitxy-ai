@@ -17,8 +17,6 @@ class LineLoginController extends Controller
 
     public function callback()
     {
-        $session = session(); // ใช้ Session ของ CI4
-
         // ตรวจสอบว่ามี code และ state ส่งกลับมาหรือไม่
         $code = $this->request->getGet('code');
         $state = $this->request->getGet('state');
@@ -46,13 +44,13 @@ class LineLoginController extends Controller
             return $this->fail('Failed to get user profile', 500);
         }
 
-        // บันทึกข้อมูลผู้ใช้ลงใน Session
-        $session->set('line_user', $userInfo);
-
         // ตรวจสอบหรือสร้างบัญชีผู้ใช้
         $customer = $this->getOrCreateCustomer($userInfo);
 
         if ($customer) {
+            // บันทึกข้อมูลผู้ใช้ลงใน Session
+            session()->set('customer', $customer);
+
             return redirect()->to('/');
         }
 

@@ -1,594 +1,421 @@
+<style>
+  /* Progress Bar */
+  .progress-container {
+    width: 80%;
+    height: 10px;
+    background: #e0e0e0;
+    margin: auto;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 20%;
+    background: #03aed2;
+    text-align: center;
+    color: white;
+    line-height: 10px;
+    font-size: 12px;
+  }
+
+  /* ซ่อนแต่ละ Step (เฉพาะ .step.active จะแสดง) */
+  .step {
+    display: none;
+  }
+
+  .step.active {
+    display: block;
+  }
+
+  /* เลย์เอาต์ของ Scroll Picker (ใช้ใน Step 2-4) */
+  .picker-container {
+    width: 100%;
+    height: 500px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .picker-container::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: url("https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/select-bg-img.png") no-repeat center;
+    opacity: 0.3;
+    z-index: 1;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  .picker {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+  }
+
+  .picker::-webkit-scrollbar {
+    display: none;
+  }
+
+  .picker div {
+    font-size: 24px;
+    padding: 10px;
+    /* color: #bbb; */
+    transition: all 0.2s ease-in-out;
+    scroll-snap-align: center;
+  }
+
+  .picker div.selected {
+    font-size: 32px;
+    font-weight: bold;
+    /* color: black; */
+    transform: scale(1.2);
+  }
+
+  /* สำหรับ Step 1: เลือกเพศ */
+  .gender-options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+  }
+
+  .gender-option {
+    padding: 10px 25px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    /* font-size: 24px; */
+    transition: all 0.2s ease-in-out;
+  }
+
+  .gender-option.selected {
+    border-color: #03aed2;
+    background-color: #03aed2;
+    color: white;
+  }
+
+  /* ปุ่ม Navigation */
+  /* .multistep-form-btn {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  } */
+
+  /* .btn-next:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+  } */
+
+  /* สไตล์สำหรับ Radio Buttons ใน Step 5 */
+  #exerciseOptions {
+    max-width: 600px;
+    margin: auto;
+    text-align: left;
+  }
+
+  #exerciseOptions .form-check {
+    margin-bottom: 10px;
+  }
+
+  /* สไตล์สำหรับ Processing Overlay (Circle Spinner) */
+  .processing-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #03aed2;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    animation: spin 2s linear infinite;
+    margin-bottom: 20px;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .processing-text {
+    font-size: 20px;
+    color: #333;
+  }
+</style>
+<style>
+  .option,
+  .goal {
+    border-radius: 8px;
+    border: 2px solid var(--9, #F5F5F5);
+    background: rgba(0, 0, 0, .3);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    column-gap: 16px;
+  }
+
+  .data-privacy-content h1,
+  .manage-txt,
+  .social-txt,
+  .activity-details h3 {
+    /* color: var(--4, #12151C); */
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+  }
+
+  .activity-details p {
+    margin-top: 4px;
+  }
+
+  .nested-accordion .comment,
+  .account-back span,
+  .activity-details p {
+    color: var(--5, #555658);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+  }
+
+  #exerciseOptions .selected {
+    border-radius: 8px;
+    border: 2px solid var(--2, #03aed2);
+    background: var(--1, #FFF);
+    color: #000;
+  }
+</style>
+<style>
+  .nav-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1320px;
+    /* Default Bootstrap 5 container width */
+    padding: 16px;
+    z-index: 9;
+  }
+
+  /* ปรับตาม Bootstrap breakpoints */
+  @media (max-width: 1400px) {
+    .nav-fixed {
+      max-width: 1140px;
+      /* xl container */
+    }
+  }
+
+  @media (max-width: 1200px) {
+    .nav-fixed {
+      max-width: 960px;
+      /* lg container */
+    }
+  }
+
+  @media (max-width: 992px) {
+    .nav-fixed {
+      max-width: 720px;
+      /* md container */
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nav-fixed {
+      max-width: 540px;
+      /* sm container */
+    }
+  }
+
+  @media (max-width: 576px) {
+    .nav-fixed {
+      max-width: 100%;
+      /* xs (เต็มจอ) */
+    }
+  }
+</style>
+<header class="adminuiux-header">
+  <nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+      <button class="btn btn-square btn-link" onclick="goBack()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <p class="h6 my-1 px-3 text-center"><span class="title"></span></p>
+      <div class="ms-auto"></div>
+      <div class="ms-auto">
+        <button
+          class="btn btn-link btn-square btnsunmoon btn-link-header"
+          id="btn-layout-modes-dark-page">
+          <i class="sun mx-auto" data-feather="sun"></i>
+          <i class="moon mx-auto" data-feather="moon"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    $("#title").length > 0 && $(".title").html($("#title").html());
+  });
+</script>
+<div id="title" class="d-none">คำนวน TDEE</div>
 <div class="adminuiux-wrap">
-
-  <main class="adminuiux-content has-sidebar" onclick="contentClick()">
+  <main class="adminuiux-content" onclick="contentClick()">
     <div class="container mt-3" id="main-content">
-      <div class="row gx-3 align-items-center">
 
-        <div class="col-9 col-sm-8 col-md-9 col-xl mb-4">
-          <h1 class="fw-bold text-theme-accent-1 mb-0">
-            สวัสดีคุณ, <span><?php echo session()->get('displayName'); ?></span>
-          </h1>
-          <h4 class="text-theme-1">You have a fantastic day</h4>
+      <div class="progress mb-3 height-20" role="progressbar" aria-label="Basic example" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar bg-theme-1" style="width: 25%">Step 1 of 5</div>
+      </div>
+
+      <!-- ฟอร์มแบ่งเป็น 5 ขั้นตอน -->
+      <div id="formSteps">
+        <!-- Step 1: เลือกเพศ -->
+        <div class="step active text-center" data-step="1">
+          <h2>เลือกเพศ</h2>
+          <p>Please choose your gender.</p>
+          <div class="gender-options">
+            <div class="gender-option" data-value="ชาย"><img width="40" src="https://cdn-icons-png.flaticon.com/512/16967/16967045.png"> <span>ชาย</span></div>
+            <div class="gender-option" data-value="หญิง"><img width="40" src="https://cdn-icons-png.flaticon.com/512/16967/16967039.png"> <span>หญิง</span></div>
+            <div class="gender-option" data-value="LGBQ"><img width="40" src="https://cdn-icons-png.flaticon.com/512/4482/4482689.png"> <span>LGBQ</span></div>
+          </div>
         </div>
-
-        <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
-          <div
-            class="card adminuiux-card border-0 position-relative border-0 overflow-hidden blur-overlay mb-3">
-            <div
-              class="position-absolute top-0 start-0 h-100 w-100 coverimg opacity-75 z-index-0">
-              <img src="<?php echo session()->get('pictureUrl'); ?>" alt="" />
-            </div>
-            <div class="card-header z-index-1">
-              <div class="row align-items-center">
-                <div class="col">
-                  <h6> แคลวันนี้ X,xxx สู้สู้นะ</h6>
-                </div>
-                <div class="col-auto">
-                  <span class="badge badge-light text-bg-theme-1 theme-orange">
-                    <span class="bi bi-award text-theme-1"></span> เป้าหมาย
-                  </span>
-                </div>
+        <!-- Step 2: เลือกอายุ -->
+        <div class="step text-center" data-step="2">
+          <h2>เลือกอายุ</h2>
+          <p>Please provide your age in years.</p>
+          <div class="picker-container">
+            <div class="picker" id="agePicker"></div>
+          </div>
+        </div>
+        <!-- Step 3: เลือกน้ำหนัก -->
+        <div class="step text-center" data-step="3">
+          <h2>เลือกน้ำหนัก</h2>
+          <p>Please provide your weight in kilograms.</p>
+          <div class="picker-container">
+            <div class="picker" id="weightPicker"></div>
+          </div>
+        </div>
+        <!-- Step 4: เลือกส่วนสูง -->
+        <div class="step text-center" data-step="4">
+          <h2>เลือกส่วนสูง</h2>
+          <p>Please provide your height in centimeters.</p>
+          <div class="picker-container">
+            <div class="picker" id="heightPicker"></div>
+          </div>
+        </div>
+        <!-- Step 5: เลือกระดับการออกกำลังกาย (ใช้ Option) -->
+        <div class="step text-center" data-step="5">
+          <h2>เลือกระดับการออกกำลังกาย</h2>
+          <p>Please select your level of physical activity.</p>
+          <div id="exerciseOptions" class="mt-4">
+            <div class="option text-start" id="activity1">
+              <div class="activity-icon">
+                <img src="https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/activity1.png" alt="activity-img">
+              </div>
+              <div class="activity-details text-start">
+                <h3>Sedentary</h3>
+                <p>ไม่ออกกำลังกายเลยหรือน้อยมาก</p>
               </div>
             </div>
-            <div class="card-body py-0 z-index-1">
-              <div class="height-170 text-center position-relative mb-3">
-                <div
-                  class="position-absolute top-50 start-50 translate-middle z-index-1 bg-white rounded-circle p-1">
-                  <figure
-                    class="avatar avatar-120 rounded-circle coverimg align-middle shadow-sm">
-                    <img src="<?php echo session()->get('pictureUrl'); ?>" alt="" />
-                  </figure>
-                </div>
-                <canvas
-                  id="doughnutchart"
-                  class="position-relative z-index-0 mx-auto"></canvas>
+            <div class="option mt-2 text-start" id="activity2">
+              <div class="activity-icon">
+                <img src="https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/activity2.png" alt="activity-img">
               </div>
-              <div class="row">
-                <div class="col-6 col-lg-6 mb-3">
-                  <p class="small">
-                    <span
-                      class="me-1 avatar avatar-20 rounded bg-green"></span>
-                    Exercise
-                    <span class="text-success fw-normal ms-1">45%</span>
-                  </p>
-                </div>
-                <div class="col-6 col-lg-6 mb-3">
-                  <p class="small">
-                    <span
-                      class="me-1 avatar avatar-20 rounded bg-orange"></span>
-                    Diet
-                    <span class="text-success fw-normal ms-1">30%</span>
-                  </p>
-                </div>
-                <div class="col-6 col-lg-6 mb-3">
-                  <p class="small">
-                    <span
-                      class="me-1 avatar avatar-20 rounded bg-cyan"></span>
-                    Medicine
-                    <span class="text-success fw-normal ms-1">25%</span>
-                  </p>
-                </div>
-                <div class="col-6 col-lg-6 mb-3">
-                  <p class="small">
-                    <span
-                      class="me-1 avatar avatar-20 rounded bg-white"></span>
-                    Other
-                    <span class="text-success fw-normal ms-1">10%</span>
-                  </p>
-                </div>
+              <div class="activity-details text-start">
+                <h3>Lightly Active</h3>
+                <p>ออกกำลังกายเบา ๆ 1-3 ครั้ง/สัปดาห์</p>
+              </div>
+            </div>
+            <div class="option mt-2 text-start selected" id="activity3">
+              <div class="activity-icon">
+                <img src="https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/activity3.png" alt="activity-img">
+              </div>
+              <div class="activity-details text-start">
+                <h3>Moderately Active</h3>
+                <p>ออกกำลังกายระดับปานกลาง 4-5 ครั้ง/สัปดาห์</p>
+              </div>
+            </div>
+            <div class="option mt-2 text-start" id="activity4">
+              <div class="activity-icon">
+                <img src="https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/activity4.png" alt="activity-img">
+              </div>
+              <div class="activity-details text-start">
+                <h3>Very Active</h3>
+                <p>ออกกำลังกายทุกวันหรือหนัก 3-4 ครั้ง/สัปดาห์</p>
+              </div>
+            </div>
+            <div class="option mt-2 text-start" id="activity5">
+              <div class="activity-icon">
+                <img src="https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/activity5.png" alt="activity-img">
+              </div>
+              <div class="activity-details text-start">
+                <h3>Athlete</h3>
+                <p>ออกกำลังกายหนักมากทุกวันหรือทำงานหนัก</p>
               </div>
             </div>
           </div>
         </div>
 
       </div>
-      <!-- <div class="swiper swipernav mb-3">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide width-140">
-                <div class="card adminuiux-card theme-green">
-                  <div class="card-header">
-                    <div class="row">
-                      <div class="col"><h6>Walk</h6></div>
-                      <div class="col-auto">
-                        <i class="bi bi-person-walking text-theme-1"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body text-center pt-0">
-                    <div class="avatar avatar-100 mx-auto position-relative">
-                      <div id="circleprogressgreen2"></div>
-                      <div class="position-absolute top-0 start-0 w-100 h-100">
-                        <div
-                          class="row align-items-center justify-content-center h-100"
-                        >
-                          <div class="col-auto lh-20">
-                            <h4 class="h4 mb-0">7532</h4>
-                            <p class="small opacity-75">Steps</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide width-140">
-                <div class="card adminuiux-card theme-red">
-                  <div class="card-header">
-                    <div class="row">
-                      <div class="col"><h6>Heart</h6></div>
-                      <div class="col-auto">
-                        <i class="bi bi-heart text-theme-1"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body pt-0 px-0">
-                    <div class="height-100 w-100 mx-auto position-relative">
-                      <canvas id="lineheart"></canvas>
-                      <div
-                        class="position-absolute bottom-0 start-0 w-100 px-3"
-                      >
-                        <div
-                          class="row align-items-center justify-content-center h-100"
-                        >
-                          <div class="col-12 lh-20">
-                            <h4 class="h4 mb-0">80</h4>
-                            <p class="small opacity-75">bpm</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide width-140">
-                <div class="card adminuiux-card theme-purple">
-                  <div class="card-header">
-                    <div class="row">
-                      <div class="col"><h6>Sleep</h6></div>
-                      <div class="col-auto">
-                        <i class="bi bi-moon-stars text-theme-1"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body text-center pt-0">
-                    <div
-                      class="avatar avatar-60 mx-auto position-relative mb-3"
-                    >
-                      <div id="circleprogresspurple1"></div>
-                    </div>
-                    <h4 class="h4 mb-0">
-                      7.4 <span class="fw-normal fs-14 opacity-75">Hours</span>
-                    </h4>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide width-140">
-                <div class="card adminuiux-card theme-cyan">
-                  <div class="card-header">
-                    <div class="row">
-                      <div class="col"><h6>Exercise</h6></div>
-                      <div class="col-auto">
-                        <i class="bi bi-bicycle text-theme-1"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body text-center pt-0">
-                    <div class="height-100">
-                      <canvas id="areachartblue1"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide width-140">
-                <div class="card adminuiux-card theme-orange">
-                  <div class="card-header">
-                    <div class="row">
-                      <div class="col"><h6>Calories</h6></div>
-                      <div class="col-auto">
-                        <i class="bi bi-speedometer text-theme-1"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-body text-center pt-0">
-                    <div class="avatar avatar-100 mx-auto position-relative">
-                      <div id="circleprogressorange1"></div>
-                      <div class="position-absolute top-0 start-0 w-100 h-100">
-                        <div
-                          class="row align-items-center justify-content-center h-100"
-                        >
-                          <div class="col-auto lh-20">
-                            <h4 class="h4 mb-0">365</h4>
-                            <p class="small opacity-75">kcal</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
-      <!-- <div class="swiper swipernav mb-3">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide width-300">
-                <div class="card adminuiux-card border-0 bg-gradient-7">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-8">
-                        <h6 class="text-truncated">
-                          Complete Morning Yoga Session
-                        </h6>
-                        <p class="text-secondary fs-14 mb-2">
-                          <span class="me-1"
-                            ><i class="bi bi-clock me-1"></i> 20 min</span
-                          >
-                          <span class="me-1"
-                            ><i class="bi bi-fire me-1"></i> 250 kcal</span
-                          >
-                        </p>
-                        <button class="btn btn-sm btn-link bg-white-opacity">
-                          <i class="bi bi-play me-1"></i> Start
-                        </button>
-                      </div>
-                      <div class="col-4">
-                        <figure class="height-90 w-100 rounded coverimg mb-0">
-                          <img src="assets/img/fitness/image-7.jpg" alt="" />
-                        </figure>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide width-300">
-                <div class="card adminuiux-card border-0 bg-gradient-3">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-8">
-                        <h6 class="text-truncated">
-                          Workout for belly fat reduce
-                        </h6>
-                        <p class="text-secondary fs-14 mb-2">
-                          <span class="me-1"
-                            ><i class="bi bi-clock me-1"></i> 22 min</span
-                          >
-                          <span class="me-1"
-                            ><i class="bi bi-fire me-1"></i> 185 kcal</span
-                          >
-                        </p>
-                        <button class="btn btn-sm btn-link bg-white-opacity">
-                          <i class="bi bi-play me-1"></i> Start
-                        </button>
-                      </div>
-                      <div class="col-4">
-                        <figure class="height-90 w-100 rounded coverimg mb-0">
-                          <img src="assets/img/fitness/image-8.jpg" alt="" />
-                        </figure>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide width-300">
-                <div class="card adminuiux-card border-0 bg-r-gradient">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-8">
-                        <h6 class="text-truncated">
-                          The great evening Yoga Session
-                        </h6>
-                        <p class="text-secondary fs-14 mb-2">
-                          <span class="me-1"
-                            ><i class="bi bi-clock me-1"></i> 18 min</span
-                          >
-                          <span class="me-1"
-                            ><i class="bi bi-fire me-1"></i> 120 kcal</span
-                          >
-                        </p>
-                        <button class="btn btn-sm btn-link bg-white-opacity">
-                          <i class="bi bi-play me-1"></i> Start
-                        </button>
-                      </div>
-                      <div class="col-4">
-                        <figure class="height-90 w-100 rounded coverimg mb-0">
-                          <img src="assets/img/fitness/image-3.jpg" alt="" />
-                        </figure>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide width-300">
-                <div class="card adminuiux-card border-0 bg-gradient-10">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-8">
-                        <h6 class="text-truncated">
-                          Routine Exercise for Legs
-                        </h6>
-                        <p class="text-secondary fs-14 mb-2">
-                          <span class="me-1"
-                            ><i class="bi bi-clock me-1"></i> 30 min</span
-                          >
-                          <span class="me-1"
-                            ><i class="bi bi-fire me-1"></i> 300 kcal</span
-                          >
-                        </p>
-                        <button class="btn btn-sm btn-link bg-white-opacity">
-                          <i class="bi bi-play me-1"></i> Start
-                        </button>
-                      </div>
-                      <div class="col-4">
-                        <figure class="height-90 w-100 rounded coverimg mb-0">
-                          <img src="assets/img/fitness/image-4.jpg" alt="" />
-                        </figure>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide width-300">
-                <div class="card adminuiux-card border-0 bg-gradient-6">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-8">
-                        <h6 class="text-truncated">
-                          Complete Morning Yoga Session
-                        </h6>
-                        <p class="text-secondary fs-14 mb-2">
-                          <span class="me-1"
-                            ><i class="bi bi-clock me-1"></i> 35 min</span
-                          >
-                          <span class="me-1"
-                            ><i class="bi bi-fire me-1"></i> 220 kcal</span
-                          >
-                        </p>
-                        <button class="btn btn-sm btn-link bg-white-opacity">
-                          <i class="bi bi-play me-1"></i> Start
-                        </button>
-                      </div>
-                      <div class="col-4">
-                        <figure class="height-90 w-100 rounded coverimg mb-0">
-                          <img src="assets/img/fitness/image-5.jpg" alt="" />
-                        </figure>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
-      <div class="row">
-        <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
-          <div class="row gx-3">
-            <div class="col-6">
-              <a href="<?php echo base_url('/calculate'); ?>">
-                <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">
-                  <div class="card-body position-relative">
-                    <h4 class="mb-0">คำนวน</h4>
-                    <p class="opacity-75 mb-4">TEDD</p>
-                  </div>
-                </div>
-              </a>
-            </div>
 
-            <div class="col-6">
-              <a href="<?php echo base_url('/'); ?>">
-                <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">
-                  <div class="card-body position-relative">
-                    <h4 class="mb-0">Develop</h4>
-                    <p class="opacity-75 mb-4">Develop</p>
-                  </div>
-                </div>
-              </a>
+      <!-- Navigation Buttons ที่จะอยู่ติดขอบล่าง -->
+      <div class="nav-fixed">
+        <div class="bg-theme-1-subtle rounded px-3 py-2 mb-4">
+          <div class="row">
+            <div class="col">
+              <button class="btn btn-accent me-3 my-2" id="backBtn" disabled>
+                <i class="bi bi-arrow-left me-2"></i> ย้อนกลับ
+              </button>
             </div>
-
-            <div class="col-6">
-              <a href="<?php echo base_url('/'); ?>">
-                <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">
-                  <div class="card-body position-relative">
-                    <h4 class="mb-0">Develop</h4>
-                    <p class="opacity-75 mb-4">Develop</p>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div class="col-6">
-              <a href="<?php echo base_url('/'); ?>">
-                <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">
-                  <div class="card-body position-relative">
-                    <h4 class="mb-0">Develop</h4>
-                    <p class="opacity-75 mb-4">Develop</p>
-                  </div>
-                </div>
-              </a>
+            <div class="col-auto">
+              <button class="btn btn-theme my-2" id="nextBtn" disabled>
+                ถัดไป <i class="bi bi-arrow-right ms-2"></i>
+              </button>
             </div>
           </div>
         </div>
-        <!-- <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
-              <div class="card adminuiux-card mb-3">
-                <div class="card-body">
-                  <div class="swiper swipernav dateselect">
-                    <div class="swiper-wrapper">
-                      <div class="swiper-slide text-center pt-1">
-                        <p
-                          class="small text-secondary text-uppercase text-truncated mb-0"
-                        >
-                          Wed
-                        </p>
-                        <div class="avatar avatar-30 rounded">4</div>
-                      </div>
-                      <div class="swiper-slide text-center pt-1">
-                        <p
-                          class="small text-secondary text-uppercase text-truncated mb-0"
-                        >
-                          Thu
-                        </p>
-                        <div class="avatar avatar-30 rounded">5</div>
-                      </div>
-                      <div class="swiper-slide text-center pt-1 active">
-                        <p
-                          class="small text-secondary text-uppercase text-truncated mb-0"
-                        >
-                          Fri
-                        </p>
-                        <div class="avatar avatar-30 rounded">6</div>
-                      </div>
-                      <div class="swiper-slide text-center pt-1">
-                        <p
-                          class="small text-secondary text-uppercase text-truncated mb-0"
-                        >
-                          Sat
-                        </p>
-                        <div class="avatar avatar-30 rounded">7</div>
-                      </div>
-                      <div class="swiper-slide text-center pt-1">
-                        <p
-                          class="small text-secondary text-uppercase text-truncated mb-0"
-                        >
-                          Sun
-                        </p>
-                        <div class="avatar avatar-30 rounded">8</div>
-                      </div>
-                      <div class="swiper-slide text-center pt-1">
-                        <p
-                          class="small text-secondary text-uppercase text-truncated mb-0"
-                        >
-                          Mon
-                        </p>
-                        <div class="avatar avatar-30 rounded">9</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="card-body height-dynamic overflow-auto pb-0"
-                  style="--h-dynamic: 225px"
-                >
-                  <div class="card mb-2">
-                    <div class="card-body">
-                      <p class="mb-3 small fw-medium text-secondary">
-                        10:00 am - 11:30 am
-                        <span class="text-warning bi bi-tag"></span>
-                      </p>
-                      <div class="row align-items-center gx-2 mb-0">
-                        <div class="col-auto">
-                          <img
-                            src="assets/img/fitness/image-11.jpg"
-                            class="avatar avatar-40 rounded"
-                            alt=""
-                          />
-                        </div>
-                        <div class="col">
-                          <h6 class="mb-0">Diet Management Event</h6>
-                          <p class="text-secondary small text-truncated">
-                            Sweden, Europe.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card bg-r-gradient mb-2">
-                    <div class="card-body">
-                      <p class="mb-3 small fw-medium text-secondary">
-                        10:00 am - 11:30 am
-                        <span class="text-warning bi bi-tag"></span>
-                      </p>
-                      <div class="row gx-2 mb-0">
-                        <div class="col-auto">
-                          <img
-                            src="assets/img/modern-ai-image/user-4.jpg"
-                            class="avatar avatar-40 rounded"
-                            alt=""
-                          />
-                          <img
-                            src="assets/img/fitness/image-10.jpg"
-                            class="avatar avatar-40 rounded"
-                            alt=""
-                          />
-                        </div>
-                        <div class="col">
-                          <h6 class="mb-0">Lunch out</h6>
-                          <p class="text-secondary small text-truncated">
-                            Chapter 2 starting.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card mb-2">
-                    <div class="card-body">
-                      <p class="mb-3 small fw-medium text-secondary">
-                        10:00 am - 11:30 am
-                        <span class="text-warning bi bi-tag"></span>
-                      </p>
-                      <div class="row gx-2 mb-0">
-                        <div class="col-auto">
-                          <img
-                            src="assets/img/modern-ai-image/user-5.jpg"
-                            class="avatar avatar-40 rounded"
-                            alt=""
-                          />
-                          <img
-                            src="assets/img/modern-ai-image/user-6.jpg"
-                            class="avatar avatar-40 rounded"
-                            alt=""
-                          />
-                        </div>
-                        <div class="col">
-                          <h6 class="mb-0">Noon Yoga Session</h6>
-                          <p class="text-secondary small text-truncated">
-                            By Jyotika Vaishnav.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-        <!-- <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
-              <div
-                class="card adminuiux-card bg-theme-1 overflow-hidden position-relative mb-3"
-              >
-                <div
-                  class="position-absolute start-0 top-0 h-100 w-100 rounded overflow-hidden coverimg z-index-0"
-                >
-                  <img src="assets/img/fitness/bg-overlay-1.png" alt="" />
-                </div>
-                <div
-                  class="card-body height-dynamic position-relative"
-                  style="--h-dynamic: 315px"
-                >
-                  <span
-                    class="opacity-50 position-absolute end-0 top-0 m-1 mx-2 fs-12"
-                    >Advertisement</span
-                  >
-                  <div
-                    class="row align-items-center justify-content-center h-100"
-                  >
-                    <div class="col-11">
-                      <h3 class="fw-normal mb-0">
-                        Stress relief<br />with Om Aditya
-                      </h3>
-                      <p class="opacity-75">By: John Nicolas</p>
-                      <h1 class="mb-0">20% OFF</h1>
-                      <br />
-                      <div class="row align-items-center">
-                        <div class="col">
-                          <button class="btn btn-outline-light">
-                            Enroll Now
-                          </button>
-                        </div>
-                        <div class="col-auto">
-                          <small class="opacity-50">Code:</small><br />NKJF007
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
       </div>
+    </div>
+
+    <!-- Processing Overlay (Circle Spinner) -->
+    <div class="processing-overlay" id="processingOverlay">
+      <div class="spinner"></div>
+      <p class="processing-text">กำลังประมวลผล...</p>
+    </div>
+
+    <div class="container mt-3 text-center" id="wrapper-result-tdee" style="display: none;">
+      <h3>พลังงานที่ต้องการในแต่ละวัน (TDEE)</h3>
+      <h1 id="tdee-result"></h1>
+      <div id="table-result-tdee"></div>
     </div>
   </main>
 </div>

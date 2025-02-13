@@ -37,12 +37,6 @@ class HomeController extends BaseController
 
     private function Auth()
     {
-        $grant_type = "authorization_code";
-        $code = "CODE_FROM_LINE";
-        $callback_uri = base_url('/callback');
-        $client_id = "2006891812";
-        $client_secret = "9fb3a0f44a76c91f40bc2971b57e1066";
-
         // สร้างค่า state แบบสุ่ม
         $state = bin2hex(random_bytes(16));
 
@@ -63,8 +57,6 @@ class HomeController extends BaseController
 
     public function index()
     {
-
-
         if (session()->get('customer')) {
 
             $data = [
@@ -83,36 +75,6 @@ class HomeController extends BaseController
             return redirect()->to($this->Auth());
         }
     }
-
-    // public function register()
-    // {
-    //     if (session()->get('line_user')) {
-    //         return redirect()->to('/');
-    //     }
-
-    //     $grant_type = "authorization_code";
-    //     $code = "CODE_FROM_LINE";
-    //     $callback_uri = base_url('/callback');
-    //     $client_id = "2006891812";
-    //     $client_secret = "9fb3a0f44a76c91f40bc2971b57e1066";
-
-    //     // สร้างค่า state แบบสุ่ม
-    //     $state = bin2hex(random_bytes(16));
-
-    //     // เก็บค่า state ไว้ใน Session โดยใช้ CI4
-    //     session()->set('oauth_state', $state);
-
-    //     // ใช้ค่า $state ใน URL ของ LINE Login
-    //     $line_login_url = "https://access.line.me/oauth2/v2.1/authorize?" . http_build_query([
-    //         "response_type" => "code",
-    //         "client_id" => getenv('LINE_CLIENT_ID'),
-    //         "redirect_uri" => base_url('/callback'),
-    //         "scope" => "profile openid email",
-    //         "state" => $state
-    //     ]);
-
-    //     return redirect()->to($line_login_url);
-    // }
 
     public function calculate()
     {

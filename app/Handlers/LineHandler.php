@@ -121,17 +121,21 @@ class LineHandler
 
     private function filterMessage($inputText)
     {
+        // ลบ json และ ออกจากข้อความ 
+        $cleanText = preg_replace('/```json|```/', '', $inputText);
+        $cleanText = trim($cleanText); // ลบช่องว่างที่ไม่จำเป็น
+
         // ใช้ regex แยก JSON ออกมา
-        preg_match('/\{.*\}/s', $inputText, $jsonMatch);
+        preg_match('/\{.*\}/s', $cleanText, $jsonMatch);
         $json = !empty($jsonMatch) ? json_decode($jsonMatch[0], true) : null;
 
         // ตรวจสอบว่ามีข้อความ "พลังงานรวมของมื้ออาหาร" และ JSON ที่มี key "totalcal" หรือไม่
-        if (strpos($inputText, 'พลังงานรวมของมื้ออาหาร') !== false && is_array($json) && isset($json['totalcal'])) {
+        if (strpos($cleanText, 'พลังงานรวมของมื้ออาหาร') !== false && is_array($json) && isset($json['totalcal'])) {
             // แยกเฉพาะส่วนของข้อความที่ไม่รวม JSON
-            $message = trim(str_replace($jsonMatch[0], '', $inputText));
+            $message = trim(str_replace($jsonMatch[0], '', $cleanText));
         } else {
             // เก็บทุกอย่างลงใน $message และให้ $json ว่างเปล่า
-            $message = $inputText;
+            $message = $cleanText;
             $json = [];
         }
 

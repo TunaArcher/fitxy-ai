@@ -7,7 +7,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 class RabbitMQPublisher
 {
-    public function publishMessage($UID,$messageRoom)
+    public function publishMessage($UID, $messageRoom)
     {
         $connection = RabbitMQ::getConnection();
         $channel = $connection->channel();

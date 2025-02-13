@@ -8,6 +8,7 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 use App\Models\MessageModel;
 use App\Models\MessageRoomModel;
+use Config\RabbitMQ;
 
 class RabbitMQConsumer extends BaseCommand
 {
@@ -17,7 +18,7 @@ class RabbitMQConsumer extends BaseCommand
 
     public function run(array $params)
     {
-        $connection = new AMQPStreamConnection('localhost', 5672, 'guest', 'guest');
+        $connection = RabbitMQ::getConnection();
         $channel = $connection->channel();
 
         // ประกาศ Queue
@@ -59,9 +60,6 @@ class RabbitMQConsumer extends BaseCommand
         $messageRoomID = $messageRoom->id;
 
         $messageModel = new MessageModel();
-        $messageRoomModel = new MessageRoomModel();
-
-        $messageRoom = $messageRoomModel->getMessageRoomByID($messageRoomID);
 
         // ดึงข้อความล่าสุดของห้องแชท
         $lastContextTimestamp = $messageModel->lastContextTimestamp($messageRoomID);

@@ -115,12 +115,17 @@ function uploadToSpaces($fileContent, $fileName, $fileType)
             $folder = "uploads/others/"; // เผื่อไว้สำหรับประเภทอื่น ๆ ในอนาคต
     }
 
+    // ตรวจสอบ MIME Type ของไฟล์
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mimeType = $finfo->buffer($fileContent) ?: 'application/octet-stream';
+
     try {
         $result = $s3->putObject([
             'Bucket' => getenv('S3_BUCKET'),
             'Key' => $folder . $fileName, // อัปโหลดไปยังโฟลเดอร์ที่เหมาะสม
             'Body' => $fileContent,
-            'ACL' => 'public-read' // ตั้งค่าให้ไฟล์เป็น public
+            'ACL' => 'public-read', // ตั้งค่าให้ไฟล์เป็น public
+            'ContentType' => $mimeType // ✅ กำหนด Content-Type ที่ถูกต้อง
         ]);
 
         return $result['ObjectURL']; // คืน URL ของไฟล์ที่อัปโหลด
@@ -128,7 +133,6 @@ function uploadToSpaces($fileContent, $fileName, $fileType)
         throw new Exception("Failed to upload to Spaces: " . $e->getMessage());
     }
 }
-
 
 function fetchFileFromWebhook($url, $headers = [])
 {

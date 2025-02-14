@@ -22,7 +22,7 @@ class CheckPermissions implements FilterInterface
         // if (getenv('CI_ENVIRONMENT') === 'development' || getenv('CI_ENVIRONMENT') === 'production') {
         if (getenv('CI_ENVIRONMENT') === 'development') {
 
-            $customer = $this->customerModel->getCustomerByUID('U8bf2cbdb6cbbdb8709dc268512abd4a3');
+            $customer = $this->customerModel->getCustomerByUID('U631d74f9459a3f6b033c6c8a97acf980');
 
             session()->set('customer', $customer);
         }

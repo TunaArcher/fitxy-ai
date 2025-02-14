@@ -20,8 +20,8 @@
             /* --adminuiux-title-font-weight: 600; */
         }
     </style>
-    <script src="assets/js/app.js"></script>
-    <link href="assets/css/app.css" rel="stylesheet" />
+    <script src="<?php echo base_url('assets/js/app.js'); ?>"></script>
+    <link href="<?php echo base_url('assets/css/app.css'); ?>" rel="stylesheet" />
 
 
     <link rel="preconnect" href="https://fonts.gstatic.com">

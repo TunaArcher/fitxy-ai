@@ -53,6 +53,17 @@ $routes->group('menu', function ($routes) {
 });
 
 // -----------------------------------------------------------------------------
+// Food
+// -----------------------------------------------------------------------------
+
+$routes->group('food', function ($routes) {
+    $routes->get('table', 'HomeController::foodTable');
+    $routes->post('generate', 'HomeController::foodGenerate');
+    $routes->post('saveTable', 'HomeController::foodSaveTable');
+});
+
+
+// -----------------------------------------------------------------------------
 // Webhook
 // -----------------------------------------------------------------------------
 

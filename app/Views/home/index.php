@@ -181,15 +181,15 @@
               </a>
             </div>
 
-            <div class="col-6 disabled">
-              <a href="<?php echo base_url('/'); ?>">
+            <div class="col-6">
+              <a href="<?php echo base_url('/food/table'); ?>">
                 <div class="card adminuiux-card border-0 height-150 mb-3 overflow-hidden hover-action">
                   <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg z-index-0" style="background-image: url(&quot;assets/img/fitness/image-10.jpg&quot;);">
                     <img src="assets/img/fitness/image-10.jpg" alt="" style="display: none;">
                   </figure>
                   <div class="card-body position-relative">
-                    <h4 class="mb-0">Develop</h4>
-                    <p class="opacity-75 mb-4">Develop</p>
+                    <h4 class="mb-0">ตารางอาหาร</h4>
+                    <p class="opacity-75 mb-4">ออกแบบตารางอาหารดังใจคุณ (AI)</p>
                   </div>
                 </div>
               </a>
@@ -202,8 +202,8 @@
                     <img src="assets/img/modern-ai-image/user-4.jpg" alt="" style="display: none;">
                   </figure>
                   <div class="card-body position-relative">
-                    <h4 class="mb-0">Develop</h4>
-                    <p class="opacity-75 mb-4">Develop</p>
+                    <h4 class="mb-0">Ads</h4>
+                    <p class="opacity-75 mb-4">Ads</p>
                   </div>
                 </div>
               </a>

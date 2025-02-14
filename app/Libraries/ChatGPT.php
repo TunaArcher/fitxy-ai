@@ -576,4 +576,30 @@ class ChatGPT
             ];
         }, array_filter(explode(',', $fileNames), 'strlen'));
     }
+
+    public function completions($systemMessage, $messages)
+    {
+        try {
+
+            $response = $this->http->post($this->baseURL, [
+                'headers' => [
+                    'Authorization' => "Bearer {$this->accessToken}",
+                    'Content-Type'  => 'application/json',
+                ],
+                'json' => [
+                    'model' => 'gpt-4o-mini',
+                    'messages' => [
+                        ['role' => 'system', 'content' => $systemMessage],
+                        ['role' => 'user', 'content' => $messages],
+                    ],
+                ]
+            ]);
+
+            $responseBody = json_decode($response->getBody(), true);
+            return $responseBody['choices'][0]['message']['content'] ?? 'No response';
+        } catch (\Exception $e) {
+            log_message('error', 'ChatGPT::completions error {message}', ['message' => $e->getMessage()]);
+            return 'Error: ' . $e->getMessage();
+        }
+    }
 }

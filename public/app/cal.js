@@ -148,14 +148,14 @@ document.addEventListener("DOMContentLoaded", function () {
   for (let i = 20; i <= 150; i++) {
     weightValues.push(i);
   }
-  initScrollPicker("weightPicker", weightValues, "weight", 50);
+  initScrollPicker("weightPicker", weightValues, "weight", 60);
 
   // Step 4: เลือกส่วนสูง (150-200) โดยระบุ default เป็น 150
   const heightValues = [];
   for (let i = 120; i <= 200; i++) {
     heightValues.push(i);
   }
-  initScrollPicker("heightPicker", heightValues, "height", 150);
+  initScrollPicker("heightPicker", heightValues, "height", 161);
 
   // -------------------------------
   // Step 5: เลือกระดับการออกกำลังกาย (ใช้ Option)

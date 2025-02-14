@@ -31,7 +31,8 @@
   /* เลย์เอาต์ของ Scroll Picker (ใช้ใน Step 2-4) */
   .picker-container {
     width: 100%;
-    height: 500px;
+    /* height: 500px; */
+    height: 300px;
     position: relative;
     overflow: hidden;
     text-align: center;
@@ -121,10 +122,13 @@
 
   /* สไตล์สำหรับ Radio Buttons ใน Step 5 */
   #exerciseOptions {
-    max-width: 600px;
+    /* max-width: 600px; */
     margin: auto;
     text-align: left;
-  }
+    overflow-y: scroll;
+    /* max-height: 500px; */
+    padding-bottom: 120px;
+}
 
   #exerciseOptions .form-check {
     margin-bottom: 10px;
@@ -305,7 +309,7 @@
           <div class="gender-options">
             <div class="gender-option" data-value="ชาย"><img width="40" src="https://cdn-icons-png.flaticon.com/512/16967/16967045.png"> <span>ชาย</span></div>
             <div class="gender-option" data-value="หญิง"><img width="40" src="https://cdn-icons-png.flaticon.com/512/16967/16967039.png"> <span>หญิง</span></div>
-            <div class="gender-option" data-value="LGBQ"><img width="40" src="https://cdn-icons-png.flaticon.com/512/4482/4482689.png"> <span>LGBQ</span></div>
+            <!-- <div class="gender-option" data-value="LGBQ"><img width="40" src="https://cdn-icons-png.flaticon.com/512/4482/4482689.png"> <span>LGBQ</span></div> -->
           </div>
         </div>
         <!-- Step 2: เลือกอายุ -->

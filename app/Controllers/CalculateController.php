@@ -3,15 +3,17 @@
 namespace App\Controllers;
 
 use App\Models\CustomerModel;
-use App\Models\UserModel;
+use App\Models\MenuModel;
 
 class CalculateController extends BaseController
 {
     private CustomerModel $customerModel;
+    private MenuModel $menuModel;
 
     public function __construct()
     {
         $this->customerModel = new CustomerModel();
+        $this->menuModel = new MenuModel();
     }
 
     public function index()
@@ -31,7 +33,8 @@ class CalculateController extends BaseController
                         '
                     ];
 
-                    $data['line_user'] = session()->get('line_user');
+                    $data['menuToday'] = $this->menuModel->getMenuTodayByCustomerID(session()->get('customer')->id);
+                    $data['calToDay'] = $this->menuModel->getTotalCalTodayByCustomerID(session()->get('customer')->id)->cal_today;
 
                     echo view('/app', $data);
                     break;
@@ -43,7 +46,7 @@ class CalculateController extends BaseController
                     $response['data'] = '';
 
                     $requestPayload = $this->request->getJSON();
-                    
+
 
                     if (session()->get('customer')) {
 

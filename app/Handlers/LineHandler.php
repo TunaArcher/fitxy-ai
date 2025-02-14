@@ -104,7 +104,7 @@ class LineHandler
         if ($repyleMessage['json']) {
             $this->menuModel->insertMenu([
                 'customer_id' => $messageRoom->customer_id,
-                'content' => $message['img_url'],
+                'content' => $this->cleanUrl($message['img_url']),
                 'note' => $repyleMessage['repyleMessage'],
                 'cal' => $repyleMessage['json'],
             ]);
@@ -118,6 +118,12 @@ class LineHandler
     // -----------------------------------------------------------------------------
     // Helper
     // -----------------------------------------------------------------------------
+
+    private function cleanUrl($text)
+    {
+        $urls = explode(',', $text); // แยกเป็นอาร์เรย์โดยใช้ ,
+        return trim($urls[0]); // คืนค่าเฉพาะตัวแรกและตัดช่องว่างออก
+    }
 
     private function filterMessage($inputText)
     {

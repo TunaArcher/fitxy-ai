@@ -3,23 +3,14 @@
 namespace App\Controllers;
 
 use App\Models\MenuModel;
-use App\Models\MessageModel;
-use App\Models\MessageRoomModel;
-use App\Models\UserModel;
 
 class HomeController extends BaseController
 {
     private MenuModel $menuModel;
-    private MessageModel $messageModel;
-    private MessageRoomModel $messageRoomModel;
-    private UserModel $userModel;
 
     public function __construct()
     {
         $this->menuModel = new MenuModel();
-        $this->messageModel = new MessageModel();
-        $this->messageRoomModel = new MessageRoomModel();
-        $this->userModel = new UserModel();
     }
 
     private function Auth()

@@ -18,6 +18,12 @@ class TestController extends BaseController
         $this->messageRoomModel = new MessageRoomModel();
     }
 
+    // public function test()
+    // {
+    //     $text1 = 'https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line_agent/line_67ae915b545f3.jpg,';
+    //     $text2 = 'https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line_agent/line_67ae94eed9099.jpg,https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line_agent/line_67ae95223151b.jpg,';
+    // }
+
     public function index()
     {
         $chatGPT = new ChatGPT(['GPTToken' => getenv('GPT_TOKEN')]);

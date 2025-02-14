@@ -34,6 +34,8 @@ $routes->set404Override('App\Controllers\Errors::show404');
  * --------------------------------------------------------------------
  */
 
+// $routes->get('/test', 'TestController::test');
+
 $routes->get('/', 'HomeController::index');
 $routes->get('/logout', 'HomeController::logout');
 $routes->get('/register', 'HomeController::register');

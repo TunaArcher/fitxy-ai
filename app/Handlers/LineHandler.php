@@ -9,18 +9,14 @@ use App\Models\CustomerModel;
 use App\Models\MenuModel;
 use App\Models\MessageModel;
 use App\Models\MessageRoomModel;
-use App\Models\UserModel;
 
 class LineHandler
 {
-    private $platform = 'Line';
-
     private AccountModel $accountModel;
     private CustomerModel $customerModel;
     private MenuModel $menuModel;
     private MessageModel $messageModel;
     private MessageRoomModel $messageRoomModel;
-    private UserModel $userModel;
 
     private $account;
 

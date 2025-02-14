@@ -50,24 +50,34 @@ class WebhookController extends BaseController
     {
         $input = $this->request->getJSON();
 
-        log_message('info', "ข้อความเข้า Webhook  " . json_encode($input, JSON_PRETTY_PRINT));
-
         if ($slug == 'x') {
 
-            $handler = new LineHandler();
-            $response = $handler->handleWebhook($input);
+            $event = $input->events[0];
 
-            $ai = 'on';
+            $eventType = $event->message->type;
 
-            switch ($ai) {
-                case 'on':
-                    if ($response['message_type'] == 'text')
-                        $handler->handleReplyByAI($response['UID'], $response['message_room']);
-                    else
-                        $this->rabbitMQPublisher->publishMessage($response['UID'], $response['message_room']);
-                    break;
-                case 'off':
-                    break;
+            if ($eventType == 'text' || $eventType == 'image' || $eventType == 'audio') {
+
+                $handler = new LineHandler();
+                $response = $handler->handleWebhook($input);
+
+                $ai = 'on';
+
+                switch ($ai) {
+
+                    case 'on':
+
+                        if ($response['message_type'] == 'text')
+                            $handler->handleReplyByAI($response['UID'], $response['message_room']);
+
+                        else
+                            $this->rabbitMQPublisher->publishMessage($response['UID'], $response['message_room']);
+
+                        break;
+
+                    case 'off':
+                        break;
+                }
             }
         }
     }

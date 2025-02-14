@@ -45,7 +45,7 @@
         .text-gd {
             font-weight: bold;
             text-transform: uppercase;
-            background-image: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47ff00, #00ffd5, #002bff, #7a00ff, #ff00c8);
+            background-image: linear-gradient(45deg, #e46dce, #c763d2, #8b5fd9, #4d77e6, #03aed2, #03d2b5);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;

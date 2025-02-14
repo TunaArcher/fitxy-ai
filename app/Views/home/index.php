@@ -126,7 +126,7 @@
                   $randomMessage = $encouragements[array_rand($encouragements)];
                   ?>
                   <div class="col">
-                    <h6><?php echo number_format($calToDay, 0); ?> แคล แล้ว <?php echo $randomMessage; ?></h6>
+                    <h6><?php echo number_format($calToDay, 0); ?> ~ <?php echo $randomMessage; ?></h6>
                   </div>
                   <div class="col-auto">
                     <span class="badge badge-light text-bg-theme-1 theme-orange">
@@ -149,7 +149,7 @@
                   id="doughnutchart"
                   class="position-relative z-index-0 mx-auto"></canvas>
               </div>
-              <div class="row mb-3 text-center">
+              <div class="row mb-4 text-center">
                 <?php if (session()->get('customer')->cal_per_day) { ?>
                   <?php if ($calToDay < (session()->get('customer')->cal_per_day)) { ?>
                     <h1>เป้าหมาย <?php echo number_format(session()->get('customer')->cal_per_day, 0); ?></h1>
@@ -183,7 +183,10 @@
 
             <div class="col-6 disabled">
               <a href="<?php echo base_url('/'); ?>">
-                <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">
+                <div class="card adminuiux-card border-0 height-150 mb-3 overflow-hidden hover-action">
+                  <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg z-index-0" style="background-image: url(&quot;assets/img/fitness/image-10.jpg&quot;);">
+                    <img src="assets/img/fitness/image-10.jpg" alt="" style="display: none;">
+                  </figure>
                   <div class="card-body position-relative">
                     <h4 class="mb-0">Develop</h4>
                     <p class="opacity-75 mb-4">Develop</p>
@@ -194,7 +197,10 @@
 
             <div class="col-6 disabled">
               <a href="<?php echo base_url('/'); ?>">
-                <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">
+                <div class="card adminuiux-card border-0 height-150 mb-3 overflow-hidden hover-action">
+                  <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg z-index-0" style="background-image: url(&quot;assets/img/modern-ai-image/user-4.jpg&quot;);">
+                    <img src="assets/img/modern-ai-image/user-4.jpg" alt="" style="display: none;">
+                  </figure>
                   <div class="card-body position-relative">
                     <h4 class="mb-0">Develop</h4>
                     <p class="opacity-75 mb-4">Develop</p>
@@ -202,6 +208,7 @@
                 </div>
               </a>
             </div>
+
             <div class="col-6">
               <a href="<?php echo base_url('/report'); ?>">
                 <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">

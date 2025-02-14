@@ -34,13 +34,21 @@ $routes->set404Override('App\Controllers\Errors::show404');
  * --------------------------------------------------------------------
  */
 
-$routes->get('/filterMessage', 'TestController::filterMessage');
-
 $routes->get('/', 'HomeController::index');
 $routes->get('/logout', 'HomeController::logout');
 $routes->get('/register', 'HomeController::register');
 $routes->match(['get', 'post'], 'calculate', 'CalculateController::index');
+$routes->get('/report', 'HomeController::report');
 $routes->get('/callback', 'LineLoginController::callback');
+
+// -----------------------------------------------------------------------------
+// Menu
+// -----------------------------------------------------------------------------
+
+$routes->group('menu', function ($routes) {
+    $routes->post('update', 'HomeController::menuUpdate');
+    $routes->post('delete', 'HomeController::menuDelete');
+});
 
 // -----------------------------------------------------------------------------
 // Webhook

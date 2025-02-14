@@ -64,70 +64,31 @@ class MenuModel
             ->get()
             ->getResult();
     }
-
-    public function getMenuByPlatformAndToken($platform, $data)
+  
+    
+    public function getMenuTodayByCustomerID($customerID)
     {
+        $sql = "
+            SELECT * 
+            FROM menus 
+            WHERE customer_id = '$customerID' AND DATE(created_at) = CURDATE();
+        ";
 
-        $builder = $this->db->table('menus');
+        $builder = $this->db->query($sql);
 
-        switch ($platform) {
-            case 'Facebook':
-
-                return false;
-
-                break;
-
-            case 'Line':
-
-                return $builder
-                    ->where('platform', $platform)
-                    ->where('line_channel_id', $data['line_channel_id'])
-                    ->where('line_channel_secret', $data['line_channel_secret'])
-                    ->get()
-                    ->getRow();
-
-                break;
-
-            case 'WhatsApp':
-
-                return $builder
-                    ->where('platform', $platform)
-                    ->where('whatsapp_token', $data['whatsapp_token'])
-                    // ->where('whatsapp_phone_number_id', $data['whatsapp_phone_number_id'])
-                    ->get()
-                    ->getRow();
-
-                break;
-
-            case 'Instagram':
-                break;
-
-            case 'Tiktok':
-                break;
-        }
+        return $builder->getResult();
     }
 
-    public function getMenuByPageID($platform, $pageID)
+    public function getTotalCalTodayByCustomerID($customerID)
     {
-        $builder = $this->db->table('menus');
+        $sql = "
+            SELECT SUM(cal) AS cal_today
+            FROM menus 
+            WHERE customer_id = '$customerID' AND DATE(created_at) = CURDATE();
+        ";
 
-        return $builder
-        ->where('platform', $platform)
-        ->where('page_id', $pageID)
-        ->get()
-        ->getRow();
+        $builder = $this->db->query($sql);
+
+        return $builder->getRow();
     }
-
-    public function getMenuByTeamID($teamID)
-    {
-        $builder = $this->db->table('menus');
-
-        return $builder
-            ->where('team_id', $teamID) 
-            ->where('deleted_at', null)
-            ->orderBy('created_at', 'DESC')
-            ->get()
-            ->getResult();
-    }
-
 }

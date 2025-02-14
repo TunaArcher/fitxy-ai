@@ -20,8 +20,8 @@
             /* --adminuiux-title-font-weight: 600; */
         }
     </style>
-    <script defer="defer" src="assets/js/app.js?287a058e58b08a2735d5"></script>
-    <link href="assets/css/app.css?287a058e58b08a2735d5" rel="stylesheet" />
+    <script src="assets/js/app.js"></script>
+    <link href="assets/css/app.css" rel="stylesheet" />
     <?php if (isset($css_critical)) {
         echo $css_critical;
     } ?>
@@ -41,10 +41,36 @@
             cursor: not-allowed;
             pointer-events: none;
         }
+
+        .text-gd {
+            font-weight: bold;
+            text-transform: uppercase;
+            background-image: linear-gradient(45deg, #ff0000, #ff7300, #ffeb00, #47ff00, #00ffd5, #002bff, #7a00ff, #ff00c8);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: animateGradient 4s linear infinite;
+        }
+
+        @keyframes animateGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
     </style>
     <script>
         var serverUrl = '<?php echo base_url(); ?>';
         var customer = <?= json_encode(session()->get('customer') ?? null, JSON_UNESCAPED_UNICODE); ?>;
+        var calPerDay = <?= session()->get('customer')->cal_per_day; ?>;
+        var calToDay = <?= $calToDay; ?>;
     </script>
 </head>
 

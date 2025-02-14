@@ -2,36 +2,23 @@
 
 namespace App\Controllers;
 
-use App\Libraries\ChatGPT;
-use App\Models\SubscriptionModel;
+use App\Models\MenuModel;
 use App\Models\MessageModel;
 use App\Models\MessageRoomModel;
-use App\Models\TeamMemberModel;
-use App\Models\TeamModel;
-use App\Models\TeamSocialModel;
 use App\Models\UserModel;
-use App\Models\UserSocialModel;
 
 class HomeController extends BaseController
 {
-    private SubscriptionModel $subscriptionModel;
-    private TeamModel $teamModel;
-    private TeamSocialModel $teamSocialModel;
-    private TeamMemberModel $teamMemberModel;
+    private MenuModel $menuModel;
     private MessageModel $messageModel;
     private MessageRoomModel $messageRoomModel;
     private UserModel $userModel;
-    private UserSocialModel $userSocialModel;
 
     public function __construct()
     {
+        $this->menuModel = new MenuModel();
         $this->messageModel = new MessageModel();
         $this->messageRoomModel = new MessageRoomModel();
-        $this->teamModel = new TeamModel();
-        $this->teamMemberModel = new TeamMemberModel();
-        $this->teamSocialModel = new TeamSocialModel();
-        $this->subscriptionModel = new SubscriptionModel();
-        $this->userSocialModel = new UserSocialModel();
         $this->userModel = new UserModel();
     }
 
@@ -70,22 +57,29 @@ class HomeController extends BaseController
                 '
             ];
 
+            $data['menuToday'] = $this->menuModel->getMenuTodayByCustomerID(session()->get('customer')->id);
+            $data['calToDay'] = $this->menuModel->getTotalCalTodayByCustomerID(session()->get('customer')->id)->cal_today;
+
             echo view('/app', $data);
         } else {
             return redirect()->to($this->Auth());
         }
     }
 
-    public function calculate()
+    public function report()
     {
         $data = [
-            'content' => 'home/calculate',
+            'content' => 'home/report',
             'title' => 'Home',
             'css_critical' => '',
-            'js_critical' => '<script src="app/cal.js"></script>'
+            'js_critical' => '
+                <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
+                <script src="app/report.js"></script>
+            '
         ];
 
-        $data['line_user'] = session()->get('line_user');
+        $data['menuToday'] = $this->menuModel->getMenuTodayByCustomerID(session()->get('customer')->id);
+        $data['calToDay'] = $this->menuModel->getTotalCalTodayByCustomerID(session()->get('customer')->id)->cal_today;
 
         echo view('/app', $data);
     }
@@ -99,6 +93,83 @@ class HomeController extends BaseController
             return redirect()->to('/login');
         } catch (\Exception $e) {
             //            echo $e->getMessage();
+        }
+    }
+
+    public function menuUpdate()
+    {
+
+        try {
+
+            $response = [
+                'success' => 0,
+                'message' => '',
+            ];
+
+            $status = 500;
+
+            // รับข้อมูล JSON จาก Request
+            $data = $this->request->getJSON();
+            $menuID = $data->menu_id;
+            $newCal = $data->cal;
+
+            $update = $this->menuModel->updateMenuByID($menuID, [
+                'cal' => $newCal,
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+
+            if ($update) {
+
+                $response = [
+                    'success' => 1,
+                    'message' => 'สำเร็จ',
+                ];
+
+                $status = 200;
+            }
+
+            return $this->response
+                ->setStatusCode($status)
+                ->setContentType('application/json')
+                ->setJSON($response);
+        } catch (\Exception $e) {
+            px($e->getMessage());
+        }
+    }
+
+    public function menuDelete()
+    {
+
+        try {
+
+            $response = [
+                'success' => 0,
+                'message' => '',
+            ];
+
+            $status = 500;
+
+            // รับข้อมูล JSON จาก Request
+            $data = $this->request->getJSON();
+            $menuID = $data->menu_id;
+
+            $delete = $this->menuModel->deleteMenuByID($menuID);
+
+            if ($delete) {
+
+                $response = [
+                    'success' => 1,
+                    'message' => 'สำเร็จ',
+                ];
+
+                $status = 200;
+            }
+
+            return $this->response
+                ->setStatusCode($status)
+                ->setContentType('application/json')
+                ->setJSON($response);
+        } catch (\Exception $e) {
         }
     }
 }

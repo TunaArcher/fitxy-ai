@@ -128,7 +128,7 @@
     overflow-y: scroll;
     /* max-height: 500px; */
     padding-bottom: 120px;
-}
+  }
 
   #exerciseOptions .form-check {
     margin-bottom: 10px;

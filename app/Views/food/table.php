@@ -1,3 +1,182 @@
+<style>
+  <style>
+
+  /* Progress Bar */
+  .progress-container {
+    width: 80%;
+    height: 10px;
+    background: #e0e0e0;
+    margin: auto;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    width: 20%;
+    background: #03aed2;
+    text-align: center;
+    color: white;
+    line-height: 10px;
+    font-size: 12px;
+  }
+
+  /* ซ่อนแต่ละ Step (เฉพาะ .step.active จะแสดง) */
+  .step {
+    display: none;
+  }
+
+  .step.active {
+    display: block;
+  }
+
+  /* เลย์เอาต์ของ Scroll Picker (ใช้ใน Step 2-4) */
+  .picker-container {
+    width: 100%;
+    /* height: 500px; */
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .picker-container::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: url("https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/select-bg-img.png") no-repeat center;
+    opacity: 0.3;
+    z-index: 1;
+    pointer-events: none;
+    transform: translateY(-50%);
+  }
+
+  .picker {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+  }
+
+  .picker::-webkit-scrollbar {
+    display: none;
+  }
+
+  .picker div {
+    font-size: 24px;
+    padding: 10px;
+    /* color: #bbb; */
+    transition: all 0.2s ease-in-out;
+    scroll-snap-align: center;
+  }
+
+  .picker div.selected {
+    font-size: 32px;
+    font-weight: bold;
+    /* color: black; */
+    transform: scale(1.2);
+  }
+
+  /* สำหรับ Step 1: เลือกเพศ */
+  .gender-options {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+  }
+
+  .gender-option {
+    padding: 10px 25px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    /* font-size: 24px; */
+    transition: all 0.2s ease-in-out;
+  }
+
+  .gender-option.selected {
+    border-color: #03aed2;
+    background-color: #03aed2;
+    color: white;
+  }
+
+  /* ปุ่ม Navigation */
+  /* .multistep-form-btn {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  } */
+
+  /* .btn-next:disabled {
+    background-color: #a0a0a0;
+    cursor: not-allowed;
+  } */
+
+  /* สไตล์สำหรับ Radio Buttons ใน Step 5 */
+  #exerciseOptions {
+    /* max-width: 600px; */
+    margin: auto;
+    text-align: left;
+    overflow-y: scroll;
+    /* max-height: 500px; */
+    padding-bottom: 120px;
+  }
+
+  #exerciseOptions .form-check {
+    margin-bottom: 10px;
+  }
+
+  /* สไตล์สำหรับ Processing Overlay (Circle Spinner) */
+  .processing-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+
+  .spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #03aed2;
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    animation: spin 2s linear infinite;
+    margin-bottom: 20px;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .processing-text {
+    font-size: 20px;
+    color: #333;
+  }
+</style>
+</style>
 <header class="adminuiux-header">
   <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
@@ -32,7 +211,7 @@
         <p>ออกแบบตารางอาหารดังใจคุณ</p>
       </div>
 
-      <div class="input-group mb-3"><input class="form-control" placeholder="บอกสิ่งที่ชอบ สิ่งที่ไม่ชอบ หรือต้องการแบบไหน เช่น ไม่เอาผัก, ไม่เอาเนื้อหมู, ไม่เอาเนื้อวัว " value="">
+      <div class="input-group mb-3"><input class="form-control" placeholder="ระบุความต้องการ เช่น ไม่เอาผัก, ไม่เอาเนื้อหมู, ไม่เอาเนื้อวัว " value="">
         <div class="dropdown input-group-text border-start-0 p-0">
           <button class="btn btn-square btn-link caret-none" type="button" id="btnGenerateFood" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
             <i class="bi bi-robot"></i> วิเคาะห์
@@ -50,49 +229,49 @@
                     class="small text-secondary text-uppercase text-truncated mb-0">
                     Sun.
                   </p>
-                  <div class="avatar avatar-30 rounded">1</div>
+                  <!-- <div class="avatar avatar-30 rounded">1</div> -->
                 </div>
                 <div class="swiper-slide text-center pt-1">
                   <p
                     class="small text-secondary text-uppercase text-truncated mb-0">
                     Mon.
                   </p>
-                  <div class="avatar avatar-30 rounded">2</div>
+                  <!-- <div class="avatar avatar-30 rounded">2</div> -->
                 </div>
                 <div class="swiper-slide text-center pt-1 active">
                   <p
                     class="small text-secondary text-uppercase text-truncated mb-0">
                     Tue.
                   </p>
-                  <div class="avatar avatar-30 rounded">3</div>
+                  <!-- <div class="avatar avatar-30 rounded">3</div> -->
                 </div>
                 <div class="swiper-slide text-center pt-1">
                   <p
                     class="small text-secondary text-uppercase text-truncated mb-0">
                     Wed.
                   </p>
-                  <div class="avatar avatar-30 rounded">4</div>
+                  <!-- <div class="avatar avatar-30 rounded">4</div> -->
                 </div>
                 <div class="swiper-slide text-center pt-1">
                   <p
                     class="small text-secondary text-uppercase text-truncated mb-0">
                     Thu.
                   </p>
-                  <div class="avatar avatar-30 rounded">5</div>
+                  <!-- <div class="avatar avatar-30 rounded">5</div> -->
                 </div>
                 <div class="swiper-slide text-center pt-1">
                   <p
                     class="small text-secondary text-uppercase text-truncated mb-0">
                     Fri.
                   </p>
-                  <div class="avatar avatar-30 rounded">6</div>
+                  <!-- <div class="avatar avatar-30 rounded">6</div> -->
                 </div>
                 <div class="swiper-slide text-center pt-1">
                   <p
                     class="small text-secondary text-uppercase text-truncated mb-0">
                     Sat.
                   </p>
-                  <div class="avatar avatar-30 rounded">7</div>
+                  <!-- <div class="avatar avatar-30 rounded">7</div> -->
                 </div>
               </div>
             </div>
@@ -165,6 +344,12 @@
 
       </div>
 
+    </div>
+
+    <!-- Processing Overlay (Circle Spinner) -->
+    <div class="processing-overlay" id="processingOverlay">
+      <div class="spinner"></div>
+      <p class="processing-text">กำลังประมวลผล...</p>
     </div>
 
   </main>

@@ -192,7 +192,7 @@ class HomeController extends BaseController
 
         try {
 
-            if (getenv('CI_ENVIRONMENT') === 'development') {
+            if (false) {
 
                 $response = [
                     'success' => 1,
@@ -363,7 +363,6 @@ class HomeController extends BaseController
                     ->setJSON($response);
             }
 
-            echo 'kk';
             $response = [
                 'success' => 0,
                 'message' => '',
@@ -395,27 +394,27 @@ class HomeController extends BaseController
                 - ความหลากหลายของอาหาร: ไม่ให้ซ้ำกันเกินไป และต้องมีความเป็นไปได้ในการทำอาหาร
 
                 ### รูปแบบผลลัพธ์ที่ต้องการ (JSON)
-                ให้ผลลัพธ์เป็น JSON ตามโครงสร้างนี้:
+                ให้ผลลัพธ์เป็น JSON ตามโครงสร้างนี้ และ url ภาพ ให้ใช้ตาม template ฉัน ตัวอย่างเช่น breakfast ให้ใช้ url https://cdn-icons-png.flaticon.com/512/6192/6192074.png dinner ให้ใช้ url https://cdn-icons-png.flaticon.com/512/6177/6177165.png:
 
                 {
                     "sun": {
                         "breakfast": {
-                        "url": "URL รูปภาพอาหาร",
+                        "url": "https://cdn-icons-png.flaticon.com/512/6192/6192074.png",
                         "menu_name": "ชื่อเมนู",
                         "cal": "จำนวน kcal"
                         },
                         "lunch": {
-                        "url": "URL รูปภาพอาหาร",
+                        "url": "https://cdn-icons-png.flaticon.com/512/3311/3311556.png",
                         "menu_name": "ชื่อเมนู",
                         "cal": "จำนวน kcal"
                         },
                         "dinner": {
-                        "url": "URL รูปภาพอาหาร",
+                        "url": "https://cdn-icons-png.flaticon.com/512/6177/6177165.png",
                         "menu_name": "ชื่อเมนู",
                         "cal": "จำนวน kcal"
                         },
                         "snack": {
-                        "url": "URL รูปภาพอาหาร",
+                        "url": "https://cdn-icons-png.flaticon.com/512/859/859293.png",
                         "menu_name": "ชื่อเมนู",
                         "cal": "จำนวน kcal"
                         }
@@ -427,6 +426,7 @@ class HomeController extends BaseController
                 2. หลีกเลี่ยงอาหารที่ผู้ใช้ไม่สามารถกินได้
                 3. ใช้วัตถุดิบที่เข้าถึงได้ง่ายและเหมาะสมกับเป้าหมายทางโภชนาการ
                 4. หลีกเลี่ยงเมนูที่ซ้ำกันในหนึ่งสัปดาห์
+                5. หารูปอาหารจากอินเทอร์เน็ต และต้องเป็นรูปที่ใช้งานได้
 
                 ให้ส่งผลลัพธ์เฉพาะ JSON เท่านั้น โดยไม่มีคำอธิบายอื่นเพิ่มเติม และไม่ต้องมี Markdown format
                 ให้คืนค่าข้อมูลเป็น JSON object เท่านั้น (ไม่ใช่ string) ห้าม escape JSON (`\\n`, `\\`, หรือ `\"`) หรือใส่เครื่องหมายคำพูดรอบ JSON

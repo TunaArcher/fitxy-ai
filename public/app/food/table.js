@@ -1,6 +1,11 @@
 var foodTable;
 
 $(document).ready(function () {
+  // ตรวจสอบวันในสัปดาห์ (0 = Sunday, 1 = Monday, ...)
+  var d = new Date();
+  var days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+  var today = days[d.getDay()]; // เช่น "wed"
+
   // เมื่อคลิกที่วันใน swiper slide
   $(".dateselect .swiper-slide").on("click", function () {
     // เปลี่ยนสถานะ active ให้กับวันที่คลิก
@@ -16,6 +21,25 @@ $(document).ready(function () {
     // แสดงเฉพาะเมนูที่ตรงกับวันที่คลิก (สมมุติว่า attribute data-day ตรงกัน)
     $('.card-body[data-day="' + day + '"]').show();
   });
+
+  // ลบคลาส active จาก swiper slide ทั้งหมด แล้วเพิ่มให้กับ slide ที่ตรงกับวันนี้
+  $(".dateselect .swiper-slide").each(function () {
+    var slideDay = $(this)
+      .find("p")
+      .text()
+      .trim()
+      .replace(".", "")
+      .toLowerCase();
+    if (slideDay === today) {
+      $(this).addClass("active");
+    } else {
+      $(this).removeClass("active");
+    }
+  });
+
+  // ซ่อน container ของทุกวัน แล้วแสดงเฉพาะ container ที่ data-day ตรงกับวันนี้
+  $(".card-body.height-dynamic").hide();
+  $('.card-body[data-day="' + today + '"]').show();
 });
 
 // jQuery AJAX Script
@@ -23,6 +47,9 @@ $(document).ready(function () {
   $("#btnGenerateFood").on("click", function () {
     // ดึงค่าจาก input
     var query = $(".input-group input.form-control").val();
+
+    const overlay = document.getElementById("processingOverlay");
+    overlay.style.display = "flex";
 
     $.ajax({
       url: `${window.serverUrl}/food/generate`, // เปลี่ยน URL ให้ถูกต้อง
@@ -33,6 +60,9 @@ $(document).ready(function () {
       }),
       contentType: "application/json",
       success: function (response) {
+        overlay.style.display = "none";
+        // overlay.innerHTML = '<div class="spinner" style="display:none;"></div>';
+
         $("#btnSaveFood").show();
         let $data = response.data;
         foodTable = $data;
@@ -168,13 +198,21 @@ $(document).ready(function () {
   });
 
   $("#btnSaveFood").on("click", function () {
+    const overlay = document.getElementById("processingOverlay");
+    overlay.style.display = "flex";
+
     $.ajax({
       url: `${window.serverUrl}/food/saveTable`, // เปลี่ยน URL ให้ถูกต้อง
       type: "POST",
       dataType: "json",
       data: JSON.stringify({ foodTable }),
       contentType: "application/json",
-      success: function (response) {},
+      success: function (response) {
+        overlay.style.display = "none";
+        // overlay.innerHTML = '<div class="spinner" style="display:none;"></div>';
+
+        location.href = `${window.serverUrl}/food/table`;
+      },
       error: function (xhr, status, error) {
         console.error("เกิดข้อผิดพลาด: " + error);
       },

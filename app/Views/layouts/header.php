@@ -68,7 +68,7 @@
         var serverUrl = '<?php echo base_url(); ?>';
         var customer = <?= json_encode(session()->get('customer') ?? null, JSON_UNESCAPED_UNICODE); ?>;
         var calPerDay = <?= session()->get('customer')->cal_per_day ?: '""'; ?>;
-        var calToDay = <?= $calToDay ?: '""'; ?>;
+        var calToDay = <?= $calToDay ?: '0'; ?>;
     </script>
 </head>
 

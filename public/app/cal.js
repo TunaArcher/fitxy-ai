@@ -318,17 +318,29 @@ function calculateTDEE(formData) {
         <div class="card-body">
             <div class="row">
                 <div class="col-4">
-                    <figure class="height-90 w-100 rounded coverimg mb-0" style="background-image: url(&quot;assets/img/fitness/image-${index + 1}.jpg&quot;);">
-                        <img src="assets/img/fitness/image-${index + 1}.jpg" alt="" style="display: none;">
+                    <figure class="height-90 w-100 rounded coverimg mb-0" style="background-image: url(&quot;assets/img/fitness/image-${
+                      index + 1
+                    }.jpg&quot;);">
+                        <img src="assets/img/fitness/image-${
+                          index + 1
+                        }.jpg" alt="" style="display: none;">
                     </figure>
                     </div>
                     <div class="col-8">
-                    <h6 class="text-truncated"><span class="${goals[goal].badge}">${goal}</span> | ${Math.round(goals[goal].cal)} แคล/วัน</h6>
+                    <h6 class="text-truncated"><span class="${
+                      goals[goal].badge
+                    }">${goal}</span> | ${Math.round(
+      goals[goal].cal
+    )} แคล/วัน</h6>
                     <p class="text-secondary fs-14 mb-2">
-                        <span class="me-1"><i class="bi bi-clock me-1"></i> ${goals[goal].weight} กิโล/อาทิตย์</span>
+                        <span class="me-1"><i class="bi bi-clock me-1"></i> ${
+                          goals[goal].weight
+                        } กิโล/อาทิตย์</span>
                         <span class="me-1"><i class="bi bi-fire me-1"></i> ${percentage}%</span>
                     </p>
-                    <button class="btn btn-sm btn-primary w-100 btn-select-target" data-title="${target}" data-cal="${Math.round(goals[goal].cal)}">
+                    <button class="btn btn-sm btn-primary w-100 btn-select-target" data-title="${target}" data-cal="${Math.round(
+      goals[goal].cal
+    )}">
                         <i class="bi bi-play me-1"></i> เลือก
                     </button>
                 </div>
@@ -355,7 +367,7 @@ $wrapperResultTdee.on("click", ".btn-select-target", function () {
 
   //   ส่งข้อมูลไปที่เซิร์ฟเวอร์ผ่าน AJAX
   $.ajax({
-    url: `${serverUrl}/calculate`,
+    url: `${window.serverUrl}/calculate`,
     type: "POST",
     data: JSON.stringify(formData),
     contentType: "application/json",

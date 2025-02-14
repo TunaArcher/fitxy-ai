@@ -22,9 +22,7 @@
     </style>
     <script src="assets/js/app.js"></script>
     <link href="assets/css/app.css" rel="stylesheet" />
-    <?php if (isset($css_critical)) {
-        echo $css_critical;
-    } ?>
+
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
@@ -69,7 +67,7 @@
     <script>
         var serverUrl = '<?php echo base_url(); ?>';
         var customer = <?= json_encode(session()->get('customer') ?? null, JSON_UNESCAPED_UNICODE); ?>;
-        var calPerDay = <?= session()->get('customer')->cal_per_day; ?>;
+        var calPerDay = <?= session()->get('customer')->cal_per_day ?: '""'; ?>;
         var calToDay = <?= $calToDay; ?>;
     </script>
 </head>

@@ -37,6 +37,7 @@ class CalculateController extends BaseController
                     $data['calToDay'] = $this->menuModel->getTotalCalTodayByCustomerID(session()->get('customer')->id)->cal_today;
 
                     echo view('/app', $data);
+
                     break;
 
                 case 'post':

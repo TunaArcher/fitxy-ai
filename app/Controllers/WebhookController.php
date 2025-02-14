@@ -50,6 +50,8 @@ class WebhookController extends BaseController
     {
         $input = $this->request->getJSON();
 
+        log_message('info', "ข้อความเข้า Webhook  " . json_encode($input, JSON_PRETTY_PRINT));
+
         if ($slug == 'x') {
 
             $event = $input->events[0];

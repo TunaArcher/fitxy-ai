@@ -27,10 +27,6 @@ class CheckPermissions implements FilterInterface
             session()->set('user', $user);
             session()->set('isUserLoggedIn', true);
         }
-
-        else {
-            return redirect()->to('/');
-        }
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)

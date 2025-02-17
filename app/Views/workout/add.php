@@ -38,6 +38,7 @@
     <div class="container mt-3" id="main-content">
 
       <?php echo view('workout/partials/list_workouts'); ?>
+      
   </div>
 
   </main>

@@ -4,14 +4,17 @@ namespace App\Controllers;
 
 use App\Libraries\ChatGPT;
 use App\Models\UserMenuModel;
+use App\Models\UserWorkoutModel;
 
 class HomeController extends BaseController
 {
     private UserMenuModel $userMenuModel;
+    private UserWorkoutModel $userWorkoutModel;
 
     public function __construct()
     {
         $this->userMenuModel = new UserMenuModel();
+        $this->userWorkoutModel = new UserWorkoutModel();
     }
 
     private function Auth()
@@ -50,8 +53,9 @@ class HomeController extends BaseController
                 '
             ];
 
-            $data['userMenusToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
-            $data['caloriesToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
+            // $data['userMenusToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
+            $data['calToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
+            $data['calBurn'] = $this->userWorkoutModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
 
             echo view('/app', $data);
         } else {
@@ -72,7 +76,8 @@ class HomeController extends BaseController
         ];
 
         $data['menuToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
-        $data['calToDay'] = $this->userMenuModel->getTotalCalTodayByUserID(session()->get('user')->id)->cal_today;
+        $data['calToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
+        $data['calBurn'] = $this->userWorkoutModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
 
         echo view('/app', $data);
     }

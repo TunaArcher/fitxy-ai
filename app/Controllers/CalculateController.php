@@ -4,16 +4,19 @@ namespace App\Controllers;
 
 use App\Models\UserModel;
 use App\Models\UserMenuModel;
+use App\Models\UserWorkoutModel;
 
 class CalculateController extends BaseController
 {
     private UserModel $userModel;
     private UserMenuModel $userMenuModel;
+    private UserWorkoutModel $userWorkoutModel;
 
     public function __construct()
     {
         $this->userModel = new UserModel();
         $this->userMenuModel = new UserMenuModel();
+        $this->userWorkoutModel = new UserWorkoutModel();
     }
 
     public function index()
@@ -33,8 +36,9 @@ class CalculateController extends BaseController
                         '
                     ];
 
-                    $data['userMenusToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
-                    $data['caloriesToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
+                    $data['userMenusToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);                    
+                    $data['calToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
+                    $data['calBurn'] = $this->userWorkoutModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
 
                     echo view('/app', $data);
 

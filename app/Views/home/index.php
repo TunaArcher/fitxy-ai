@@ -126,7 +126,7 @@
                   $randomMessage = $encouragements[array_rand($encouragements)];
                   ?>
                   <div class="col">
-                    <h6><?php echo number_format($caloriesToDay, 0); ?> ~ <?php echo $randomMessage; ?></h6>
+                    <h6 id="welcomeMessage"><?php echo number_format($calToDay, 0); ?> ~ <?php echo $randomMessage; ?></h6>
                   </div>
                   <div class="col-auto">
                     <span class="badge badge-light text-bg-theme-1 theme-orange">
@@ -151,11 +151,45 @@
               </div>
               <div class="row mb-4 text-center">
                 <?php if (session()->get('user')->cal_per_day) { ?>
-                  <?php if ($caloriesToDay < (session()->get('user')->cal_per_day)) { ?>
-                    <h1>เป้าหมาย <?php echo number_format(session()->get('user')->cal_per_day, 0); ?></h1>
-                  <?php } else { ?>
-                    <h1 class="text-gd">เป้าหมาย <?php echo number_format(session()->get('user')->cal_per_day, 0); ?> ถึงแล้ว !!</h1>
-                  <?php } ?>
+                  
+                  <div class="row">
+                  <div class="col-4 col-lg-4 mb-3">
+                      <p class="small">
+                        <span
+                          class="me-1 avatar avatar-20 rounded bg-blue"
+                        ></span>
+                        ทาน (แคลอรี่)
+                        <!-- <span class="text-success fw-normal ms-1">80%</span> -->
+                      </p>
+                    </div>
+                    <div class="col-4 col-lg-4 mb-3">
+                      <p class="small">
+                        <span
+                          class="me-1 avatar avatar-20 rounded bg-white"
+                        ></span>
+                        แคลอรี่ที่รับได้
+                        <!-- <span class="text-success fw-normal ms-1">10%</span> -->
+                      </p>
+                    </div>
+                    <div class="col-4 col-lg-4 mb-3">
+                      <p class="small">
+                        <span
+                          class="me-1 avatar avatar-20 rounded bg-orange"
+                        ></span>
+                        เผาผลาญ
+                        <!-- <span class="text-success fw-normal ms-1">10%</span> -->
+                      </p>
+                    </div>
+                    <!-- <div class="col-6 col-lg-6 mb-3">
+                      <p class="small">
+                        <span
+                          class="me-1 avatar avatar-20 rounded bg-white"
+                        ></span>
+                        Other
+                        <span class="text-success fw-normal ms-1">10%</span>
+                      </p>
+                    </div> -->
+                  </div>
 
                 <?php } else { ?>
 
@@ -214,7 +248,7 @@
                 <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">
                   <div class="card-body position-relative">
                     <h4 class="mb-0">ตารางอาหาร</h4>
-                    <p class="opacity-75 mb-4">ออกแบบตารางดังใจคุณ (AI)</p>
+                    <p class="opacity-75 mb-4">กำหนดตารางอาชีพจากมืออาชีพโดย <span class="badge badge-light text-bg-theme-1 theme-black">🤖 AI</span></p>
                   </div>
                 </div>
               </a>

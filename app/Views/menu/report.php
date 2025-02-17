@@ -28,7 +28,7 @@
     <div class="container mt-3" id="main-content">
 
       <div class="my-3 text-center">
-        <h2 id="totalCalToday"><?php echo number_format($caloriesToDay, 0); ?></h2>
+        <h2 id="totalCalToday"><?php echo number_format($calToDay, 0); ?></h2>
         <p>จำนวนแคลวันนี้</p>
       </div>
 

@@ -5,16 +5,19 @@ namespace App\Controllers;
 use App\Libraries\ChatGPT;
 use App\Models\UserFoodTableModel;
 use App\Models\UserMenuModel;
+use App\Models\UserWorkoutModel;
 
 class FoodController extends BaseController
 {
     private UserFoodTableModel $userFoodTableModel;
     private UserMenuModel $userMenuModel;
+    private UserWorkoutModel $userWorkoutModel;
 
     public function __construct()
     {
         $this->userFoodTableModel = new UserFoodTableModel();
         $this->userMenuModel = new UserMenuModel();
+        $this->userWorkoutModel = new UserWorkoutModel();
     }
 
     public function foodTable()
@@ -30,7 +33,8 @@ class FoodController extends BaseController
         ];
 
         $data['userMenusToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
-        $data['caloriesToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
+        $data['calToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
+        $data['calBurn'] = $this->userWorkoutModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
         $data['foodTable'] = $this->userFoodTableModel->getUserFoodTableByUserID(session()->get('user')->id);
 
         echo view('/app', $data);

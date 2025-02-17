@@ -67,15 +67,23 @@
     <script>
         var serverUrl = '<?php echo base_url(); ?>';
         var customer = <?= json_encode(session()->get('user') ?? null, JSON_UNESCAPED_UNICODE); ?>;
-        
+
         var userGender = '<?= session()->get('user')->gender ?: '""'; ?>';
         var userAge = <?= session()->get('user')->age ?: '""'; ?>;
         var userWeight = <?= session()->get('user')->weight ?: '""'; ?>;
         var userHeight = <?= session()->get('user')->height ?: '""'; ?>;
         var userExercise = '<?= session()->get('user')->exercise ?: '""'; ?>';
-        var userTarget= '<?= session()->get('user')->target ?: '""'; ?>';
+        var userTarget = '<?= session()->get('user')->target ?: '""'; ?>';
 
         var calPerDay = <?= session()->get('user')->cal_per_day ?: '""'; ?>;
+        var calToDay = <?= $calToDay ?: 0; ?>;
+        var calBurn = <?= $calBurn ?: 0; ?>;
+    </script>
+    <script>
+        function goBackHome() {
+            // เปลี่ยน URL ใน window.location.href ให้ตรงกับหน้าแรกของเว็บไซต์คุณ
+            window.location.href = '/';
+        }
     </script>
 </head>
 

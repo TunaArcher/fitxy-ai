@@ -11,7 +11,7 @@
 <header class="adminuiux-header">
   <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
-      <button class="btn btn-square btn-link" onclick="goBack()">
+      <button class="btn btn-square btn-link" onclick="goBackHome()">
         <i class="bi bi-arrow-left"></i>
       </button>
       <p class="h6 my-1 px-3 text-center"><span class="title"></span></p>
@@ -37,11 +37,11 @@
   <main class="adminuiux-content" onclick="contentClick()">
     <div class="container mt-3" id="main-content">
 
-    <?php if ($userWorkouts) { ?>
-      <?php echo view('workout/partials/have_workout'); ?>
-    <?php  } else { ?>
-      <?php echo view('partials/no_have_workout'); ?>
-    <?php } ?>
+      <?php if ($userWorkouts) { ?>
+        <?php echo view('workout/partials/have_workout'); ?>
+      <?php  } else { ?>
+        <?php echo view('workout/partials/list_workouts'); ?>
+      <?php } ?>
 
   </main>
 </div>

@@ -1,3 +1,18 @@
+<style>
+    .processing-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+</style>
 <div class="my-3 text-center">
     <h2 id="totalCalToday">สวัสดี</h2>
     <p>เลือกการออกกำลังกายวันนี้ของคุณ</p>
@@ -6,7 +21,7 @@
 <div class="row">
     <!-- วนลูปแสดง Workout -->
     <?php foreach ($workouts as $workout) { ?>
-        <div class="col-4 text-center mb-4 icon-item">
+        <div class="col-4 text-center mb-4 icon-item <?php if ($workout->id == 12) echo 'disabled'; ?>">
             <!-- 
           data-bs-toggle="modal" และ data-bs-target="#addappointment" 
           เอาไว้สั่งเปิด Modal ของ Bootstrap 

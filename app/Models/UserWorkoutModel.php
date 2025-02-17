@@ -69,9 +69,15 @@ class UserWorkoutModel
     public function getUserWorkoutTodayByUserID($userID)
     {
         $sql = "
-            SELECT * 
+            SELECT 
+                user_workouts.id,
+                user_workouts.calories AS calories,
+                user_workouts.time AS time,
+                workouts.title AS title,
+                workouts.icon AS icon
             FROM user_workouts 
-            WHERE user_id = '$userID' AND DATE(created_at) = CURDATE();
+            JOIN workouts ON user_workouts.workout_id = workouts.id
+            WHERE user_workouts.user_id = '$userID' AND DATE(user_workouts.created_at) = CURDATE();
         ";
 
         $builder = $this->db->query($sql);
@@ -79,10 +85,10 @@ class UserWorkoutModel
         return $builder->getResult();
     }
 
-    public function getTotalCalTodayByUserID($userID)
+    public function getTotalCaloriesTodayByUserID($userID)
     {
         $sql = "
-            SELECT SUM(cal) AS cal_today
+            SELECT SUM(calories) AS calories_today
             FROM user_workouts 
             WHERE user_id = '$userID' AND DATE(created_at) = CURDATE();
         ";

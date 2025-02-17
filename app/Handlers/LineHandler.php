@@ -5,7 +5,7 @@ namespace App\Handlers;
 use App\Integrations\Line\LineClient;
 use App\Libraries\ChatGPT;
 use App\Models\AccountModel;
-use App\Models\CustomerModel;
+use App\Models\UserModel;
 use App\Models\MenuModel;
 use App\Models\MessageModel;
 use App\Models\MessageRoomModel;
@@ -13,7 +13,7 @@ use App\Models\MessageRoomModel;
 class LineHandler
 {
     private AccountModel $accountModel;
-    private CustomerModel $customerModel;
+    private UserModel $userModel;
     private MenuModel $menuModel;
     private MessageModel $messageModel;
     private MessageRoomModel $messageRoomModel;
@@ -23,7 +23,7 @@ class LineHandler
     public function __construct()
     {
         $this->accountModel = new AccountModel();
-        $this->customerModel = new CustomerModel();
+        $this->userModel = new UserModel();
         $this->menuModel = new MenuModel();
         $this->messageModel = new MessageModel();
         $this->messageRoomModel = new MessageRoomModel();
@@ -40,17 +40,17 @@ class LineHandler
         $message = $this->processMessage($input);
 
         // ตรวจสอบหรือสร้างลูกค้า
-        $customer = $this->customerModel->getCustomerByUID($message['UID']);
+        $user = $this->userModel->getUserByUID($message['UID']);
 
-        if ($customer) {
+        if ($user) {
             // ตรวจสอบหรือสร้างห้องสนทนา
-            $messageRoom = $this->getOrCreateMessageRoom($customer);
+            $messageRoom = $this->getOrCreateMessageRoom($user);
 
             // บันทึกข้อความ
             $this->messageModel->insertMessage([
                 'room_id' => $messageRoom->id,
-                'send_by' => 'Customer',
-                'sender_id' => $customer->id,
+                'send_by' => 'User',
+                'sender_id' => $user->id,
                 'message_type' => $message['type'],
                 'message' => $message['content'],
                 'is_context' => '1'
@@ -106,7 +106,7 @@ class LineHandler
     {
         $this->account = $this->accountModel->getAccountByID('128');
 
-        $messages = $this->messageModel->getMessageNotReplyBySendByAndRoomID('Customer', $messageRoom->id);
+        $messages = $this->messageModel->getMessageNotReplyBySendByAndRoomID('User', $messageRoom->id);
         $message = $this->getUserContext($messages);
 
         // ข้อความตอบกลับ
@@ -135,7 +135,7 @@ class LineHandler
 
         if ($repyleMessage['json']) {
             $this->menuModel->insertMenu([
-                'customer_id' => $messageRoom->customer_id,
+                'user_id' => $messageRoom->user_id,
                 'content' => $this->cleanUrl($message['img_url']),
                 'note' => $repyleMessage['repyleMessage'],
                 'cal' => $repyleMessage['json'],
@@ -272,46 +272,16 @@ class LineHandler
         ];
     }
 
-    // public function getOrCreateCustomer($UID)
-    // {
-
-    //     $customer = $this->customerModel->getCustomerByUID($UID);
-
-    //     if (!$customer) {
-
-    //         $this->account = $this->accountModel->getAccountByID('128');
-
-    //         $lineAPI = new LineClient([
-    //             'id' => $this->account->id,
-    //             'accessToken' =>  $this->account->line_channel_access_token,
-    //             'channelID' =>  $this->account->line_channel_id,
-    //             'channelSecret' => $this->account->line_channel_secret,
-    //         ]);
-
-    //         $profile = $lineAPI->getUserProfile($UID);
-
-    //         $customerID = $this->customerModel->insertCustomer([
-    //             'uid' => $UID,
-    //             'name' => $profile->displayName,
-    //             'profile' => $profile->pictureUrl
-    //         ]);
-
-    //         return $this->customerModel->getCustomerByID($customerID);
-    //     }
-
-    //     return $customer;
-    // }
-
-    public function getOrCreateMessageRoom($customer)
+    public function getOrCreateMessageRoom($user)
     {
-        $messageRoom = $this->messageRoomModel->getMessageRoomByCustomerID($customer->id);
+        $messageRoom = $this->messageRoomModel->getMessageRoomByUserID($user->id);
 
         if (!$messageRoom) {
 
             $roomId = $this->messageRoomModel->insertMessageRoom([
                 'account_id' => '128',
                 'account_name' => 'UNITYxTDEE',
-                'customer_id' => $customer->id,
+                'user_id' => $user->id,
             ]);
 
             return $this->messageRoomModel->getMessageRoomByID($roomId);

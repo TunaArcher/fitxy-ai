@@ -66,7 +66,6 @@
     </style>
     <script>
         var serverUrl = '<?php echo base_url(); ?>';
-        var customer = <?= json_encode(session()->get('user') ?? null, JSON_UNESCAPED_UNICODE); ?>;
 
         var userGender = '<?= session()->get('user')->gender ?: '""'; ?>';
         var userAge = <?= session()->get('user')->age ?: '""'; ?>;

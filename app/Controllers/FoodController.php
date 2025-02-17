@@ -358,7 +358,7 @@ class FoodController extends BaseController
         if (!$foodTable) {
 
             $foodTableID = $this->userFoodTableModel->insertUserFoodTable([
-                'customer_id' => session()->get('user')->id,
+                'user_id' => session()->get('user')->id,
                 'list' => $listFoodTable
             ]);
 

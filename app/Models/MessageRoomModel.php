@@ -79,7 +79,7 @@ class MessageRoomModel
         return $builder->getResult();
     }
 
-    public function getMessageRoomByCustomerID($userID)
+    public function getMessageRoomByUserID($userID)
     {
         $builder = $this->db->table('message_rooms');
 

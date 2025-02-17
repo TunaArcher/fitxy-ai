@@ -2,17 +2,17 @@
 
 namespace App\Controllers;
 
-use App\Models\CustomerModel;
+use App\Models\userModel;
 use CodeIgniter\Controller;
 
 class LineLoginController extends Controller
 {
 
-    private CustomerModel $customerModel;
+    private userModel $userModel;
 
     public function __construct()
     {
-        $this->customerModel = new CustomerModel();
+        $this->userModel = new userModel();
     }
 
     public function callback()
@@ -57,10 +57,10 @@ class LineLoginController extends Controller
         }
 
         // ตรวจสอบหรือสร้างบัญชีผู้ใช้
-        $customer = $this->getOrCreateCustomer($userInfo);
+        $user = $this->getOrCreateUser($userInfo);
 
-        if ($customer) {
-            session()->set('customer', $customer);
+        if ($user) {
+            session()->set('user', $user);
             return redirect()->to('/');
         }
 
@@ -109,22 +109,22 @@ class LineLoginController extends Controller
         return json_decode($response->getBody(), true);
     }
 
-    public function getOrCreateCustomer($userInfo)
+    public function getOrCreateUser($userInfo)
     {
 
-        $customer = $this->customerModel->getCustomerByUID($userInfo['userId']);
+        $user = $this->userModel->getUserByUID($userInfo['userId']);
 
-        if (!$customer) {
+        if (!$user) {
 
-            $customerID = $this->customerModel->insertCustomer([
+            $userID = $this->userModel->insertUser([
                 'uid' => $userInfo['userId'],
                 'name' => $userInfo['displayName'],
                 'profile' => $userInfo['pictureUrl']
             ]);
 
-            return $this->customerModel->getCustomerByID($customerID);
+            return $this->userModel->getUserByID($userID);
         }
 
-        return $customer;
+        return $user;
     }
 }

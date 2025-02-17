@@ -3,13 +3,10 @@
 namespace App\Controllers;
 
 use App\Handlers\LineHandler;
-use App\Integrations\Line\LineClient;
-use App\Libraries\ChatGPT;
 use App\Models\MessageModel;
 use App\Models\UserModel;
 use App\Models\AccountModel;
 use App\Libraries\RabbitMQPublisher;
-use App\Models\CustomerModel;
 use App\Models\MessageRoomModel;
 
 class WebhookController extends BaseController
@@ -17,7 +14,6 @@ class WebhookController extends BaseController
     private RabbitMQPublisher $rabbitMQPublisher;
 
     private AccountModel $accountModel;
-    private CustomerModel $customerModel;
     private MessageModel $messageModel;
     private MessageRoomModel $messageRoomModel;
     private UserModel $userModel;
@@ -28,7 +24,7 @@ class WebhookController extends BaseController
     {
         $this->rabbitMQPublisher = new RabbitMQPublisher();
 
-        $this->customerModel = new CustomerModel();
+        $this->userModel = new UserModel();
         $this->accountModel = new AccountModel();
         $this->messageModel = new MessageModel();
         $this->messageRoomModel = new MessageRoomModel();

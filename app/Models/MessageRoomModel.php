@@ -53,31 +53,31 @@ class MessageRoomModel
         return $builder->where('id', $id)->delete();
     }
 
-    public function getMessageRoomByUserID($userID)
-    {
-        $sql = "
-            SELECT 
-                mr.*,
-                m.created_at AS latest_message_time
-            FROM 
-                message_rooms mr
-            LEFT JOIN 
-                messages m ON mr.id = m.room_id
-            WHERE 
-                mr.user_id = '$userID'
-                AND m.created_at = (
-                    SELECT MAX(created_at)
-                    FROM messages
-                    WHERE room_id = mr.id
-                )
-            ORDER BY 
-                m.created_at DESC
-        ";
+    // public function getMessageRoomByUserID($userID)
+    // {
+    //     $sql = "
+    //         SELECT 
+    //             mr.*,
+    //             m.created_at AS latest_message_time
+    //         FROM 
+    //             message_rooms mr
+    //         LEFT JOIN 
+    //             messages m ON mr.id = m.room_id
+    //         WHERE 
+    //             mr.user_id = '$userID'
+    //             AND m.created_at = (
+    //                 SELECT MAX(created_at)
+    //                 FROM messages
+    //                 WHERE room_id = mr.id
+    //             )
+    //         ORDER BY 
+    //             m.created_at DESC
+    //     ";
 
-        $builder = $this->db->query($sql);
+    //     $builder = $this->db->query($sql);
 
-        return $builder->getResult();
-    }
+    //     return $builder->getResult();
+    // }
 
     public function getMessageRoomByUserID($userID)
     {

@@ -167,7 +167,7 @@
                         <span
                           class="me-1 avatar avatar-20 rounded bg-white"
                         ></span>
-                        แคลอรี่ที่รับได้
+                        ร่างกายต้องการ
                         <!-- <span class="text-success fw-normal ms-1">10%</span> -->
                       </p>
                     </div>

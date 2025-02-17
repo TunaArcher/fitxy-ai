@@ -4,7 +4,7 @@
       <a class="navbar-brand" href="<?php echo base_url(); ?>"><img data-bs-img="light" src="<?php echo base_url('assets/img/logo72x72.png'); ?>" alt="" />
         <img data-bs-img="dark" src="<?php echo base_url('assets/img/logo72x72.png'); ?>" alt="" />
         <div class="">
-          <span class="h4">Fitness<span class="fw-bold"></span><span>AI</span></span>
+          <span class="h4">FitXy<span class="fw-bold"></span><span>AI</span></span>
           <p class="company-tagline">UnityX</p>
         </div>
       </a>

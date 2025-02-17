@@ -5,11 +5,13 @@ namespace App\Controllers;
 use App\Libraries\ChatGPT;
 use App\Models\WorkoutModel;
 use App\Models\UserMenuModel;
+use App\Models\UserModel;
 use App\Models\UserWorkoutModel;
 
 class WorkoutController extends BaseController
 {
     private WorkoutModel $workoutModel;
+    private UserModel $userModel;
     private UserMenuModel $userMenuModel;
     private UserWorkoutModel $userWorkoutModel;
 
@@ -17,6 +19,7 @@ class WorkoutController extends BaseController
     {
 
         $this->workoutModel = new WorkoutModel();
+        $this->userModel = new UserModel();
         $this->userMenuModel = new UserMenuModel();
         $this->userWorkoutModel = new UserWorkoutModel();
     }
@@ -86,6 +89,9 @@ class WorkoutController extends BaseController
             ]);
 
             if ($userWorkout) {
+
+                $user = $this->userModel->getUserByID(session()->get('user')->id);
+                session()->set('user', $user);
 
                 $response = [
                     'success' => 1,

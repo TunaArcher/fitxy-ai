@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Database\ConnectionInterface;
 
-class MenuModel
+class UserWorkoutModel
 {
 
     protected $db;
@@ -15,47 +15,47 @@ class MenuModel
         $this->db = &$db;
     }
 
-    public function getMenuAll()
+    public function getUserWorkoutAll()
     {
-        $builder = $this->db->table('menus');
+        $builder = $this->db->table('user_workouts');
 
         return $builder
-            ->orderBy('created_at', 'DESC')
+            ->orderBy('sort', 'ASC')
             ->get()
             ->getResult();
     }
 
-    public function getMenuByID($id)
+    public function getUserWorkoutByID($id)
     {
-        $builder = $this->db->table('menus');
+        $builder = $this->db->table('user_workouts');
 
         return $builder->where('id', $id)->get()->getRow();
     }
 
-    public function insertMenu($data)
+    public function insertUserWorkout($data)
     {
-        $builder = $this->db->table('menus');
+        $builder = $this->db->table('user_workouts');
 
         return $builder->insert($data) ? $this->db->insertID() : false;
     }
 
-    public function updateMenuByID($id, $data)
+    public function updateUserWorkoutByID($id, $data)
     {
-        $builder = $this->db->table('menus');
+        $builder = $this->db->table('user_workouts');
 
         return $builder->where('id', $id)->update($data);
     }
 
-    public function deleteMenuByID($id)
+    public function deleteUserWorkoutByID($id)
     {
-        $builder = $this->db->table('menus');
+        $builder = $this->db->table('user_workouts');
 
         return $builder->where('id', $id)->delete();
     }
 
-    public function getMenuByUserID($userID)
+    public function getUserWorkoutByUserID($userID)
     {
-        $builder = $this->db->table('menus');
+        $builder = $this->db->table('user_workouts');
 
         return $builder
             ->where('user_id', $userID) 
@@ -66,12 +66,12 @@ class MenuModel
     }
   
     
-    public function getMenuTodayByCustomerID($customerID)
+    public function getUserWorkoutTodayByUserID($userID)
     {
         $sql = "
             SELECT * 
-            FROM menus 
-            WHERE customer_id = '$customerID' AND DATE(created_at) = CURDATE();
+            FROM user_workouts 
+            WHERE user_id = '$userID' AND DATE(created_at) = CURDATE();
         ";
 
         $builder = $this->db->query($sql);
@@ -79,12 +79,12 @@ class MenuModel
         return $builder->getResult();
     }
 
-    public function getTotalCalTodayByCustomerID($customerID)
+    public function getTotalCalTodayByUserID($userID)
     {
         $sql = "
             SELECT SUM(cal) AS cal_today
-            FROM menus 
-            WHERE customer_id = '$customerID' AND DATE(created_at) = CURDATE();
+            FROM user_workouts 
+            WHERE user_id = '$userID' AND DATE(created_at) = CURDATE();
         ";
 
         $builder = $this->db->query($sql);

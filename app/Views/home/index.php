@@ -81,7 +81,7 @@
 
         <div class="col-12 mb-4">
           <h1 class="fw-bold text-theme-accent-1 mb-0">
-            สวัสดีคุณ, <span><?php echo session()->get('customer')->name; ?></span>
+            สวัสดีคุณ, <span><?php echo session()->get('user')->name; ?></span>
           </h1>
           <h4 class="text-theme-1"><?php echo $randomGreeting; ?></h4>
         </div>
@@ -91,12 +91,12 @@
             class="card adminuiux-card border-0 position-relative border-0 overflow-hidden blur-overlay mb-3">
             <div
               class="position-absolute top-0 start-0 h-100 w-100 coverimg opacity-75 z-index-0">
-              <img src="<?php echo session()->get('customer')->profile; ?>" alt="" />
+              <img src="<?php echo session()->get('user')->profile; ?>" alt="" />
             </div>
             <div class="card-header z-index-1">
               <div class="row align-items-center">
 
-                <?php if (session()->get('customer')->target == '') { ?>
+                <?php if (session()->get('user')->target == '') { ?>
 
                   <div class="col"></div>
                   <div class="col-auto">
@@ -126,11 +126,11 @@
                   $randomMessage = $encouragements[array_rand($encouragements)];
                   ?>
                   <div class="col">
-                    <h6><?php echo number_format($calToDay, 0); ?> ~ <?php echo $randomMessage; ?></h6>
+                    <h6><?php echo number_format($caloriesToDay, 0); ?> ~ <?php echo $randomMessage; ?></h6>
                   </div>
                   <div class="col-auto">
                     <span class="badge badge-light text-bg-theme-1 theme-orange">
-                      <span class="bi bi-award text-theme-1"></span> <?php echo session()->get('customer')->target; ?>
+                      <span class="bi bi-award text-theme-1"></span> <?php echo session()->get('user')->target; ?>
                     </span>
                   </div>
                 <?php } ?>
@@ -142,7 +142,7 @@
                   class="position-absolute top-50 start-50 translate-middle z-index-1 bg-white rounded-circle p-1">
                   <figure
                     class="avatar avatar-120 rounded-circle coverimg align-middle shadow-sm">
-                    <img src="<?php echo session()->get('customer')->profile; ?>" alt="" />
+                    <img src="<?php echo session()->get('user')->profile; ?>" alt="" />
                   </figure>
                 </div>
                 <canvas
@@ -150,11 +150,11 @@
                   class="position-relative z-index-0 mx-auto"></canvas>
               </div>
               <div class="row mb-4 text-center">
-                <?php if (session()->get('customer')->cal_per_day) { ?>
-                  <?php if ($calToDay < (session()->get('customer')->cal_per_day)) { ?>
-                    <h1>เป้าหมาย <?php echo number_format(session()->get('customer')->cal_per_day, 0); ?></h1>
+                <?php if (session()->get('user')->cal_per_day) { ?>
+                  <?php if ($caloriesToDay < (session()->get('user')->cal_per_day)) { ?>
+                    <h1>เป้าหมาย <?php echo number_format(session()->get('user')->cal_per_day, 0); ?></h1>
                   <?php } else { ?>
-                    <h1 class="text-gd">เป้าหมาย <?php echo number_format(session()->get('customer')->cal_per_day, 0); ?> ถึงแล้ว !!</h1>
+                    <h1 class="text-gd">เป้าหมาย <?php echo number_format(session()->get('user')->cal_per_day, 0); ?> ถึงแล้ว !!</h1>
                   <?php } ?>
 
                 <?php } else { ?>
@@ -182,39 +182,39 @@
             </div>
 
             <div class="col-6">
-              <a href="<?php echo base_url('/food/table'); ?>">
+              <a href="<?php echo base_url('/menu'); ?>">
                 <div class="card adminuiux-card border-0 height-150 mb-3 overflow-hidden hover-action">
                   <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg z-index-0" style="background-image: url(&quot;assets/img/fitness/image-10.jpg&quot;);">
                     <img src="assets/img/fitness/image-10.jpg" alt="" style="display: none;">
                   </figure>
                   <div class="card-body position-relative">
-                    <h4 class="mb-0">ตารางอาหาร</h4>
-                    <p class="opacity-75 mb-4">ออกแบบตารางอาหารดังใจคุณ (AI)</p>
-                  </div>
-                </div>
-              </a>
-            </div>
-
-            <div class="col-6 disabled">
-              <a href="<?php echo base_url('/'); ?>">
-                <div class="card adminuiux-card border-0 height-150 mb-3 overflow-hidden hover-action">
-                  <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg z-index-0" style="background-image: url(&quot;assets/img/modern-ai-image/user-4.jpg&quot;);">
-                    <img src="assets/img/modern-ai-image/user-4.jpg" alt="" style="display: none;">
-                  </figure>
-                  <div class="card-body position-relative">
-                    <h4 class="mb-0">Ads</h4>
-                    <p class="opacity-75 mb-4">Ads</p>
+                    <h4 class="mb-0">การกิน</h4>
+                    <p class="opacity-75 mb-4">การกิน, แคลวันนี้</p>
                   </div>
                 </div>
               </a>
             </div>
 
             <div class="col-6">
-              <a href="<?php echo base_url('/report'); ?>">
+              <a href="<?php echo base_url('/workout'); ?>">
+                <div class="card adminuiux-card border-0 height-150 mb-3 overflow-hidden hover-action">
+                  <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg z-index-0" style="background-image: url(&quot;assets/img/modern-ai-image/user-4.jpg&quot;);">
+                    <img src="assets/img/modern-ai-image/user-4.jpg" alt="" style="display: none;">
+                  </figure>
+                  <div class="card-body position-relative">
+                    <h4 class="mb-0">ออกกำลังกาย</h4>
+                    <p class="opacity-75 mb-4">การออกกำลังกายวันนี้</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div class="col-6">
+              <a href="<?php echo base_url('/food/table'); ?>">
                 <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">
                   <div class="card-body position-relative">
-                    <h4 class="mb-0">รายงาน</h4>
-                    <p class="opacity-75 mb-4">การกิน, แคลวันนี้</p>
+                    <h4 class="mb-0">ตารางอาหาร</h4>
+                    <p class="opacity-75 mb-4">ออกแบบตารางดังใจคุณ (AI)</p>
                   </div>
                 </div>
               </a>

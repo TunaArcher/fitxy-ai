@@ -306,7 +306,7 @@
 
           <!-- Render รายการอาหารสำหรับแต่ละวัน -->
           <?php foreach ($days as $day): ?>
-            <div class="card-body height-dynamic overflow-auto pb-0" style="--h-dynamic: 340px;" data-day="<?php echo $day; ?>">
+            <div class="card-body height-dynamic overflow-auto pb-0" style="--h-dynamic: 360px;" data-day="<?php echo $day; ?>">
               <?php if (isset($meals[$day]) && is_array($meals[$day])): ?>
                 <?php foreach ($mealLabels as $mealType => $label): ?>
                   <?php if (isset($meals[$day][$mealType])):
@@ -323,9 +323,9 @@
                           </div>
                           <div class="col">
                             <h6 class="mb-0">
-                              <?php echo htmlspecialchars($meal['menu_name']); ?> | <?php echo htmlspecialchars($meal['cal']); ?> พลังงาน
+                              <?php echo htmlspecialchars($meal['menu_name']); ?>
                             </h6>
-                            <p class="text-secondary small text-truncated">Ads.</p>
+                            <p class="text-secondary small text-truncated"><i class="bi bi-fire me-1"></i> <?php echo htmlspecialchars($meal['cal']); ?> พลังงาน</p>
                           </div>
                         </div>
                       </div>

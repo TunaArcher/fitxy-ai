@@ -70,7 +70,6 @@ class LineLoginController extends Controller
         ]);
     }
 
-
     private function getAccessToken($code)
     {
         $client_id = getenv('LINE_CLIENT_ID');

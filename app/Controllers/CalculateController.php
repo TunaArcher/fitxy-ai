@@ -2,18 +2,18 @@
 
 namespace App\Controllers;
 
-use App\Models\CustomerModel;
-use App\Models\MenuModel;
+use App\Models\UserModel;
+use App\Models\UserMenuModel;
 
 class CalculateController extends BaseController
 {
-    private CustomerModel $customerModel;
-    private MenuModel $menuModel;
+    private UserModel $userModel;
+    private UserMenuModel $userMenuModel;
 
     public function __construct()
     {
-        $this->customerModel = new CustomerModel();
-        $this->menuModel = new MenuModel();
+        $this->userModel = new UserModel();
+        $this->userMenuModel = new UserMenuModel();
     }
 
     public function index()
@@ -33,8 +33,8 @@ class CalculateController extends BaseController
                         '
                     ];
 
-                    $data['menuToday'] = $this->menuModel->getMenuTodayByCustomerID(session()->get('customer')->id);
-                    $data['calToDay'] = $this->menuModel->getTotalCalTodayByCustomerID(session()->get('customer')->id)->cal_today;
+                    $data['userMenusToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
+                    $data['caloriesToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
 
                     echo view('/app', $data);
 
@@ -49,13 +49,13 @@ class CalculateController extends BaseController
                     $requestPayload = $this->request->getJSON();
 
 
-                    if (session()->get('customer')) {
+                    if (session()->get('user')) {
 
-                        $customer = $this->customerModel->getCustomerByID(session()->get('customer')->id);
+                        $user = $this->userModel->getUserByID(session()->get('user')->id);
 
-                        if ($customer) {
+                        if ($user) {
 
-                            $this->customerModel->updateCustomerByID($customer->id, [
+                            $this->userModel->updateUserByID($user->id, [
                                 'gender' => $requestPayload->gender,
                                 'age' => $requestPayload->age,
                                 'weight' => $requestPayload->weight,

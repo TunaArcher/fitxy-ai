@@ -52,7 +52,7 @@ $(document).ready(function () {
     overlay.style.display = "flex";
 
     $.ajax({
-      url: `${window.serverUrl}/food/generate`, // เปลี่ยน URL ให้ถูกต้อง
+      url: `${window.serverUrl}/food/generate`,
       type: "POST",
       dataType: "json",
       data: JSON.stringify({
@@ -94,11 +94,8 @@ $(document).ready(function () {
                 '<div class="col">' +
                 '<h6 class="mb-0">' +
                 bf.menu_name +
-                " | " +
-                bf.cal +
-                " พลังงาน " +
                 "</h6>" +
-                '<p class="text-secondary small text-truncated">Ads.</p>' +
+                '<p class="text-secondary small text-truncated"><i class="bi bi-fire me-1"></i>' + bf.cal + ' พลังงาน</p>' +
                 "</div>" +
                 "</div>" +
                 "</div>" +
@@ -121,11 +118,8 @@ $(document).ready(function () {
                 '<div class="col">' +
                 '<h6 class="mb-0">' +
                 ln.menu_name +
-                " | " +
-                ln.cal +
-                " พลังงาน " +
                 "</h6>" +
-                '<p class="text-secondary small text-truncated">Ads.</p>' +
+                '<p class="text-secondary small text-truncated"><i class="bi bi-fire me-1"></i>' + ln.cal + ' พลังงาน</p>' +
                 "</div>" +
                 "</div>" +
                 "</div>" +
@@ -148,11 +142,8 @@ $(document).ready(function () {
                 '<div class="col">' +
                 '<h6 class="mb-0">' +
                 dn.menu_name +
-                " | " +
-                dn.cal +
-                " พลังงาน " +
                 "</h6>" +
-                '<p class="text-secondary small text-truncated">Ads.</p>' +
+                '<p class="text-secondary small text-truncated"><i class="bi bi-fire me-1"></i>' + dn.cal + ' พลังงาน</p>' +
                 "</div>" +
                 "</div>" +
                 "</div>" +
@@ -175,11 +166,8 @@ $(document).ready(function () {
                 '<div class="col">' +
                 '<h6 class="mb-0">' +
                 sn.menu_name +
-                " | " +
-                sn.cal +
-                " พลังงาน " +
                 "</h6>" +
-                '<p class="text-secondary small text-truncated">Ads.</p>' +
+                '<p class="text-secondary small text-truncated"><i class="bi bi-fire me-1"></i>' + sn.cal + ' พลังงาน</p>' +
                 "</div>" +
                 "</div>" +
                 "</div>" +

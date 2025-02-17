@@ -32,13 +32,6 @@ class UserModel
         return $builder->where('id', $id)->get()->getRow();
     }
 
-    public function getMessageTraningByID($id)
-    {
-        $builder = $this->db->table('message_setting');
-
-        return $builder->where('user_id', $id)->get()->getRow();
-    }
-
     public function insertUser($data)
     {
         $builder = $this->db->table('users');
@@ -60,50 +53,28 @@ class UserModel
         return $builder->where('id', $id)->delete();
     }
 
-    public function getUser($Username)
+    public function getUser($username)
     {
         $builder = $this->db->table('users');
-        return $builder->where('email', $Username)->get()->getResult();
+        
+        return $builder->where('username', $username)->get()->getResult();
     }
 
-    public function getUserByPlatFromAndID($platform, $platformUserID)
-    {
-        $builder = $this->db->table('users');
-
-        return $builder
-            ->where('sign_by_platform', $platform)
-            ->where('platform_user_id', $platformUserID)
-            ->get()
-            ->getRow();
-    }
-
-    public function getUserByEmail($email)
-    {
-        $builder = $this->db->table('users');
-        return $builder->where('email', $email)->get()->getRow();
-    }
-
-    public function getUserByUserOwnerID($userOwnerID)
+    public function getUserByUID($UID)
     {
         $builder = $this->db->table('users');
 
-        return $builder->where('user_owner_id', $userOwnerID)->get()->getResult();
+        return $builder->where('uid', $UID)->get()->getRow();
     }
 
-    public function getUserByStripeCustomerID($stripeCustomerID)
-    {
-        $builder = $this->db->table('users');
+//     public function getUserByUID($UID)
+// {
+//     $builder = $this->db->table('users');
+//     $sql = $builder->where('uid', $UID)->getCompiledSelect();
 
-        return $builder
-            ->where('stripe_customer_id', $stripeCustomerID)
-            ->get()
-            ->getRow();
-    }
+//     // แสดงคำสั่ง SQL
+//     echo $sql;
+//     exit;
+// }
 
-    public function updateUser($data)
-    {
-        $builder = $this->db->table('users');
-
-        return $builder->update($data);
-    }
 }

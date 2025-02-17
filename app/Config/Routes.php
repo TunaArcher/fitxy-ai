@@ -39,29 +39,40 @@ $routes->set404Override('App\Controllers\Errors::show404');
 $routes->get('/', 'HomeController::index');
 $routes->get('/logout', 'HomeController::logout');
 $routes->get('/register', 'HomeController::register');
-$routes->match(['get', 'post'], 'calculate', 'CalculateController::index');
-$routes->get('/report', 'HomeController::report');
+
+$routes->match(['get', 'post'], 'calculate', 'CalculateController::index', ['filter' => 'userAuth']);
 $routes->get('/callback', 'LineLoginController::callback');
 
 // -----------------------------------------------------------------------------
 // Menu
 // -----------------------------------------------------------------------------
 
-$routes->group('menu', function ($routes) {
-    $routes->post('update', 'HomeController::menuUpdate');
-    $routes->post('delete', 'HomeController::menuDelete');
+$routes->group('menu', ['filter' => 'userAuth'], function ($routes) {
+    $routes->get('/', 'MenuController::report');
+    $routes->post('update', 'MenuController::update');
+    $routes->post('delete', 'MenuController::delete');
+});
+
+// -----------------------------------------------------------------------------
+// Workout
+// -----------------------------------------------------------------------------
+
+$routes->group('workout', ['filter' => 'userAuth'], function ($routes) {
+    $routes->get('/', 'WorkoutController::index');
+    $routes->get('add', 'WorkoutController::add');
+    $routes->post('save', 'WorkoutController::save');
+    $routes->post('delete', 'WorkoutController::delete');
 });
 
 // -----------------------------------------------------------------------------
 // Food
 // -----------------------------------------------------------------------------
 
-$routes->group('food', function ($routes) {
-    $routes->get('table', 'HomeController::foodTable');
-    $routes->post('generate', 'HomeController::foodGenerate');
-    $routes->post('saveTable', 'HomeController::foodSaveTable');
+$routes->group('food', ['filter' => 'userAuth'], function ($routes) {
+    $routes->get('table', 'FoodController::foodTable');
+    $routes->post('generate', 'FoodController::foodGenerate');
+    $routes->post('saveTable', 'FoodController::saveTable');
 });
-
 
 // -----------------------------------------------------------------------------
 // Webhook

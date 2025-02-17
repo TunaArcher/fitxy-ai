@@ -6,25 +6,30 @@ use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Filters\FilterInterface;
 
-use Hashids\Hashids;
 
 class CheckPermissions implements FilterInterface
 {
 
-    protected $customerModel;
+    protected $userModel;
+
     public function __construct()
     {
-        $this->customerModel = new \App\Models\CustomerModel();
+        $this->userModel = new \App\Models\UserModel();
     }
 
     public function before(RequestInterface $request, $arguments = null)
     {
-        // if (getenv('CI_ENVIRONMENT') === 'development' || getenv('CI_ENVIRONMENT') === 'production') {
+    
         if (getenv('CI_ENVIRONMENT') === 'development') {
+         
+            $user = $this->userModel->getUserByUID('U8bf2cbdb6cbbdb8709dc268512abd4a3');
 
-            $customer = $this->customerModel->getCustomerByUID('Ufc1738677dfe7207c4af443d0d365fba');
+            session()->set('user', $user);
+            session()->set('isUserLoggedIn', true);
+        }
 
-            session()->set('customer', $customer);
+        else {
+            return redirect()->to('/');
         }
     }
 

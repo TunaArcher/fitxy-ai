@@ -28,11 +28,11 @@
     <div class="container mt-3" id="main-content">
 
       <div class="my-3 text-center">
-        <h2 id="totalCalToday"><?php echo number_format($calToDay, 0); ?></h2>
+        <h2 id="totalCalToday"><?php echo number_format($caloriesToDay, 0); ?></h2>
         <p>จำนวนแคลวันนี้</p>
       </div>
 
-      <?php foreach ($menuToday as $key => $menu) { ?>
+      <?php foreach ($userMenusToday as $key => $menu) { ?>
         <div class="col-12 mb-3">
           <div class="card adminuiux-card border-0 mb-3 overflow-hidden hover-action" data-menu-id="<?php echo $menu->id; ?>">
 
@@ -50,7 +50,7 @@
                   <a href="#" class="w-100 height-90 rounded coverimg d-inline-block align-top" style="background-image: url(&quot;assets/img/fitness/image-10.jpg&quot;);"><img src="<?php echo $menu->content; ?>" alt="" style="display: none;"></a>
                 </div>
                 <div class="col-8 d-flex align-items-center justify-content-between">
-                  <h4 class="text-theme-1 mb-0"><span style="font-size: 1.2rem;" class="badge badge-light text-bg-theme-<?php echo $key; ?> theme-orange"><?php echo number_format($menu->cal, 0); ?> แคลอรี่</span></h4>
+                  <h4 class="text-theme-1 mb-0"><span style="font-size: 1.2rem;" class="badge badge-light text-bg-theme-<?php echo $key; ?> theme-orange"><?php echo number_format($menu->calories, 0); ?> แคลอรี่</span></h4>
                 </div>
               </div>
             </div>

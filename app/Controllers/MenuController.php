@@ -2,10 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Libraries\ChatGPT;
 use App\Models\UserMenuModel;
 
-class HomeController extends BaseController
+class MenuController extends BaseController
 {
     private UserMenuModel $userMenuModel;
 
@@ -14,157 +13,100 @@ class HomeController extends BaseController
         $this->userMenuModel = new UserMenuModel();
     }
 
-    private function Auth()
-    {
-        // สร้างค่า state แบบสุ่ม
-        $state = bin2hex(random_bytes(16));
-
-        // เก็บค่า state ไว้ใน Session โดยใช้ CI4
-        session()->set('oauth_state', $state);
-
-        // ใช้ค่า $state ใน URL ของ LINE Login
-        $line_login_url = "https://access.line.me/oauth2/v2.1/authorize?" . http_build_query([
-            "response_type" => "code",
-            "client_id" => getenv('LINE_CLIENT_ID'),
-            "redirect_uri" => base_url('/callback'),
-            "scope" => "profile openid email",
-            "state" => $state
-        ]);
-
-        return $line_login_url;
-    }
-
-    public function index()
-    {
- 
-        if (session()->get('user')) {
-       
-            $data = [
-                'content' => 'home/index',
-                'title' => 'Home',
-                'css_critical' => '',
-                'js_critical' => '
-                    <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
-                    <script src="app/home.js"></script>
-                    <script src="assets/js/fitness/fitness-dashboard.js"></script>
-                '
-            ];
-
-            $data['userMenusToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
-            $data['caloriesToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
-
-            echo view('/app', $data);
-        } else {
-            return redirect()->to($this->Auth());
-        }
-    }
-
     public function report()
     {
         $data = [
-            'content' => 'home/report',
-            'title' => 'Home',
+            'content' => 'menu/report',
+            'title' => 'Menu',
             'css_critical' => '',
             'js_critical' => '
                 <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
-                <script src="app/report.js"></script>
+                <script src="' . base_url('/app/menu/report.js') . '"></script>
             '
         ];
 
-        $data['menuToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
-        $data['calToDay'] = $this->userMenuModel->getTotalCalTodayByUserID(session()->get('user')->id)->cal_today;
+        $data['userMenusToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
+        $data['caloriesToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
 
         echo view('/app', $data);
     }
 
-    public function logout()
+    public function update()
     {
+
         try {
 
-            session()->destroy();
+            $response = [
+                'success' => 0,
+                'message' => '',
+            ];
 
-            return redirect()->to('/');
+            $status = 500;
+
+            // รับข้อมูล JSON จาก Request
+            $data = $this->request->getJSON();
+            $menuID = $data->menu_id;
+            $newCal = $data->cal;
+
+            $update = $this->userMenuModel->updateUserMenuByID($menuID, [
+                'calories' => $newCal,
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+
+            if ($update) {
+
+                $response = [
+                    'success' => 1,
+                    'message' => 'สำเร็จ',
+                ];
+
+                $status = 200;
+            }
+
+            return $this->response
+                ->setStatusCode($status)
+                ->setContentType('application/json')
+                ->setJSON($response);
         } catch (\Exception $e) {
-            //            echo $e->getMessage();
+            px($e->getMessage());
         }
     }
 
-    // public function menuUpdate()
-    // {
+    public function delete()
+    {
 
-    //     try {
+        try {
 
-    //         $response = [
-    //             'success' => 0,
-    //             'message' => '',
-    //         ];
+            $response = [
+                'success' => 0,
+                'message' => '',
+            ];
 
-    //         $status = 500;
+            $status = 500;
 
-    //         // รับข้อมูล JSON จาก Request
-    //         $data = $this->request->getJSON();
-    //         $menuID = $data->menu_id;
-    //         $newCal = $data->cal;
+            // รับข้อมูล JSON จาก Request
+            $data = $this->request->getJSON();
+            $menuID = $data->menu_id;
 
-    //         $update = $this->userMenuModel->updateMenuByID($menuID, [
-    //             'cal' => $newCal,
-    //             'updated_at' => date('Y-m-d H:i:s'),
-    //         ]);
+            $delete = $this->userMenuModel->deleteMenuByID($menuID);
 
-    //         if ($update) {
+            if ($delete) {
 
-    //             $response = [
-    //                 'success' => 1,
-    //                 'message' => 'สำเร็จ',
-    //             ];
+                $response = [
+                    'success' => 1,
+                    'message' => 'สำเร็จ',
+                ];
 
-    //             $status = 200;
-    //         }
+                $status = 200;
+            }
 
-    //         return $this->response
-    //             ->setStatusCode($status)
-    //             ->setContentType('application/json')
-    //             ->setJSON($response);
-    //     } catch (\Exception $e) {
-    //         px($e->getMessage());
-    //     }
-    // }
-
-    // public function menuDelete()
-    // {
-
-    //     try {
-
-    //         $response = [
-    //             'success' => 0,
-    //             'message' => '',
-    //         ];
-
-    //         $status = 500;
-
-    //         // รับข้อมูล JSON จาก Request
-    //         $data = $this->request->getJSON();
-    //         $menuID = $data->menu_id;
-
-    //         $delete = $this->userMenuModel->deleteMenuByID($menuID);
-
-    //         if ($delete) {
-
-    //             $response = [
-    //                 'success' => 1,
-    //                 'message' => 'สำเร็จ',
-    //             ];
-
-    //             $status = 200;
-    //         }
-
-    //         return $this->response
-    //             ->setStatusCode($status)
-    //             ->setContentType('application/json')
-    //             ->setJSON($response);
-    //     } catch (\Exception $e) {
-    //     }
-    // }
+            return $this->response
+                ->setStatusCode($status)
+                ->setContentType('application/json')
+                ->setJSON($response);
+        } catch (\Exception $e) {
+        }
+    }
 
     // public function foodTable()
     // {

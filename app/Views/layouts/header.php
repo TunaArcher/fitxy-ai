@@ -84,6 +84,30 @@
             window.location.href = '/';
         }
     </script>
+    <style>
+        .pageloader {
+            position: fixed;
+            /* ทำให้เต็มหน้าจอ */
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            /* สามารถเปลี่ยนเป็นสีโปร่งใสหรือตามที่ต้องการ */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            /* ให้แน่ใจว่าอยู่บนสุด */
+        }
+
+        .pageloader img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* ปรับขนาดให้เต็มจอโดยไม่เสียอัตราส่วน */
+        }
+    </style>
 </head>
 
 <body
@@ -97,7 +121,7 @@
     data-sidebarlayout="adminuiux-sidebar-standard"
     data-headerlayout="adminuiux-header-standard"
     data-headerfill="adminuiux-header-transparent">
-
+    <!-- 
     <div class="pageloader">
         <div class="container h-100">
             <div
@@ -116,4 +140,8 @@
                 </div>
             </div>
         </div>
+    </div> -->
+
+    <div class="pageloader">
+        <img src="https://cdn.discordapp.com/attachments/1089056066530197515/1341019279897919488/1739794300292.gif?ex=67b47907&amp;is=67b32787&amp;hm=08f43dd1533440ca0512b3b4dcdbfbf92b4d35ed57e0aff17d70d599e1435358&amp;">
     </div>

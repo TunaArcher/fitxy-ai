@@ -39,7 +39,6 @@ class HomeController extends BaseController
 
     public function index()
     {
-
         if (session()->get('user')) {
 
             $data = [

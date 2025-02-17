@@ -270,7 +270,7 @@
 <header class="adminuiux-header">
   <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
-      <button class="btn btn-square btn-link" onclick="goBack()">
+      <button class="btn btn-square btn-link" onclick="goBackHome()">
         <i class="bi bi-arrow-left"></i>
       </button>
       <p class="h6 my-1 px-3 text-center"><span class="title"></span></p>

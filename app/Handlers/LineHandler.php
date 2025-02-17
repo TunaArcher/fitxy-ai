@@ -138,7 +138,7 @@ class LineHandler
                 'user_id' => $messageRoom->user_id,
                 'content' => $this->cleanUrl($message['img_url']),
                 'note' => $repyleMessage['repyleMessage'],
-                'cal' => $repyleMessage['json'],
+                'calories' => $repyleMessage['json'],
             ]);
         }
 

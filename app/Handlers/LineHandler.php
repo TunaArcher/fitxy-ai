@@ -6,7 +6,7 @@ use App\Integrations\Line\LineClient;
 use App\Libraries\ChatGPT;
 use App\Models\AccountModel;
 use App\Models\UserModel;
-use App\Models\MenuModel;
+use App\Models\UserMenuModel;
 use App\Models\MessageModel;
 use App\Models\MessageRoomModel;
 
@@ -14,7 +14,7 @@ class LineHandler
 {
     private AccountModel $accountModel;
     private UserModel $userModel;
-    private MenuModel $menuModel;
+    private UserMenuModel $userMenuModel;
     private MessageModel $messageModel;
     private MessageRoomModel $messageRoomModel;
 
@@ -24,7 +24,7 @@ class LineHandler
     {
         $this->accountModel = new AccountModel();
         $this->userModel = new UserModel();
-        $this->menuModel = new MenuModel();
+        $this->userMenuModel = new UserMenuModel();
         $this->messageModel = new MessageModel();
         $this->messageRoomModel = new MessageRoomModel();
     }
@@ -134,7 +134,7 @@ class LineHandler
         ]);
 
         if ($repyleMessage['json']) {
-            $this->menuModel->insertMenu([
+            $this->userMenuModel->insertUserMenu([
                 'user_id' => $messageRoom->user_id,
                 'content' => $this->cleanUrl($message['img_url']),
                 'note' => $repyleMessage['repyleMessage'],

@@ -293,13 +293,14 @@
 
           ?>
           <?php
+
+          // กำหนดลำดับของวัน
+          $days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
           // สมมุติว่าคุณมีตัวแปร $food ที่เป็น stdClass Object จากฐานข้อมูล
           // $food->list เป็น JSON string เราจะ decode ให้เป็น Array
-          if ($foodTable->list) {
+          if ($foodTable) {
             $meals = json_decode($foodTable->list, true);
-
-            // กำหนดลำดับของวัน
-            $days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
           }
 
           ?>

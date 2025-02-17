@@ -90,9 +90,6 @@ class WorkoutController extends BaseController
 
             if ($userWorkout) {
 
-                $user = $this->userModel->getUserByID(session()->get('user')->id);
-                session()->set('user', $user);
-
                 $response = [
                     'success' => 1,
                     'message' => 'สำเร็จ',

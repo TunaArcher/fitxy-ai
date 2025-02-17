@@ -70,6 +70,8 @@ class CalculateController extends BaseController
                                 'updated_at' => date('Y-m-d H:i:s'),
                             ]);
 
+                            session()->set('user', $user);
+
                             $response['data'] = '';
                         }
                     }

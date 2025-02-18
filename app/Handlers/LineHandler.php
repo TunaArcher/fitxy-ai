@@ -147,8 +147,7 @@ class LineHandler
                 'calories' => $renderFlexMessage['summary']['calories'],
                 'protein' => $renderFlexMessage['summary']['protein'],
                 'fat' => $renderFlexMessage['summary']['fat'],
-                'carbohydrates' => $renderFlexMessage['summary']['carbohydrates'],
-                'ingredients' => $renderFlexMessage['summary']['ingredients'],
+                'carbohydrates' => $renderFlexMessage['summary']['carbohydrates']
             ]);
 
             $line->pushMessage($UID, $renderFlexMessage['content'], 'flex');
@@ -472,8 +471,7 @@ class LineHandler
                 'calories' => $calories,
                 'protein' => $protein,
                 'fat' => $fat,
-                'carbohydrates' => $carbohydrates,
-                'ingredients' => $ingredients,
+                'carbohydrates' => $carbohydrates
             ]
         ];
 

@@ -51,7 +51,7 @@ class LineHandler
 
         if ($user) {
 
-            $line->startLoadingAnimation($message['UID'], 12);
+            $line->startLoadingAnimation($message['UID'], 15);
 
             // ตรวจสอบหรือสร้างห้องสนทนา
             $messageRoom = $this->getOrCreateMessageRoom($user);
@@ -78,7 +78,7 @@ class LineHandler
             $event = $input->events[0];
             $UID = $event->source->userId;
 
-            $line->startLoadingAnimation($UID , 4);
+            $line->startLoadingAnimation($UID , 5);
 
             $messages = [
                 "ก่อนจะคุยกับผมช่วย FitXy-AI  มาสมัครสมาชิกก่อนนะ! แล้วผมจะมีแรง สมัครคลิกเลยที่นี่ 👉 http://line.autoconx.app/",

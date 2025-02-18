@@ -186,7 +186,7 @@ class LineClient
         }
     }
 
-    public function replyMessage($to, $replyToken, $messages)
+    public function replyMessage($replyToken, $messages)
     {
         try {
 
@@ -203,7 +203,6 @@ class LineClient
             ];
 
             $data = [
-                'to' => $to,
                 'replyToken' => $replyToken,
                 'messages' => [
                     $message
@@ -232,8 +231,6 @@ class LineClient
             return false;
         }
     }
-
-
 
     /*********************************************************************
      * 1. Profile | ดึงข้อมูล
@@ -310,6 +307,46 @@ class LineClient
         } catch (\Exception $e) {
             // จัดการข้อผิดพลาด
             log_message('error', 'LineClient::accessToken error {message}', ['message' => $e->getMessage()]);
+            return false;
+        }
+    }
+
+    public function startLoadingAnimation($userId, $seconds = 5)
+    {
+        try {
+            // ตั้งค่า Endpoint ของ LINE API
+            $endPoint = $this->baseURL . '/bot/chat/loading/start';
+
+            $headers = [
+                'Authorization' => "Bearer " . $this->accessToken,
+                'Content-Type' => 'application/json',
+            ];
+
+            $data = [
+                'chatId' => $userId, // ระบุ userId หรือ groupId ที่ต้องการแสดง Animation
+                'loadingSeconds' => $seconds, // ตั้งค่าระยะเวลาการแสดง (5-60 วินาที)
+            ];
+
+            // ส่ง Request ไปที่ LINE API
+            $response = $this->http->request('POST', $endPoint, [
+                'headers' => $headers,
+                'json' => $data, // ใช้ 'json' เพื่อแปลงข้อมูลให้อยู่ในรูปแบบ JSON
+            ]);
+
+            $responseData = json_decode($response->getBody());
+
+            // ตรวจสอบสถานะ HTTP Code และข้อมูลใน Response
+            $statusCode = $response->getStatusCode();
+            if ($statusCode === 200 || isset($responseData->statusCode) && (int)$responseData->statusCode === 0) {
+                return true; // ส่งคำขอสำเร็จ
+            }
+
+            // กรณีเรียก API ล้มเหลว
+            log_message('error', "Failed to start loading animation: " . json_encode($responseData));
+            return false;
+        } catch (\Exception $e) {
+            // จัดการข้อผิดพลาด
+            log_message('error', 'LineClient::startLoadingAnimation error {message}', ['message' => $e->getMessage()]);
             return false;
         }
     }

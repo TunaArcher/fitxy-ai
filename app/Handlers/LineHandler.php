@@ -42,7 +42,16 @@ class LineHandler
         // ตรวจสอบหรือสร้างลูกค้า
         $user = $this->userModel->getUserByUID($message['UID']);
 
+        $line = new LineClient([
+            'id' => $this->account->id,
+            'accessToken' =>  $this->account->line_channel_access_token,
+            'channelID' =>  $this->account->line_channel_id,
+            'channelSecret' =>  $this->account->line_channel_secret,
+        ]);
+        $line->startLoadingAnimation($message['UID'], 10);
+
         if ($user) {
+            
             // ตรวจสอบหรือสร้างห้องสนทนา
             $messageRoom = $this->getOrCreateMessageRoom($user);
 
@@ -88,13 +97,6 @@ class LineHandler
                 "แค่สมัครก็ได้เปิดประตูสู่โลกของ AI! 🚀 มาสมัครสมาชิกกันเถอะ 👉 http://line.autoconx.app/",
                 "สมัครก่อน ได้ใช้ก่อน แถมได้รู้จัก AI ก่อนใคร! 😏 คลิกเลย 👉 http://line.autoconx.app/",
             ];
-
-            $line = new LineClient([
-                'id' => $this->account->id,
-                'accessToken' =>  $this->account->line_channel_access_token,
-                'channelID' =>  $this->account->line_channel_id,
-                'channelSecret' =>  $this->account->line_channel_secret,
-            ]);
 
             $repyleMessage = $messages[array_rand($messages)];
 

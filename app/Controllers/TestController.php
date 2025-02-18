@@ -235,56 +235,56 @@ class TestController extends BaseController
     //     exit();
     // }
 
-    // public function test()
-    // {
-    //     // $input = 'text';
+    public function test()
+    {
+        // $input = 'text';
 
-    //     // $line = new LineClient([
-    //     //     'id' => '128',
-    //     //     'accessToken' => 'mswad2W1OPrri9UQpAgNassH7G1hKIMq24ll7rDk0VgDTRCZhqQjhQKk7hwHub86Se3EtrO528RG3rNEsBtZzHVCtg4XTq/7fO1qfStVdOB7j4iHiP8SpQsdwgGT78Guqrwv+CmrwANtZSxG3EaAkI9PbdgDzCFqoOLOYbqAITQ=',
-    //     //     'channelID' => '2006918518',
-    //     //     'channelSecret' => '142d73fd0b359cafc31872a2e165d750',
-    //     // ]);
+        $line = new LineClient([
+            'id' => '128',
+            'accessToken' => 'mswad2W1OPrri9UQpAgNassH7G1hKIMq24ll7rDk0VgDTRCZhqQjhQKk7hwHub86Se3EtrO528RG3rNEsBtZzHVCtg4XTq/7fO1qfStVdOB7j4iHiP8SpQsdwgGT78Guqrwv+CmrwANtZSxG3EaAkI9PbdgDzCFqoOLOYbqAITQ=',
+            'channelID' => '2006918518',
+            'channelSecret' => '142d73fd0b359cafc31872a2e165d750',
+        ]);
 
-    //     // // $repyleMessage = $messages[array_rand($messages)];
+        // // $repyleMessage = $messages[array_rand($messages)];
 
-    //     // $UID = 'Ucac64382c185fd8acd69438c5af15935';
-    //     // $repyleMessage = $flexMessage;
-    //     // $line->pushMessage($UID, $repyleMessage, 'image');
-    //     // exit();
+        $UID = 'Ucac64382c185fd8acd69438c5af15935';
+        $line->startLoadingAnimation($UID, 10);
+        $line->pushMessage($UID, 'hi', 'text');
+        exit();
 
-    //     $user_id = 'Ucac64382c185fd8acd69438c5af15935'; // หรือเปลี่ยนเป็น event ที่รับมาจาก Webhook
+        $user_id = 'Ucac64382c185fd8acd69438c5af15935'; // หรือเปลี่ยนเป็น event ที่รับมาจาก Webhook
 
-    //     // 🔹 1. ส่ง "..." ก่อน
-    //     $this->sendLineMessage($user_id, [
-    //         ["type" => "text", "text" => "..."]
-    //     ]);
+        // 🔹 1. ส่ง "..." ก่อน
+        $this->sendLineMessage($user_id, [
+            ["type" => "text", "text" => "..."]
+        ]);
 
-    //     // 🔹 2. รอ 2 วินาที
-    //     sleep(2);
+        // 🔹 2. รอ 2 วินาที
+        sleep(2);
 
-    //     // 🔹 3. ส่งข้อความจริง พร้อม Quick Reply (กดแล้ว "..." จะหายไป)
-    //     $this->sendLineMessage($user_id, [
-    //         [
-    //             "type" => "text",
-    //             "text" => "นี่คือข้อมูลของคุณ!",
-    //             "quickReply" => [
-    //                 "items" => [
-    //                     [
-    //                         "type" => "action",
-    //                         "action" => [
-    //                             "type" => "message",
-    //                             "label" => "เข้าใจแล้ว ✅",
-    //                             "text" => "เข้าใจแล้ว ✅"
-    //                         ]
-    //                     ]
-    //                 ]
-    //             ]
-    //         ]
-    //     ]);
+        // 🔹 3. ส่งข้อความจริง พร้อม Quick Reply (กดแล้ว "..." จะหายไป)
+        $this->sendLineMessage($user_id, [
+            [
+                "type" => "text",
+                "text" => "นี่คือข้อมูลของคุณ!",
+                "quickReply" => [
+                    "items" => [
+                        [
+                            "type" => "action",
+                            "action" => [
+                                "type" => "message",
+                                "label" => "เข้าใจแล้ว ✅",
+                                "text" => "เข้าใจแล้ว ✅"
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
 
-    //     echo "Done!";
-    // }
+        echo "Done!";
+    }
 
     // public function test()
     // {
@@ -321,25 +321,25 @@ class TestController extends BaseController
     //     echo "Done!";
     // }
 
-    public function test()
-    {
-        $user_id = 'Ucac64382c185fd8acd69438c5af15935'; 
+    // public function test()
+    // {
+    //     $user_id = 'Ucac64382c185fd8acd69438c5af15935'; 
     
-        $replyToken = 'ded71fa51d5547b9828add6ebff4afd5';
+    //     $replyToken = 'ded71fa51d5547b9828add6ebff4afd5';
 
-        // 🔹 1. ส่ง "กำลังพิมพ์..." ก่อน
-        $this->replyLineMessage($replyToken, [
-            ["type" => "text", "text" => "กำลังพิมพ์..."]
-        ]);
+    //     // 🔹 1. ส่ง "กำลังพิมพ์..." ก่อน
+    //     $this->replyLineMessage($replyToken, [
+    //         ["type" => "text", "text" => "กำลังพิมพ์..."]
+    //     ]);
 
-        // 🔹 2. รอ 2 วินาที (จำลอง Typing Bubble)
-        sleep(2);
+    //     // 🔹 2. รอ 2 วินาที (จำลอง Typing Bubble)
+    //     sleep(2);
 
-        // 🔹 3. ใช้ Push API ส่งข้อความจริง (LINE จะลบ "กำลังพิมพ์..." อัตโนมัติ)
-        $this->pushLineMessage($user_id, [
-            ["type" => "text", "text" => "นี่คือคำตอบของคุณ! 😊"]
-        ]);
-    }
+    //     // 🔹 3. ใช้ Push API ส่งข้อความจริง (LINE จะลบ "กำลังพิมพ์..." อัตโนมัติ)
+    //     $this->pushLineMessage($user_id, [
+    //         ["type" => "text", "text" => "นี่คือคำตอบของคุณ! 😊"]
+    //     ]);
+    // }
     
     private function replyLineMessage($replyToken, $messages)
     {

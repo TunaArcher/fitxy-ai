@@ -67,24 +67,24 @@ class LineHandler
             $UID = $event->source->userId;
 
             $messages = [
-                "ก่อนจะคุยกับผมช่วย FitXy-AI  มาสมัครสมาชิกก่อนนะ! แล้วผมจะมีแรง สมัครคลิกเลยที่นี่ 👉 http://line.autoconx.app/",
+                "ก่อนจะคุยกับผมช่วย FitXy AI  มาสมัครสมาชิกก่อนนะ! แล้วผมจะมีแรง สมัครคลิกเลยที่นี่ 👉 http://line.autoconx.app/",
                 "อยากให้ผม ตอบแบบรู้ใจ? สมัครสมาชิกก่อนนะ 😄 สมัครง่ายมากที่นี่ 👉 http://line.autoconx.app/",
-                "FitXy-AI  พร้อมจะช่วยคุณ แต่ก่อนอื่น... สมัครสมาชิกก่อนเถอะ! 😆 กดเลย 👉 http://line.autoconx.app/",
-                "รู้มั้ย? สมัครสมาชิกแล้ว FitXy-AI  จะฉลาดขึ้น 10% (จากไหนก็ไม่รู้ 🤣) สมัครเลย! 👉 http://line.autoconx.app/",
-                "เฮ้! อยากได้คำตอบดีๆ จาก FitXy-AI  ต้องสมัครก่อนนะ สมัครง่ายๆ ที่นี่เลย 👉 http://line.autoconx.app/",
+                "FitXy AI  พร้อมจะช่วยคุณ แต่ก่อนอื่น... สมัครสมาชิกก่อนเถอะ! 😆 กดเลย 👉 http://line.autoconx.app/",
+                "รู้มั้ย? สมัครสมาชิกแล้ว FitXy AI  จะฉลาดขึ้น 10% (จากไหนก็ไม่รู้ 🤣) สมัครเลย! 👉 http://line.autoconx.app/",
+                "เฮ้! อยากได้คำตอบดีๆ จาก FitXy AI  ต้องสมัครก่อนนะ สมัครง่ายๆ ที่นี่เลย 👉 http://line.autoconx.app/",
                 "FitAI ไม่ใช่แค่ AI แต่เป็นเพื่อนของคุณ! สมัครสมาชิกก่อนเพื่อรู้จักกันให้ดีขึ้น 😊 👉 http://line.autoconx.app/",
                 "สมัครสมาชิกตอนนี้ รับสิทธิพิเศษเพียบ! (แต่จริงๆ คือสมัครก่อนคุยได้ 🤣) คลิกเลย 👉 http://line.autoconx.app/",
-                "สมัครแล้วคุยกับ FitXy-AI  ได้เลย! ไม่สมัคร... ก็รอ FitXy-AI  มาเกาหัวแป๊บนะ 🤔😆 👉 http://line.autoconx.app/",
-                "ไม่ต้องร่ายมนต์! แค่สมัครสมาชิกก็เข้าถึง FitXy-AI  ได้แล้ว 🎩✨ คลิกที่นี่เลย 👉 http://line.autoconx.app/",
-                "อยากให้ FitXy-AI  ทักทายด้วยรอยยิ้ม? 😊 สมัครสมาชิกก่อนเลย! 👉 http://line.autoconx.app/",
+                "สมัครแล้วคุยกับ FitXy AI  ได้เลย! ไม่สมัคร... ก็รอ FitXy AI  มาเกาหัวแป๊บนะ 🤔😆 👉 http://line.autoconx.app/",
+                "ไม่ต้องร่ายมนต์! แค่สมัครสมาชิกก็เข้าถึง FitXy AI  ได้แล้ว 🎩✨ คลิกที่นี่เลย 👉 http://line.autoconx.app/",
+                "อยากให้ FitXy AI  ทักทายด้วยรอยยิ้ม? 😊 สมัครสมาชิกก่อนเลย! 👉 http://line.autoconx.app/",
                 "FitAI พร้อมคุย แต่คุณพร้อมรึยัง? ถ้าพร้อม กดสมัครเลย! 👉 http://line.autoconx.app/",
-                "สมัครสมาชิก = ได้คุยกับ FitXy-AI  สมัครง่ายมาก ไม่ต้องพิมพ์รหัสผ่าน 18 หลัก! 😆 👉 http://line.autoconx.app/",
-                "ก่อนจะให้ FitXy-AI  ช่วย มาช่วยตัวเองด้วยการสมัครสมาชิกก่อนนะ! คลิกเลย 👉 http://line.autoconx.app/",
-                "สมัครก่อน คุยก่อน ได้เปรียบกว่า! FitXy-AI  รออยู่ สมัครเลย 👉 http://line.autoconx.app/",
+                "สมัครสมาชิก = ได้คุยกับ FitXy AI  สมัครง่ายมาก ไม่ต้องพิมพ์รหัสผ่าน 18 หลัก! 😆 👉 http://line.autoconx.app/",
+                "ก่อนจะให้ FitXy AI  ช่วย มาช่วยตัวเองด้วยการสมัครสมาชิกก่อนนะ! คลิกเลย 👉 http://line.autoconx.app/",
+                "สมัครก่อน คุยก่อน ได้เปรียบกว่า! FitXy AI  รออยู่ สมัครเลย 👉 http://line.autoconx.app/",
                 "AI อัจฉริยะก็ต้องมีการเตรียมตัว คนฉลาดอย่างคุณก็ต้องสมัครก่อน! 😆 👉 http://line.autoconx.app/",
-                "สมัครก่อนจะคุยกับ FitXy-AI  นะ ไม่งั้น AI จะงอนเอา! 🤖💢 คลิกเลย 👉 http://line.autoconx.app/",
+                "สมัครก่อนจะคุยกับ FitXy AI  นะ ไม่งั้น AI จะงอนเอา! 🤖💢 คลิกเลย 👉 http://line.autoconx.app/",
                 "FitAI พร้อมเป็นเพื่อนคุณ แต่ก่อนอื่น... มาเป็นสมาชิกกันก่อนเถอะ! 😊 สมัครเลย 👉 http://line.autoconx.app/",
-                "ไม่ต้องรอคิว! สมัครปุ๊บ คุยกับ FitXy-AI  ได้ปั๊บ คลิกเลย 👉 http://line.autoconx.app/",
+                "ไม่ต้องรอคิว! สมัครปุ๊บ คุยกับ FitXy AI  ได้ปั๊บ คลิกเลย 👉 http://line.autoconx.app/",
                 "แค่สมัครก็ได้เปิดประตูสู่โลกของ AI! 🚀 มาสมัครสมาชิกกันเถอะ 👉 http://line.autoconx.app/",
                 "สมัครก่อน ได้ใช้ก่อน แถมได้รู้จัก AI ก่อนใคร! 😏 คลิกเลย 👉 http://line.autoconx.app/",
             ];
@@ -115,8 +115,6 @@ class LineHandler
             ? $chatGPT->askChatGPT($messageRoom->id, $message['message'])
             : $chatGPT->askChatGPT($messageRoom->id, $message['message'], $message['img_url']);
 
-        $repyleMessage = $this->filterMessage($repyleMessage);
-
         $line = new LineClient([
             'id' => $this->account->id,
             'accessToken' =>  $this->account->line_channel_access_token,
@@ -128,21 +126,35 @@ class LineHandler
             'send_by' => 'ADMIN',
             // 'sender_id' => $senderId,
             'message_type' => 'text',
-            'message' => $repyleMessage['repyleMessage'],
+            'message' => $repyleMessage,
             // 'is_context' => '1',
             'reply_by' => 'AI'
         ]);
 
-        if ($repyleMessage['json']) {
+        if (isJson($repyleMessage)) {
+
+            log_message('info', "isJson:  " . $repyleMessage);
+
+            $img = $this->cleanUrl($message['img_url']);
+
+            $renderFlexMessage = $this->renderFlexMessage($repyleMessage, $img);
+
             $this->userMenuModel->insertUserMenu([
                 'user_id' => $messageRoom->user_id,
-                'content' => $this->cleanUrl($message['img_url']),
-                'note' => $repyleMessage['repyleMessage'],
-                'calories' => $repyleMessage['json'],
+                'name' => $renderFlexMessage['summary']['name'],
+                'content' => $img,
+                'weight' => $renderFlexMessage['summary']['weight'],
+                'calories' => $renderFlexMessage['summary']['calories'],
+                'protein' => $renderFlexMessage['summary']['protein'],
+                'fat' => $renderFlexMessage['summary']['fat'],
+                'carbohydrates' => $renderFlexMessage['summary']['carbohydrates'],
+                'ingredients' => $renderFlexMessage['summary']['ingredients'],
             ]);
-        }
 
-        $line->pushMessage($UID, $repyleMessage['repyleMessage'], 'text');
+            $line->pushMessage($UID, $renderFlexMessage['content'], 'flex');
+        } 
+        
+        else $line->pushMessage($UID, $repyleMessage, 'text');
 
         $this->messageModel->clearUserContext($messageRoom->id);
     }
@@ -157,43 +169,46 @@ class LineHandler
         return trim($urls[0]); // คืนค่าเฉพาะตัวแรกและตัดช่องว่างออก
     }
 
-    private function filterMessage($inputText)
-    {
-        // ลบ json และ ออกจากข้อความ 
-        $cleanText = preg_replace('/```json|```/', '', $inputText);
-        $cleanText = trim($cleanText); // ลบช่องว่างที่ไม่จำเป็น
+    // private function filterMessage($inputText)
+    // {
 
-        // ใช้ regex แยก JSON ที่มี single quote หรือ double quote ออกมา
-        preg_match('/\{.*\}/s', $cleanText, $jsonMatch);
+    //     px($inputText);
 
-        $json = null;
-        if (!empty($jsonMatch)) {
-            // แปลง ' (single quote) เป็น " (double quote) เพื่อให้ json_decode() ใช้ได้
-            $jsonString = str_replace("'", '"', $jsonMatch[0]);
+    //     // ลบ json และ ออกจากข้อความ 
+    //     $cleanText = preg_replace('/```json|```/', '', $inputText);
+    //     $cleanText = trim($cleanText); // ลบช่องว่างที่ไม่จำเป็น
 
-            // ถอดรหัส JSON
-            $json = json_decode($jsonString, true);
-        }
+    //     // ใช้ regex แยก JSON ที่มี single quote หรือ double quote ออกมา
+    //     preg_match('/\{.*\}/s', $cleanText, $jsonMatch);
 
-        // ตรวจสอบว่ามีข้อความ "พลังงานรวมของมื้ออาหาร" และ JSON ที่มี key "totalcal" หรือไม่
-        if (strpos($cleanText, 'พลังงานรวมของมื้ออาหาร') !== false && is_array($json) && isset($json['totalcal'])) {
-            // แยกเฉพาะส่วนของข้อความที่ไม่รวม JSON
-            $message = trim(str_replace($jsonMatch[0], '', $cleanText));
-        } else {
-            // เก็บทุกอย่างลงใน $message และให้ $json ว่างเปล่า
-            $message = $cleanText;
-            $json = [];
-        }
+    //     $json = null;
+    //     if (!empty($jsonMatch)) {
+    //         // แปลง ' (single quote) เป็น " (double quote) เพื่อให้ json_decode() ใช้ได้
+    //         $jsonString = str_replace("'", '"', $jsonMatch[0]);
 
-        // // แสดงผลลัพธ์
-        // echo "Message: \n$message\n\n";
-        // echo "JSON: \n" . json_encode($json, JSON_PRETTY_PRINT) . "\n";
+    //         // ถอดรหัส JSON
+    //         $json = json_decode($jsonString, true);
+    //     }
 
-        return [
-            'repyleMessage' => $message,
-            'json' => $json
-        ];
-    }
+    //     // ตรวจสอบว่ามีข้อความ "พลังงานรวมของมื้ออาหาร" และ JSON ที่มี key "totalcal" หรือไม่
+    //     if (strpos($cleanText, 'พลังงานรวมของมื้ออาหาร') !== false && is_array($json) && isset($json['totalcal'])) {
+    //         // แยกเฉพาะส่วนของข้อความที่ไม่รวม JSON
+    //         $message = trim(str_replace($jsonMatch[0], '', $cleanText));
+    //     } else {
+    //         // เก็บทุกอย่างลงใน $message และให้ $json ว่างเปล่า
+    //         $message = $cleanText;
+    //         $json = [];
+    //     }
+
+    //     // // แสดงผลลัพธ์
+    //     // echo "Message: \n$message\n\n";
+    //     // echo "JSON: \n" . json_encode($json, JSON_PRETTY_PRINT) . "\n";
+
+    //     return [
+    //         'repyleMessage' => $message,
+    //         'json' => $json
+    //     ];
+    // }
 
     private function processMessage($input)
     {
@@ -280,7 +295,7 @@ class LineHandler
 
             $roomId = $this->messageRoomModel->insertMessageRoom([
                 'account_id' => '128',
-                'account_name' => 'FitXy-AI',
+                'account_name' => 'FitXy AI',
                 'user_id' => $user->id,
             ]);
 
@@ -317,36 +332,184 @@ class LineHandler
         ];
     }
 
+    private function renderFlexMessage($inputData, $img)
+    {
+        // แปลง JSON เป็น PHP Array
+        $data = json_decode($inputData, true);
+        $foodItems = $data['food_items'];
+
+        // สร้างชื่อเมนูโดยรวม
+        $menuNames = array_map(fn($item) => $item['name'], $foodItems);
+        $menuTitle = "เพิ่มข้อมูล: " . implode(" + ", $menuNames);
+
+        $weight = 0;
+        $calories = 0;
+        $protein = 0;
+        $fat = 0;
+        $carbohydrates = 0;
+
+        // สร้างรายการเมนูแยกแต่ละเมนู
+        $menuContents = [];
+
+        foreach ($foodItems as $food) {
+
+            // ลบหน่วยออกจากค่าและแปลงเป็นตัวเลข
+            $weight += (is_numeric(str_replace(' ', '', $food['weight'])) ? floatval($food['weight']) : 0);
+            $calories += floatval($food['calories']);
+            $protein += floatval(preg_replace('/[^0-9.]/', '', $food['protein']));
+            $fat += floatval(preg_replace('/[^0-9.]/', '', $food['fat']));
+            $carbohydrates += floatval(preg_replace('/[^0-9.]/', '', $food['carbohydrates']));
+
+            $menuContents[] = [
+                "type" => "text",
+                "text" => $food['name'],
+                "weight" => "bold",
+                "size" => "md",
+                "margin" => "md"
+            ];
+
+            $menuContents[] = [
+                "type" => "box",
+                "layout" => "vertical",
+                "contents" => [
+                    [
+                        "type" => "box",
+                        "layout" => "horizontal",
+                        "contents" => [
+                            ["type" => "text", "text" => "แคลอรี่", "size" => "sm", "color" => "#2ECC71"],
+                            ["type" => "text", "text" => $food['calories'] . " กิโลแคลอรี่", "size" => "sm", "align" => "end", "color" => "#888888"]
+                        ]
+                    ],
+                    [
+                        "type" => "box",
+                        "layout" => "horizontal",
+                        "contents" => [
+                            ["type" => "text", "text" => "โปรตีน", "size" => "sm", "color" => "#2ECC71"],
+                            ["type" => "text", "text" => $food['protein'], "size" => "sm", "align" => "end", "color" => "#888888"]
+                        ]
+                    ],
+                    [
+                        "type" => "box",
+                        "layout" => "horizontal",
+                        "contents" => [
+                            ["type" => "text", "text" => "ไขมัน", "size" => "sm", "color" => "#2ECC71"],
+                            ["type" => "text", "text" => $food['fat'], "size" => "sm", "align" => "end", "color" => "#888888"]
+                        ]
+                    ],
+                    [
+                        "type" => "box",
+                        "layout" => "horizontal",
+                        "contents" => [
+                            ["type" => "text", "text" => "คาร์โบไฮเดรต", "size" => "sm", "color" => "#2ECC71"],
+                            ["type" => "text", "text" => $food['carbohydrates'], "size" => "sm", "align" => "end", "color" => "#888888"]
+                        ]
+                    ],
+                    ["type" => "separator", "margin" => "md"]
+                ]
+            ];
+        }
+
+        // สร้าง Flex Message JSON
+        $flexMessage = [
+            "type" => "bubble",
+            "hero" => [
+                "type" => "image",
+                "url" => $img,
+                "size" => "full",
+                "aspectRatio" => "20:13",
+                "aspectMode" => "cover"
+            ],
+            "header" => [
+                "type" => "box",
+                "layout" => "vertical",
+                "contents" => [
+                    [
+                        "type" => "text",
+                        "text" => $menuTitle,
+                        "weight" => "bold",
+                        "size" => "lg"
+                    ],
+                    [
+                        "type" => "text",
+                        "text" => "สรุปพลังงานทั้งหมด: " . $data['totalcal'] . " กิโลแคลอรี่",
+                        "size" => "md",
+                        "color" => "#666666"
+                    ]
+                ]
+            ],
+            "body" => [
+                "type" => "box",
+                "layout" => "vertical",
+                "contents" => array_merge($menuContents, [
+                    ["type" => "text", "text" => "คำแนะนำเพื่อสุขภาพ", "weight" => "bold", "margin" => "md"],
+                    ["type" => "text", "text" => $data['note'], "size" => "sm", "wrap" => true, "color" => "#666666"]
+                ])
+            ],
+            "footer" => [
+                "type" => "box",
+                "layout" => "vertical",
+                "contents" => [
+                    [
+                        "type" => "button",
+                        "style" => "primary",
+                        "color" => "#1DB446",
+                        "action" => [
+                            "type" => "uri",
+                            "label" => "แก้ไขข้อมูลอาหาร",
+                            "uri" => base_url('menu')
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $data = [
+            'content' => $flexMessage,
+            'summary' => [
+                'name' => $menuTitle,
+                'content' => $img,
+                'weight' => $weight,
+                'calories' => $calories,
+                'protein' => $protein,
+                'fat' => $fat,
+                'carbohydrates' => $carbohydrates,
+                'ingredients' => $ingredients,
+            ]
+        ];
+
+        return $flexMessage;
+    }
+
     private function getMockLineWebhookData()
     {
         // TEXT
-        //         return json_decode(
-        //             '{
-        //     "destination": "U4289200c7269074fb51b326a7fa30cdf",
+        //                 return json_decode(
+        //                     '{
+        //     "destination": "Uad63a2f680bd53d9d8626333f648e652",
         //     "events": [
         //         {
         //             "type": "message",
         //             "message": {
         //                 "type": "text",
-        //                 "id": "547666636904595686",
-        //                 "quoteToken": "Uj6pC-mig81A7SiH2_WOH_aZ7XouukaC7gBYPSOfmqPAlLsWRADY1qhQZ5GfBXpTOScqr5kfRVSkli37u4FRV27zUXLaaYQ1EKDnvLzdCkvsmSnqDxIdpcQLXQ0ZZiXIGaOFJicaam65Y2ZW9swVlg",
-        //                 "text": "อยากอ้วง"
+        //                 "id": "548654014133436481",
+        //                 "quoteToken": "2ivuZUjyByI0pHBLXGB--KVV70WIsCEon_PCW3AESQ-iKiR4Etot4y5FJClpkmwxhALZSV59a05SxWN4PPlk3GWo_zHI4gT8EOs8qBz_Lbyr0ddWC4W9ePUM3iENQq01oNqeo3KvoglYdLFmOxliTQ",
+        //                 "text": "Test text"
         //             },
-        //             "webhookEventId": "01JKT5BSV10VCPYF2AZ6QPPGGJ",
+        //             "webhookEventId": "01JMBPM2J0PRFHZA8E9CBJXNPE",
         //             "deliveryContext": {
         //                 "isRedelivery": false
         //             },
-        //             "timestamp": 1739266057672,
+        //             "timestamp": 1739854580178,
         //             "source": {
         //                 "type": "user",
-        //                 "userId": "U8bf2cbdb6cbbdb8709dc268512abd4a3"
+        //                 "userId": "Ucac64382c185fd8acd69438c5af15935"
         //             },
-        //             "replyToken": "846857eb08e642ae8c019f579fc3e3c2",
+        //             "replyToken": "bbc502d6e7dd44e5964b02c9220476f3",
         //             "mode": "active"
         //         }
         //     ]
         // }'
-        //         );
+        //                 );
 
         // return json_decode(
         //     '{
@@ -379,28 +542,28 @@ class LineHandler
         // Image
         return json_decode(
             '{
-    "destination": "U4289200c7269074fb51b326a7fa30cdf",
+    "destination": "Uad63a2f680bd53d9d8626333f648e652",
     "events": [
         {
             "type": "message",
             "message": {
                 "type": "image",
-                "id": "548033449140420817",
-                "quoteToken": "qm_i9ObtFhv6cZUbqVdZy0611-_bO0_SITfWRfufl1mXlNgs-r1pQrJn5WYjV4mqJtfkgUYh9_-5mB1vXHZQhk40O-J2DhFU6ngUzTAlbi5f45njO2ddl4O2hQMf3oO07Qa1RCVu7ntJvsppKyYTpA",
+                "id": "548654032437641381",
+                "quoteToken": "A7vq8x3emJCw60wxbQdrvYbnlrB5Vw3NrUt4IgXGjs_gMuuovGsu9xbfGhRbepUPvBDAtejEfVvy1WkCgRKkntW99gIyati6hBmosjc-8BuE9pqGr7qcJ7BgaoPBB1VOAsdBXdNfl1h7m-S-SMmIyg",
                 "contentProvider": {
                     "type": "line"
                 }
             },
-            "webhookEventId": "01JM0NW2JEG5863TNFRTYTD968",
+            "webhookEventId": "01JMBPMDEQQAFB7MEW58G5A6VV",
             "deliveryContext": {
                 "isRedelivery": false
             },
-            "timestamp": 1739484694789,
+            "timestamp": 1739854591386,
             "source": {
                 "type": "user",
-                "userId": "U8bf2cbdb6cbbdb8709dc268512abd4a3"
+                "userId": "Ucac64382c185fd8acd69438c5af15935"
             },
-            "replyToken": "204aadd278084e909c08b4f24ada17ad",
+            "replyToken": "245e808a4e57431199fcdf978df7912a",
             "mode": "active"
         }
     ]

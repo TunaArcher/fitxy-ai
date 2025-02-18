@@ -105,20 +105,48 @@ class LineClient
     public function pushMessage($to, $messages, $message_type)
     {
         try {
-
             $message = [];
 
-            if ($message_type == 'image') {
-                $message = [
-                    "type" => "image",
-                    "originalContentUrl" => $messages,
-                    "previewImageUrl" => $messages
-                ];
-            } else {
-                $message =  [
-                    'type' => 'text',
-                    'text' => $messages
-                ];
+            //  if ($message_type == 'image') {
+            //      $message = [
+            //          "type" => "image",
+            //          "originalContentUrl" => $messages,
+            //          "previewImageUrl" => $messages
+            //      ];
+            //  } elseif ($message_type == 'flex') {
+            //      $message = [
+            //          "type" => "flex",
+            //          "altText" => "ข้อมูลอาหาร", // สามารถเปลี่ยนเป็นข้อความที่ต้องการ
+            //          "contents" => $messages
+            //      ];
+            //  } else {
+            //      $message = [
+            //          'type' => 'text',
+            //          'text' => $messages
+            //      ];
+            //  }
+
+            switch ($message_type) {
+                case 'image':
+                    $message = [
+                        "type" => "image",
+                        "originalContentUrl" => $messages,
+                        "previewImageUrl" => $messages
+                    ];
+                    break;
+                case 'flex':
+                    $message = [
+                        "type" => "flex",
+                        "altText" => "ข้อมูลอาหาร",
+                        "contents" => $messages
+                    ];
+                    break;
+
+                default:
+                    $message = [
+                        'type' => 'text',
+                        'text' => $messages
+                    ];
             }
 
             $endPoint = $this->baseURL . '/bot/message/push/';
@@ -157,6 +185,7 @@ class LineClient
             return false;
         }
     }
+
 
     /*********************************************************************
      * 1. Profile | ดึงข้อมูล

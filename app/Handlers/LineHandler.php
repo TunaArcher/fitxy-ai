@@ -462,7 +462,7 @@ class LineHandler
             ]
         ];
 
-        $data = [
+        return [
             'content' => $flexMessage,
             'summary' => [
                 'name' => $menuTitle,
@@ -474,8 +474,6 @@ class LineHandler
                 'carbohydrates' => $carbohydrates
             ]
         ];
-
-        return $flexMessage;
     }
 
     private function getMockLineWebhookData()

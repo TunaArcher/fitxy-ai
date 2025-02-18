@@ -486,7 +486,7 @@ class LineClient
 
             // ตรวจสอบสถานะ HTTP Code และข้อมูลใน Response
             $statusCode = $response->getStatusCode();
-            if ($statusCode === 200 || isset($responseData->statusCode) && (int)$responseData->statusCode === 0) {
+            if ($statusCode === 200) {
                 return true; // ส่งคำขอสำเร็จ
             }
 

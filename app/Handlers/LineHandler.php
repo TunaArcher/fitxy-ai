@@ -119,10 +119,10 @@ class LineHandler
             'channelSecret' =>  $this->account->line_channel_secret,
         ]);
 
-        $reply = $line->replyMessage($message['UID'], $message['replyToken'], 'text');
+        $reply = $line->replyMessage($message['UID'], $message['replyToken'], 'คิดแปป');
 
         if ($reply) {
-            
+
             // ตรวจสอบหรือสร้างลูกค้า
             $user = $this->userModel->getUserByUID($message['UID']);
 

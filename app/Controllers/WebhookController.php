@@ -3,23 +3,15 @@
 namespace App\Controllers;
 
 use App\Handlers\LineHandler;
-use App\Integrations\Line\LineClient;
 use App\Libraries\RabbitMQPublisher;
-use App\Models\AccountModel;
 
 class WebhookController extends BaseController
 {
     private RabbitMQPublisher $rabbitMQPublisher;
 
-    private AccountModel $accountModel;
-
-    private $account;
-
     public function __construct()
     {
         $this->rabbitMQPublisher = new RabbitMQPublisher();
-
-        $this->accountModel = new AccountModel();
     }
 
     /**
@@ -74,7 +66,7 @@ class WebhookController extends BaseController
     //     }
     // }
 
-    public function webhook($slug)
+        public function webhook($slug)
     {
         $input = $this->request->getJSON();
 
@@ -95,18 +87,6 @@ class WebhookController extends BaseController
 
                 $ai = 'on';
 
-                $this->account = $this->accountModel->getAccountByID('128');
-                
-                $line = new LineClient([
-                    'id' => $this->account->id,
-                    'accessToken' =>  $this->account->line_channel_access_token,
-                    'channelID' =>  $this->account->line_channel_id,
-                    'channelSecret' =>  $this->account->line_channel_secret,
-                ]);
-
-
-                $line->replyMessage()
-                
                 switch ($ai) {
 
                     case 'on':

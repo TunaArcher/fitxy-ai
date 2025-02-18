@@ -3,31 +3,15 @@
 namespace App\Controllers;
 
 use App\Handlers\LineHandler;
-use App\Models\MessageModel;
-use App\Models\UserModel;
-use App\Models\AccountModel;
 use App\Libraries\RabbitMQPublisher;
-use App\Models\MessageRoomModel;
 
 class WebhookController extends BaseController
 {
     private RabbitMQPublisher $rabbitMQPublisher;
 
-    private AccountModel $accountModel;
-    private MessageModel $messageModel;
-    private MessageRoomModel $messageRoomModel;
-    private UserModel $userModel;
-
-    private $account;
-
     public function __construct()
     {
         $this->rabbitMQPublisher = new RabbitMQPublisher();
-
-        $this->userModel = new UserModel();
-        $this->accountModel = new AccountModel();
-        $this->messageModel = new MessageModel();
-        $this->messageRoomModel = new MessageRoomModel();
     }
 
     /**
@@ -85,33 +69,33 @@ class WebhookController extends BaseController
     private function getMockLineWebhookData()
     {
         // TEXT
-//                 return json_decode(
-//                     '{
-//     "destination": "Uad63a2f680bd53d9d8626333f648e652",
-//     "events": [
-//         {
-//             "type": "message",
-//             "message": {
-//                 "type": "text",
-//                 "id": "548654014133436481",
-//                 "quoteToken": "2ivuZUjyByI0pHBLXGB--KVV70WIsCEon_PCW3AESQ-iKiR4Etot4y5FJClpkmwxhALZSV59a05SxWN4PPlk3GWo_zHI4gT8EOs8qBz_Lbyr0ddWC4W9ePUM3iENQq01oNqeo3KvoglYdLFmOxliTQ",
-//                 "text": "Test text"
-//             },
-//             "webhookEventId": "01JMBPM2J0PRFHZA8E9CBJXNPE",
-//             "deliveryContext": {
-//                 "isRedelivery": false
-//             },
-//             "timestamp": 1739854580178,
-//             "source": {
-//                 "type": "user",
-//                 "userId": "Ucac64382c185fd8acd69438c5af15935"
-//             },
-//             "replyToken": "bbc502d6e7dd44e5964b02c9220476f3",
-//             "mode": "active"
-//         }
-//     ]
-// }'
-//                 );
+        //                 return json_decode(
+        //                     '{
+        //     "destination": "Uad63a2f680bd53d9d8626333f648e652",
+        //     "events": [
+        //         {
+        //             "type": "message",
+        //             "message": {
+        //                 "type": "text",
+        //                 "id": "548654014133436481",
+        //                 "quoteToken": "2ivuZUjyByI0pHBLXGB--KVV70WIsCEon_PCW3AESQ-iKiR4Etot4y5FJClpkmwxhALZSV59a05SxWN4PPlk3GWo_zHI4gT8EOs8qBz_Lbyr0ddWC4W9ePUM3iENQq01oNqeo3KvoglYdLFmOxliTQ",
+        //                 "text": "Test text"
+        //             },
+        //             "webhookEventId": "01JMBPM2J0PRFHZA8E9CBJXNPE",
+        //             "deliveryContext": {
+        //                 "isRedelivery": false
+        //             },
+        //             "timestamp": 1739854580178,
+        //             "source": {
+        //                 "type": "user",
+        //                 "userId": "Ucac64382c185fd8acd69438c5af15935"
+        //             },
+        //             "replyToken": "bbc502d6e7dd44e5964b02c9220476f3",
+        //             "mode": "active"
+        //         }
+        //     ]
+        // }'
+        //                 );
 
         // return json_decode(
         //     '{

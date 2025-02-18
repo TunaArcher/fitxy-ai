@@ -350,7 +350,8 @@
     <!-- Processing Overlay (Circle Spinner) -->
     <div class="processing-overlay" id="processingOverlay">
       <div class="spinner"></div>
-      <p class="processing-text">กำลังประมวลผล...</p>
+      <p class="processing-text">รอสักครู่นะ</p>
+      <h2 class="processing-text">FitXy-AI กำลังจัดให้ ...</h2>
     </div>
 
   </main>

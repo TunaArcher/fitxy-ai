@@ -92,7 +92,7 @@ class MenuController extends BaseController
             $data = $this->request->getJSON();
             $menuID = $data->menu_id;
 
-            $delete = $this->userMenuModel->deleteMenuByID($menuID);
+            $delete = $this->userMenuModel->deleteUserMenuByID($menuID);
 
             if ($delete) {
 

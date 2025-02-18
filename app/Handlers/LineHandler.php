@@ -465,7 +465,7 @@ class LineHandler
         return [
             'content' => $flexMessage,
             'summary' => [
-                'name' => $menuTitle,
+                'name' => implode(" + ", $menuNames),
                 'content' => $img,
                 'weight' => $weight,
                 'calories' => $calories,

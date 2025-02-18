@@ -34,23 +34,39 @@
 
       <?php foreach ($userMenusToday as $key => $menu) { ?>
         <div class="col-12 mb-3">
-          <div class="card adminuiux-card border-0 mb-3 overflow-hidden hover-action" data-menu-id="<?php echo $menu->id; ?>">
 
-            <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg blur-overlay z-index-0" style="background-image: url(&quot;<?php echo $menu->content; ?>&quot;);"><img src="<?php echo $menu->content; ?>" alt="" style="display: none;"></figure>
-
-            <div class="card-body position-relative z-index-1">
-
+          <div class="card adminuiux-card" data-menu-id="<?php echo $menu->id; ?>">
+            <div class="card-body pt-2">
               <!-- ปุ่มปิด -->
-              <button class="close-btn position-absolute top-0 end-0 m-2 border-0 bg-transparent">
-                ✕
-              </button>
-
-              <div class="row gx-3" data-bs-toggle="modal" data-bs-target="#standardmodal">
-                <div class="col-4">
-                  <a href="#" class="w-100 height-90 rounded coverimg d-inline-block align-top" style="background-image: url(&quot;assets/img/fitness/image-10.jpg&quot;);"><img src="<?php echo $menu->content; ?>" alt="" style="display: none;"></a>
+              <button class="close-btn position-absolute top-0 end-0 m-2 border-0 bg-transparent">✕</button>
+              <div class="row gx-3 align-items-center mb-2"  data-bs-toggle="modal" data-bs-target="#standardmodal">
+                <div class="col">
+                  <h6 class="text-truncated"><?php echo $menu->name; ?></h6>
                 </div>
-                <div class="col-8 d-flex align-items-center justify-content-between">
-                  <h4 class="text-theme-1 mb-0"><span style="font-size: 1.2rem;" class="badge badge-light text-bg-theme-<?php echo $key; ?> theme-orange"><?php echo number_format($menu->calories, 0); ?> แคลอรี่</span></h4>
+              </div>
+              <div class="row gx-3 align-items-center" data-bs-toggle="modal" data-bs-target="#standardmodal">
+                <div class="col-4">
+                  <figure class="height-50 w-100 rounded coverimg mb-0" style="background-image: url(&quot;<?php echo $menu->content; ?>&quot;);"><img src="<?php echo $menu->content; ?>" alt="" style="display: none;"></figure>
+                </div>
+                <div class="col-8">
+                  <div class="row gx-3">
+                    <div class="col">
+                      <p class="small mb-0"><?php echo number_format($menu->carbohydrates, 0); ?> g</p>
+                      <p class="fs-12 opacity-75">Carbs</p>
+                    </div>
+                    <div class="col">
+                      <p class="small mb-0"><?php echo number_format($menu->protein, 0); ?> g</p>
+                      <p class="fs-12 opacity-75">Protein</p>
+                    </div>
+                    <div class="col">
+                      <p class="small mb-0"><?php echo number_format($menu->fat, 0); ?> g</p>
+                      <p class="fs-12 opacity-75">Fat</p>
+                    </div>
+                    <div class="col">
+                      <p class="small mb-0"><?php echo number_format($menu->calories, 0); ?> kcal</p>
+                      <p class="fs-12 opacity-75">Energy</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

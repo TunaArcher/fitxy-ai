@@ -102,29 +102,178 @@ class LineClient
      * 1. Message | ส่งข้อความ
      */
 
+    // public function pushMessage($to, $messages, $message_type)
+    // {
+    //     try {
+    //         $message = [];
+
+    //         //  if ($message_type == 'image') {
+    //         //      $message = [
+    //         //          "type" => "image",
+    //         //          "originalContentUrl" => $messages,
+    //         //          "previewImageUrl" => $messages
+    //         //      ];
+    //         //  } elseif ($message_type == 'flex') {
+    //         //      $message = [
+    //         //          "type" => "flex",
+    //         //          "altText" => "ข้อมูลอาหาร", // สามารถเปลี่ยนเป็นข้อความที่ต้องการ
+    //         //          "contents" => $messages
+    //         //      ];
+    //         //  } else {
+    //         //      $message = [
+    //         //          'type' => 'text',
+    //         //          'text' => $messages
+    //         //      ];
+    //         //  }
+
+    //         switch ($message_type) {
+    //             case 'image':
+    //                 $message = [
+    //                     "type" => "image",
+    //                     "originalContentUrl" => $messages,
+    //                     "previewImageUrl" => $messages
+    //                 ];
+    //                 break;
+    //             case 'flex':
+    //                 $message = [
+    //                     "type" => "flex",
+    //                     "altText" => "ข้อมูลอาหาร",
+    //                     "contents" => $messages
+    //                 ];
+    //                 break;
+    //             default:
+    //                 $message = [
+    //                     'type' => 'text',
+    //                     'text' => $messages,
+    //                     'quickReply' => [ // ย้าย quickReply มาที่นี่
+    //                         "items" => [
+    //                             [
+    //                                 "type" => "action",
+    //                                 "action" => [
+    //                                     "type" => "camera",
+    //                                     "label" => "ถ่ายอาหาร"
+    //                                 ]
+    //                             ],
+    //                             [
+    //                                 "type" => "action",
+    //                                 "action" => [
+    //                                     "type" => "uri",
+    //                                     "label" => "ออกกำลังกาย",
+    //                                     "uri" => base_url('workout')
+    //                                 ]
+    //                             ],
+    //                             [
+    //                                 "type" => "action",
+    //                                 "action" => [
+    //                                     "type" => "uri",
+    //                                     "label" => "รายงานการกิน",
+    //                                     "uri" => base_url('menu')
+    //                                 ]
+    //                             ],
+    //                             [
+    //                                 "type" => "action",
+    //                                 "action" => [
+    //                                     "type" => "message",
+    //                                     "label" => "คิดแปป",
+    //                                     "text" => "คิดอีกแปปป"
+    //                                 ]
+    //                             ],
+    //                             [
+    //                                 "type" => "action",
+    //                                 "action" => [
+    //                                     "type" => "message",
+    //                                     "label" => "วิเคราะห์",
+    //                                     "text" => "กำลังทำเด้อ"
+    //                                 ]
+    //                             ]
+    //                         ]
+    //                     ]
+    //                 ];
+    //         }
+    //         $endPoint = $this->baseURL . '/bot/message/push/';
+
+    //         $headers = [
+    //             'Authorization' => "Bearer " . $this->accessToken,
+    //             'Content-Type' => 'application/json',
+    //         ];
+
+    //         $data = [
+    //             'to' => $to,
+    //             'messages' => [
+    //                 $message
+    //             ]
+    //         ];
+
+    //         $response = $this->http->request('POST', $endPoint, [
+    //             'headers' => $headers,
+    //             'json' => $data, // ใช้ 'json' เพื่อแปลงข้อมูลให้อยู่ในรูปแบบ JSON
+    //         ]);
+
+    //         $responseData = json_decode($response->getBody());
+
+    //         // ตรวจสอบสถานะ HTTP Code และข้อมูลใน Response
+    //         $statusCode = $response->getStatusCode();
+    //         if ($statusCode === 200 || isset($responseData->statusCode) && (int)$responseData->statusCode === 0) {
+    //             return true; // ส่งข้อความสำเร็จ
+    //         }
+
+    //         // กรณีส่งข้อความล้มเหลว
+    //         log_message('error', "Failed to send message to Line API: " . json_encode($responseData));
+    //         return false;
+    //     } catch (\Exception $e) {
+    //         // จัดการข้อผิดพลาด
+    //         log_message('error', 'LineClient::pushMessage error {message}', ['message' => $e->getMessage()]);
+    //         return false;
+    //     }
+    // }
+
     public function pushMessage($to, $messages, $message_type)
     {
         try {
             $message = [];
-
-            //  if ($message_type == 'image') {
-            //      $message = [
-            //          "type" => "image",
-            //          "originalContentUrl" => $messages,
-            //          "previewImageUrl" => $messages
-            //      ];
-            //  } elseif ($message_type == 'flex') {
-            //      $message = [
-            //          "type" => "flex",
-            //          "altText" => "ข้อมูลอาหาร", // สามารถเปลี่ยนเป็นข้อความที่ต้องการ
-            //          "contents" => $messages
-            //      ];
-            //  } else {
-            //      $message = [
-            //          'type' => 'text',
-            //          'text' => $messages
-            //      ];
-            //  }
+            $quickReply = [ // Quick Reply
+                "items" => [
+                    [
+                        "type" => "action",
+                        "action" => [
+                            "type" => "camera",
+                            "label" => "ถ่ายอาหาร"
+                        ]
+                    ],
+                    [
+                        "type" => "action",
+                        "action" => [
+                            "type" => "uri",
+                            "label" => "ออกกำลังกาย",
+                            "uri" => base_url('workout')
+                        ]
+                    ],
+                    [
+                        "type" => "action",
+                        "action" => [
+                            "type" => "uri",
+                            "label" => "รายงานการกิน",
+                            "uri" => base_url('menu')
+                        ]
+                    ],
+                    [
+                        "type" => "action",
+                        "action" => [
+                            "type" => "message",
+                            "label" => "คิดแปป",
+                            "text" => "..."
+                        ]
+                    ],
+                    [
+                        "type" => "action",
+                        "action" => [
+                            "type" => "message",
+                            "label" => "วิเคราะห์",
+                            "text" => "วิเคราะห์"
+                        ]
+                    ]
+                ]
+            ];
 
             switch ($message_type) {
                 case 'image':
@@ -132,20 +281,22 @@ class LineClient
                         "type" => "image",
                         "originalContentUrl" => $messages,
                         "previewImageUrl" => $messages
+                        // ❌ **ไม่สามารถใช้ quickReply ได้**
                     ];
                     break;
                 case 'flex':
                     $message = [
                         "type" => "flex",
                         "altText" => "ข้อมูลอาหาร",
-                        "contents" => $messages
+                        "contents" => $messages,
+                        "quickReply" => $quickReply // ✅ ใส่ quickReply ใน flex message
                     ];
                     break;
-
                 default:
                     $message = [
                         'type' => 'text',
-                        'text' => $messages
+                        'text' => $messages,
+                        'quickReply' => $quickReply // ✅ ใส่ quickReply ใน text message
                     ];
             }
 
@@ -158,14 +309,12 @@ class LineClient
 
             $data = [
                 'to' => $to,
-                'messages' => [
-                    $message
-                ],
+                'messages' => [$message], // ✅ quickReply อยู่ใน messages
             ];
 
             $response = $this->http->request('POST', $endPoint, [
                 'headers' => $headers,
-                'json' => $data, // ใช้ 'json' เพื่อแปลงข้อมูลให้อยู่ในรูปแบบ JSON
+                'json' => $data,
             ]);
 
             $responseData = json_decode($response->getBody());

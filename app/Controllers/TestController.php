@@ -249,7 +249,7 @@ class TestController extends BaseController
         // // $repyleMessage = $messages[array_rand($messages)];
 
         $UID = 'Ucac64382c185fd8acd69438c5af15935';
-        $line->startLoadingAnimation($UID, 15);
+        // $line->startLoadingAnimation($UID, 15);
         $line->pushMessage($UID, 'hi', 'text');
         exit();
 

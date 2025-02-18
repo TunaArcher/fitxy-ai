@@ -186,6 +186,54 @@ class LineClient
         }
     }
 
+    public function replyMessage($to, $replyToken, $messages)
+    {
+        try {
+
+            $message = [
+                'type' => 'text',
+                'text' => $messages
+            ];
+
+            $endPoint = $this->baseURL . '/bot/message/reply/';
+
+            $headers = [
+                'Authorization' => "Bearer " . $this->accessToken,
+                'Content-Type' => 'application/json',
+            ];
+
+            $data = [
+                'to' => $to,
+                'replyToken' => $replyToken,
+                'messages' => [
+                    $message
+                ],
+            ];
+
+            $response = $this->http->request('POST', $endPoint, [
+                'headers' => $headers,
+                'json' => $data, // ใช้ 'json' เพื่อแปลงข้อมูลให้อยู่ในรูปแบบ JSON
+            ]);
+
+            $responseData = json_decode($response->getBody());
+
+            // ตรวจสอบสถานะ HTTP Code และข้อมูลใน Response
+            $statusCode = $response->getStatusCode();
+            if ($statusCode === 200 || isset($responseData->statusCode) && (int)$responseData->statusCode === 0) {
+                return true; // ส่งข้อความสำเร็จ
+            }
+
+            // กรณีส่งข้อความล้มเหลว
+            log_message('error', "Failed to send message to Line API: " . json_encode($responseData));
+            return false;
+        } catch (\Exception $e) {
+            // จัดการข้อผิดพลาด
+            log_message('error', 'LineClient::replyMessage error {message}', ['message' => $e->getMessage()]);
+            return false;
+        }
+    }
+
+
 
     /*********************************************************************
      * 1. Profile | ดึงข้อมูล

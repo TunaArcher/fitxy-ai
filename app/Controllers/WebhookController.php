@@ -3,15 +3,23 @@
 namespace App\Controllers;
 
 use App\Handlers\LineHandler;
+use App\Integrations\Line\LineClient;
 use App\Libraries\RabbitMQPublisher;
+use App\Models\AccountModel;
 
 class WebhookController extends BaseController
 {
     private RabbitMQPublisher $rabbitMQPublisher;
 
+    private AccountModel $accountModel;
+
+    private $account;
+
     public function __construct()
     {
         $this->rabbitMQPublisher = new RabbitMQPublisher();
+
+        $this->accountModel = new AccountModel();
     }
 
     /**
@@ -26,6 +34,46 @@ class WebhookController extends BaseController
     /**
      * จัดการข้อมูล Webhook จากแพลตฟอร์มต่าง ๆ
      */
+    // public function webhook($slug)
+    // {
+    //     $input = $this->request->getJSON();
+
+    //     if (getenv('CI_ENVIRONMENT') === 'development') $input = $this->getMockLineWebhookData();
+
+    //     log_message('info', "ข้อความเข้า Webhook  " . json_encode($input, JSON_PRETTY_PRINT));
+
+    //     if ($slug == 'x') {
+
+    //         $event = $input->events[0];
+
+    //         $eventType = $event->message->type;
+
+    //         if ($eventType == 'text' || $eventType == 'image' || $eventType == 'audio') {
+
+    //             $handler = new LineHandler();
+    //             $response = $handler->handleWebhook($input);
+
+    //             $ai = 'on';
+
+    //             switch ($ai) {
+
+    //                 case 'on':
+
+    //                     if ($response['message_type'] == 'text')
+    //                         $handler->handleReplyByAI($response['UID'], $response['message_room']);
+
+    //                     else
+    //                         $this->rabbitMQPublisher->publishMessage($response['UID'], $response['message_room']);
+
+    //                     break;
+
+    //                 case 'off':
+    //                     break;
+    //             }
+    //         }
+    //     }
+    // }
+
     public function webhook($slug)
     {
         $input = $this->request->getJSON();
@@ -47,6 +95,18 @@ class WebhookController extends BaseController
 
                 $ai = 'on';
 
+                $this->account = $this->accountModel->getAccountByID('128');
+                
+                $line = new LineClient([
+                    'id' => $this->account->id,
+                    'accessToken' =>  $this->account->line_channel_access_token,
+                    'channelID' =>  $this->account->line_channel_id,
+                    'channelSecret' =>  $this->account->line_channel_secret,
+                ]);
+
+
+                $line->replyMessage()
+                
                 switch ($ai) {
 
                     case 'on':

@@ -60,8 +60,10 @@ class LineLoginController extends Controller
         $user = $this->getOrCreateUser($userInfo);
 
         if ($user) {
+            
             session()->set('user', $user);
             session()->set('isUserLoggedIn', true);
+
             return redirect()->to('/');
         }
 

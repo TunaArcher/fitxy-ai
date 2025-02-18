@@ -75,10 +75,10 @@ class LineHandler
         
         else {
 
-            $line->startLoadingAnimation($message['UID'], 4);
-
             $event = $input->events[0];
             $UID = $event->source->userId;
+
+            $line->startLoadingAnimation($UID , 4);
 
             $messages = [
                 "ก่อนจะคุยกับผมช่วย FitXy-AI  มาสมัครสมาชิกก่อนนะ! แล้วผมจะมีแรง สมัครคลิกเลยที่นี่ 👉 http://line.autoconx.app/",

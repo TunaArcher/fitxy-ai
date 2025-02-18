@@ -40,8 +40,13 @@ $routes->get('/', 'HomeController::index');
 $routes->get('/logout', 'HomeController::logout');
 $routes->get('/register', 'HomeController::register');
 
-$routes->match(['get', 'post'], 'calculate', 'CalculateController::index', ['filter' => 'userAuth']);
 $routes->get('/callback', 'LineLoginController::callback');
+
+// -----------------------------------------------------------------------------
+// Calculate
+// -----------------------------------------------------------------------------
+
+$routes->match(['get', 'post'], 'calculate', 'CalculateController::index', ['filter' => 'userAuth']);
 
 // -----------------------------------------------------------------------------
 // Menu

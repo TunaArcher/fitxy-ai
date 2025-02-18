@@ -52,7 +52,6 @@ class HomeController extends BaseController
                 '
             ];
 
-            // $data['userMenusToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
             $data['calToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
             $data['calBurn'] = $this->userWorkoutModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
 
@@ -60,25 +59,6 @@ class HomeController extends BaseController
         } else {
             return redirect()->to($this->Auth());
         }
-    }
-
-    public function report()
-    {
-        $data = [
-            'content' => 'home/report',
-            'title' => 'Home',
-            'css_critical' => '',
-            'js_critical' => '
-                <script src="https://code.jquery.com/jquery-3.7.1.js" crossorigin="anonymous"></script>
-                <script src="app/report.js"></script>
-            '
-        ];
-
-        $data['menuToday'] = $this->userMenuModel->getUserMenuTodayByUserID(session()->get('user')->id);
-        $data['calToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
-        $data['calBurn'] = $this->userWorkoutModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
-
-        echo view('/app', $data);
     }
 
     public function logout()

@@ -72,7 +72,7 @@ class MenuController extends BaseController
                 ->setContentType('application/json')
                 ->setJSON($response);
         } catch (\Exception $e) {
-            px($e->getMessage());
+            // px($e->getMessage());
         }
     }
 

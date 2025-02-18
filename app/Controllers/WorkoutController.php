@@ -59,7 +59,7 @@ class WorkoutController extends BaseController
 
         $data['workouts'] = $this->workoutModel->getWorkoutAll();
         $data['userWorkouts'] = $this->userWorkoutModel->getUserWorkoutTodayByUserID(session()->get('user')->id);
-        $data['caloriesToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
+        
         $data['calToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
         $data['calBurn'] = $this->userWorkoutModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
 

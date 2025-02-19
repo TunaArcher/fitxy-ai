@@ -22,7 +22,7 @@ class CheckPermissions implements FilterInterface
 
         if (getenv('CI_ENVIRONMENT') === 'development') {
 
-            $user = $this->userModel->getUserByUID('Ucac64382c185fd8acd69438c5af15935');
+            $user = $this->userModel->getUserByUID('Ubb5e0e3569de3b8dfc0b3d0fb55e3440');
 
             session()->set('user', $user);
             session()->set('isUserLoggedIn', true);

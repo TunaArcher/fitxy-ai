@@ -56,7 +56,7 @@ class UserModel
     public function getUser($username)
     {
         $builder = $this->db->table('users');
-        
+
         return $builder->where('username', $username)->get()->getResult();
     }
 
@@ -67,14 +67,14 @@ class UserModel
         return $builder->where('uid', $UID)->get()->getRow();
     }
 
-//     public function getUserByUID($UID)
-// {
-//     $builder = $this->db->table('users');
-//     $sql = $builder->where('uid', $UID)->getCompiledSelect();
+    //     public function getUserByUID($UID)
+    // {
+    //     $builder = $this->db->table('users');
+    //     $sql = $builder->where('uid', $UID)->getCompiledSelect();
 
-//     // แสดงคำสั่ง SQL
-//     echo $sql;
-//     exit;
-// }
+    //     // แสดงคำสั่ง SQL
+    //     echo $sql;
+    //     exit;
+    // }
 
 }

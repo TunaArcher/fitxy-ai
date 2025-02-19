@@ -27,6 +27,14 @@ class CheckPermissions implements FilterInterface
             session()->set('user', $user);
             session()->set('isUserLoggedIn', true);
         }
+        else {
+
+            $user = $this->userModel->getUserByUID(session()->get('uid'));
+
+            session()->set('user', $user);
+            session()->set('isUserLoggedIn', true);
+
+        }
     }
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)

@@ -41,6 +41,13 @@ class UserAuth implements FilterInterface
             return redirect()->to('/');
         }
 
+        if ($user) {
+            $user = $this->userModel->getUserByUID(session()->get('user')->uid);
+
+            session()->set('user', $user);
+            session()->set('isUserLoggedIn', true);
+        }
+
         return null; // อนุญาตให้ผ่าน
     }
 

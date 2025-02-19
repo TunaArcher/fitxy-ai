@@ -59,7 +59,7 @@ class LineHandler
             // บันทึกข้อความ
             $this->messageModel->insertMessage([
                 'room_id' => $messageRoom->id,
-                'send_by' => 'User',
+                'send_by' => 'USER',
                 'sender_id' => $user->id,
                 'message_type' => $message['type'],
                 'message' => $message['content'],
@@ -140,7 +140,7 @@ class LineHandler
     //             // บันทึกข้อความ
     //             $this->messageModel->insertMessage([
     //                 'room_id' => $messageRoom->id,
-    //                 'send_by' => 'User',
+    //                 'send_by' => 'USER',
     //                 'sender_id' => $user->id,
     //                 'message_type' => $message['type'],
     //                 'message' => $message['content'],
@@ -198,7 +198,7 @@ class LineHandler
     {
         $this->account = $this->accountModel->getAccountByID('128');
 
-        $messages = $this->messageModel->getMessageNotReplyBySendByAndRoomID('User', $messageRoom->id);
+        $messages = $this->messageModel->getMessageNotReplyBySendByAndRoomID('USER', $messageRoom->id);
         $message = $this->getUserContext($messages);
 
         // ข้อความตอบกลับ

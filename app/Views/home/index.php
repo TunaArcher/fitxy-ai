@@ -248,7 +248,7 @@
       </div>
 
       <div class="row">
-        <div class="col-12 col-lg-4 col-xl-3">
+        <div class="col-12 col-lg-12 col-xl-3">
           <div class="card adminuiux-card border-0 bg-theme-r-gradient mb-3">
             <div class="card-body">
               <div class="row gx-3 align-items-center">

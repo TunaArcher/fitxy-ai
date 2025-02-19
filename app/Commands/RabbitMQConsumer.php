@@ -52,6 +52,39 @@ class RabbitMQConsumer extends BaseCommand
         $connection->close();
     }
 
+    // private function processAIResponse($UID, $messageRoom)
+    // {
+    //     helper('my_hashids');
+
+    //     $messageRoom = json_decode(json_encode($messageRoom));
+    //     $messageRoomID = $messageRoom->id;
+
+    //     $messageModel = new MessageModel();
+
+    //     // ดึงข้อความล่าสุดของห้องแชท
+    //     $lastContextTimestamp = $messageModel->lastContextTimestamp($messageRoomID);
+
+    //     if (!$lastContextTimestamp) return;
+
+    //     $timeoutSeconds = 5;
+    //     sleep($timeoutSeconds);
+
+    //     // ตรวจสอบว่ามีข้อความใหม่หรือไม่
+    //     $newContextCount = $messageModel->newContextCount($messageRoomID, $lastContextTimestamp->_time);
+
+    //     log_message('info', "Debug lastContextTimestamp {$lastContextTimestamp->_time} newContextCount: " . json_encode($newContextCount, JSON_PRETTY_PRINT));
+
+    //     if ($newContextCount->_count > 0) {
+    //         log_message('info', "timeout: ");
+    //         // มีข้อความใหม่เข้ามาในช่วง Timeout
+    //         return; // ถ้ามีข้อความใหม่ ให้รอไปก่อน
+    //     }
+
+    //     // AI ตอบ และ ลบบริบทหลังจากใช้งาน
+    //     $handler = new LineHandler();
+    //     $handler->handleReplyByAI($UID, $messageRoom);
+    // }
+
     private function processAIResponse($UID, $messageRoom)
     {
         helper('my_hashids');
@@ -61,24 +94,41 @@ class RabbitMQConsumer extends BaseCommand
 
         $messageModel = new MessageModel();
 
+        // ตรวจสอบและรีเชื่อมต่อหากจำเป็น
+        $db = \Config\Database::connect();
+        if (!$db->simpleQuery('SELECT 1')) {
+            log_message('error', 'Database connection lost. Reconnecting...');
+            $db->reconnect();
+        }
+
         // ดึงข้อความล่าสุดของห้องแชท
         $lastContextTimestamp = $messageModel->lastContextTimestamp($messageRoomID);
 
         if (!$lastContextTimestamp) return;
 
+        // ใช้วิธีตรวจสอบระยะเวลาผ่าน Timestamp แทนการ sleep()
+        $timeoutStart = time();
         $timeoutSeconds = 5;
-        sleep($timeoutSeconds);
 
-        // ตรวจสอบว่ามีข้อความใหม่หรือไม่
-        $newContextCount = $messageModel->newContextCount($messageRoomID, $lastContextTimestamp->_time);
+        do {
+            sleep(1); // ลดภาระ CPU โดยใช้ sleep น้อย ๆ
 
-        log_message('info', "Debug lastContextTimestamp {$lastContextTimestamp->_time} newContextCount: " . json_encode($newContextCount, JSON_PRETTY_PRINT));
+            // ตรวจสอบ Connection ก่อน Query
+            if (!$db->simpleQuery('SELECT 1')) {
+                log_message('error', 'Database connection lost during waiting. Reconnecting...');
+                $db->reconnect();
+            }
 
-        if ($newContextCount->_count > 0) {
-            log_message('info', "timeout: ");
-            // มีข้อความใหม่เข้ามาในช่วง Timeout
-            return; // ถ้ามีข้อความใหม่ ให้รอไปก่อน
-        }
+            // ตรวจสอบว่ามีข้อความใหม่หรือไม่
+            $newContextCount = $messageModel->newContextCount($messageRoomID, $lastContextTimestamp->_time);
+
+            log_message('info', "Debug lastContextTimestamp {$lastContextTimestamp->_time} newContextCount: " . json_encode($newContextCount, JSON_PRETTY_PRINT));
+
+            if ($newContextCount->_count > 0) {
+                log_message('info', "Message arrived during timeout, skipping AI response.");
+                return; // ถ้ามีข้อความใหม่ ให้รอไปก่อน
+            }
+        } while (time() - $timeoutStart < $timeoutSeconds);
 
         // AI ตอบ และ ลบบริบทหลังจากใช้งาน
         $handler = new LineHandler();

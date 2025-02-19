@@ -79,7 +79,6 @@ class Notification extends BaseController
                     $messageRoom = $messageRoomModel->getMessageRoomByUserID($user->id);
 
                     $replyMessage = $chatGPT->askChatGPTWithSystemMessage($messageRoom->id, $question, $systemMessage);
-                    px($replyMessage);
 
                     $line = new LineClient([
                         'id' => $account->id,

@@ -74,7 +74,9 @@
         var userExercise = '<?= session()->get('user')->exercise ?: '""'; ?>';
         var userTarget = '<?= session()->get('user')->target ?: '""'; ?>';
 
+        var maintenanceCal = <?= session()->get('user')->maintenanceCal ?: '""'; ?>;
         var calPerDay = <?= session()->get('user')->cal_per_day ?: '""'; ?>;
+        
         var calToDay = <?= $calToDay ?: 0; ?>;
         var calBurn = <?= $calBurn ?: 0; ?>;
     </script>

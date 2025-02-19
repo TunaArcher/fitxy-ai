@@ -87,6 +87,13 @@ $routes->group('food', ['filter' => 'userAuth'], function ($routes) {
 $routes->get('/webhook/(:any)', 'WebhookController::verifyWebhook/$1'); // Webhook สำหรับยืนยัน Meta Developer
 $routes->post('/webhook/(:any)', 'WebhookController::webhook/$1'); // Webhook สำหรับรับข้อมูลจากแพลตฟอร์ม
 
+// -----------------------------------------------------------------------------
+// CRONJOB
+// -----------------------------------------------------------------------------
+
+// ส่งแจ้งเตือนสินเชื่อ
+$routes->cli('cronjob/notification', 'Notification::run', ['namespace' => 'App\Controllers\cronjob']);
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

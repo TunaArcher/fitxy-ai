@@ -8,6 +8,46 @@ const formData = {
   calPerDay: null,
 };
 
+let tdee = 0;
+
+let goals = {
+  ลดน้ำหนักอย่างมาก: {
+    cal: tdee - 1000,
+    weight: -1,
+    badge: "badge badge-light text-bg-danger",
+  },
+  ลดน้ำหนัก: {
+    cal: tdee - 500,
+    weight: -0.5,
+    badge: "badge badge-light text-bg-warning",
+  },
+  ลดน้ำหนักเล็กน้อย: {
+    cal: tdee - 250,
+    weight: -0.25,
+    badge: "badge badge-light text-bg-success",
+  },
+  รักษาน้ำหนัก: {
+    cal: tdee,
+    weight: 0,
+    badge: "badge badge-light text-bg-secondary",
+  },
+  เพิ่มน้ำหนักเล็กน้อย: {
+    cal: tdee + 250,
+    weight: 0.25,
+    badge: "badge badge-light text-bg-success",
+  },
+  เพิ่มน้ำหนัก: {
+    cal: tdee + 500,
+    weight: 0.5,
+    badge: "badge badge-light text-bg-warning",
+  },
+  เพิ่มน้ำหนักอย่างมาก: {
+    cal: tdee + 1000,
+    weight: 1,
+    badge: "badge badge-light text-bg-danger",
+  },
+};
+
 document.addEventListener("DOMContentLoaded", function () {
   const totalSteps = 5;
   let currentStep = 0;
@@ -262,12 +302,13 @@ function calculateTDEE(formData) {
       ? 10 * weight + 6.25 * height - 5 * age + 5
       : 10 * weight + 6.25 * height - 5 * age - 161;
 
-  let tdee = bmr * activity;
+  tdee = bmr * activity;
+
   document.getElementById("tdee-result").innerHTML = `<strong>${Math.round(
     tdee
   )} แคลอรี่ต่อวัน</strong>`;
 
-  let goals = {
+  goals = {
     ลดน้ำหนักอย่างมาก: {
       cal: tdee - 1000,
       weight: -1,
@@ -361,11 +402,14 @@ $wrapperResultTdee.on("click", ".btn-select-target", function () {
   formData.target = $me.data("title");
   formData.calPerDay = $me.data("cal");
 
+  // เพิ่มค่า cal สำหรับการรักษาน้ำหนัก
+  formData.maintenanceCal = goals["รักษาน้ำหนัก"].cal;
+
   console.log(formData);
 
   $wrapperResultTdee.find(".btn-select-target").prop("disabled", true);
 
-  //   ส่งข้อมูลไปที่เซิร์ฟเวอร์ผ่าน AJAX
+  // ส่งข้อมูลไปที่เซิร์ฟเวอร์ผ่าน AJAX
   $.ajax({
     url: `${window.serverUrl}/calculate`,
     type: "POST",

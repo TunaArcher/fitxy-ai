@@ -6,7 +6,9 @@ use App\Integrations\Line\LineClient;
 use App\Libraries\ChatGPT;
 use App\Models\MessageModel;
 use App\Models\MessageRoomModel;
+use App\Models\UserMenuModel;
 use App\Models\UserModel;
+use App\Models\UserWorkoutModel;
 use Exception;
 
 class TestController extends BaseController
@@ -15,17 +17,20 @@ class TestController extends BaseController
     private MessageModel $messageModel;
     private MessageRoomModel $messageRoomModel;
 
+    private userModel $userModel;
+    private userMenuModel $userMenuModel;
+    private UserWorkoutModel $userWorkoutModel;
+
     public function __construct()
     {
+        
         $this->messageModel = new MessageModel();
         $this->messageRoomModel = new MessageRoomModel();
-    }
+        $this->userModel = new UserModel();
+        $this->userMenuModel = new UserMenuModel();
+        $this->userWorkoutModel = new UserWorkoutModel();
 
-    // public function test()
-    // {
-    //     $text1 = 'https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line_agent/line_67ae915b545f3.jpg,';
-    //     $text2 = 'https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line_agent/line_67ae94eed9099.jpg,https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line_agent/line_67ae95223151b.jpg,';
-    // }
+    }
 
     public function index()
     {
@@ -49,195 +54,74 @@ class TestController extends BaseController
         echo $chatGPT->askChatGPT($messageRoom->id, $question, $messageSetting);
     }
 
-    // public function test()
-    // {
-    //     $input = 'text';
-
-    //     $input = '
-    //     {
-    //         "food_items": [
-    //             {
-    //             "name": "ก๋วยเตี๋ยวเรือ",
-    //             "weight": "-",
-    //             "calories": "350",
-    //             "protein": "20 กรัม",
-    //             "fat": "10 กรัม",
-    //             "carbohydrates": "45 กรัม",
-    //             "ingredients": "เส้นหมี่, หมู, เครื่องใน, น้ำซุป, ถั่วงอก, โหระพา"
-    //             }
-    //         ],
-    //         "totalcal": "350",
-    //         "note": "ก๋วยเตี๋ยวเรือนี่เอง! อร่อยแบบได้รสชาติเด็ด ๆ ขนาดนี้ ลองใส่ผักเยอะ ๆ เพื่อเพิ่มใยอาหารนะครับ อย่าลืมออกกำลังกายเผาผลาญพลังงานด้วยล่ะ!"
-    //     }';
-
-    //     $input = '
-    //     {
-    //         "food_items": [
-    //             {
-    //                 "name": "ไข่เจียวหมูสับ",
-    //                 "weight": "-",
-    //                 "calories": "450",
-    //                 "protein": "25 กรัม",
-    //                 "fat": "35 กรัม",
-    //                 "carbohydrates": "3 กรัม",
-    //                 "ingredients": "ไข่, หมูสับ, ต้นหอม"
-    //             },
-    //             {
-    //                 "name": "ไข่ดาว 2 ฟอง",
-    //                 "weight": "-",
-    //                 "calories": "200",
-    //                 "protein": "14 กรัม",
-    //                 "fat": "16 กรัม",
-    //                 "carbohydrates": "1 กรัม",
-    //                 "ingredients": "ไข่"
-    //             },
-    //             {
-    //                 "name": "ขนมปังกรอบ",
-    //                 "weight": "-",
-    //                 "calories": "120",
-    //                 "protein": "3 กรัม",
-    //                 "fat": "6 กรัม",
-    //                 "carbohydrates": "15 กรัม",
-    //                 "ingredients": "ขนมปัง, เนย"
-    //             }
-    //         ],
-    //         "totalcal": "770",
-    //         "note": "ชุดนี้เต็มไปด้วยโปรตีนเลยทีเดียว! เพิ่มผักสักหน่อยเพื่อสุขภาพที่แข็งแรงนะครับ ไข่เจียวหมูสับกับไข่ดาวนี่คือคู่หูสุดยอด แต่ระวังไม่ให้ไข่เกินไปในมื้อนี้นะ!"
-    //     }';
-
-    //     // เลือกอินพุตที่ต้องการใช้ (เลือกได้ระหว่าง $inputFoodSingle และ $inputFoodMuilti)
-    //     $inputData = $input;
-
-    //     // แปลง JSON เป็น PHP Array
-    //     $data = json_decode($inputData, true);
-    //     $foodItems = $data['food_items'];
-
-    //     // สร้างชื่อเมนูโดยรวม
-    //     $menuNames = array_map(fn($item) => $item['name'], $foodItems);
-    //     $menuTitle = "เพิ่มข้อมูล: " . implode(" + ", $menuNames);
-
-    //     // สร้างรายการเมนูแยกแต่ละเมนู
-    //     $menuContents = [];
-    //     foreach ($foodItems as $food) {
-    //         $menuContents[] = [
-    //             "type" => "text",
-    //             "text" => $food['name'],
-    //             "weight" => "bold",
-    //             "size" => "md",
-    //             "margin" => "md"
-    //         ];
-    //         $menuContents[] = [
-    //             "type" => "box",
-    //             "layout" => "vertical",
-    //             "contents" => [
-    //                 [
-    //                     "type" => "box",
-    //                     "layout" => "horizontal",
-    //                     "contents" => [
-    //                         ["type" => "text", "text" => "แคลอรี่", "size" => "sm", "color" => "#2ECC71"],
-    //                         ["type" => "text", "text" => $food['calories'] . " กิโลแคลอรี่", "size" => "sm", "align" => "end", "color" => "#888888"]
-    //                     ]
-    //                 ],
-    //                 [
-    //                     "type" => "box",
-    //                     "layout" => "horizontal",
-    //                     "contents" => [
-    //                         ["type" => "text", "text" => "โปรตีน", "size" => "sm", "color" => "#2ECC71"],
-    //                         ["type" => "text", "text" => $food['protein'], "size" => "sm", "align" => "end", "color" => "#888888"]
-    //                     ]
-    //                 ],
-    //                 [
-    //                     "type" => "box",
-    //                     "layout" => "horizontal",
-    //                     "contents" => [
-    //                         ["type" => "text", "text" => "ไขมัน", "size" => "sm", "color" => "#2ECC71"],
-    //                         ["type" => "text", "text" => $food['fat'], "size" => "sm", "align" => "end", "color" => "#888888"]
-    //                     ]
-    //                 ],
-    //                 [
-    //                     "type" => "box",
-    //                     "layout" => "horizontal",
-    //                     "contents" => [
-    //                         ["type" => "text", "text" => "คาร์โบไฮเดรต", "size" => "sm", "color" => "#2ECC71"],
-    //                         ["type" => "text", "text" => $food['carbohydrates'], "size" => "sm", "align" => "end", "color" => "#888888"]
-    //                     ]
-    //                 ],
-    //                 ["type" => "separator", "margin" => "md"]
-    //             ]
-    //         ];
-    //     }
-
-    //     // สร้าง Flex Message JSON
-    //     $flexMessage = [
-    //         "type" => "bubble",
-    //         "hero" => [
-    //             "type" => "image",
-    //             "url" => "https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line_agent/line_67b329ce38e56.jpg",
-    //             "size" => "full",
-    //             "aspectRatio" => "20:13",
-    //             "aspectMode" => "cover"
-    //         ],
-    //         "header" => [
-    //             "type" => "box",
-    //             "layout" => "vertical",
-    //             "contents" => [
-    //                 [
-    //                     "type" => "text",
-    //                     "text" => $menuTitle,
-    //                     "weight" => "bold",
-    //                     "size" => "lg"
-    //                 ],
-    //                 [
-    //                     "type" => "text",
-    //                     "text" => "สรุปพลังงานทั้งหมด: " . $data['totalcal'] . " กิโลแคลอรี่",
-    //                     "size" => "md",
-    //                     "color" => "#666666"
-    //                 ]
-    //             ]
-    //         ],
-    //         "body" => [
-    //             "type" => "box",
-    //             "layout" => "vertical",
-    //             "contents" => array_merge($menuContents, [
-    //                 ["type" => "text", "text" => "คำแนะนำเพื่อสุขภาพ", "weight" => "bold", "margin" => "md"],
-    //                 ["type" => "text", "text" => $data['note'], "size" => "sm", "wrap" => true, "color" => "#666666"]
-    //             ])
-    //         ],
-    //         "footer" => [
-    //             "type" => "box",
-    //             "layout" => "vertical",
-    //             "contents" => [
-    //                 [
-    //                     "type" => "button",
-    //                     "style" => "primary",
-    //                     "color" => "#1DB446",
-    //                     "action" => [
-    //                         "type" => "uri",
-    //                         "label" => "แก้ไขข้อมูลอาหาร",
-    //                         "uri" => "https://line.autoconx.co/"
-    //                     ]
-    //                 ]
-    //             ]
-    //         ]
-    //     ];
-    //     $line = new LineClient([
-    //         'id' => '128',
-    //         'accessToken' => 'mswad2W1OPrri9UQpAgNassH7G1hKIMq24ll7rDk0VgDTRCZhqQjhQKk7hwHub86Se3EtrO528RG3rNEsBtZzHVCtg4XTq/7fO1qfStVdOB7j4iHiP8SpQsdwgGT78Guqrwv+CmrwANtZSxG3EaAkI9PbdgDzCFqoOLOYbqAITQ=',
-    //         'channelID' => '2006918518',
-    //         'channelSecret' => '142d73fd0b359cafc31872a2e165d750',
-    //     ]);
-
-    //     // $repyleMessage = $messages[array_rand($messages)];
-
-    //     $UID = 'Ucac64382c185fd8acd69438c5af15935';
-    //     $repyleMessage = $flexMessage;
-    //     $line->pushMessage($UID, $repyleMessage, 'flex');
-    //     exit();
-    // }
-
     public function test()
     {
         // $input = 'text';
+
+        $users = $this->userModel->getUserAll();
+
+        foreach ($users as $user) {
+            
+            if ($user->id == '') {
+
+                $gender = $user->gender;
+                $age = $user->age;
+                $weight = $user->weight;
+                $height = $user->height;
+                $target = $user->target;
+                $cal_per_day = $user->cal_per_day;
+    
+                $menus = $this->userMenuModel->getUserMenuTodayByUserID($user->id);
+                // $workouts = $this->userWorkoutModel->getUserWorkoutTodayByUserID($user->id);
+    
+                $meneText = '';
+                foreach ($menus as $menu) {
+                    $meneText .= "$menu->name แคลอรี่ $menu->calories กิโลแคลอรี่ มีโปรตีน $menu->protein ไขมัน $menu->fat คาร์โบไฮเดรต $menu->carbohydrates";
+                }
+    
+                $chatGPT = new ChatGPT(['GPTToken' => getenv('GPT_TOKEN')]);
+                $messageSetting = <<<EOT
+                    คุณคือผู้เชี่ยวชาญด้านโภชนาการและสุขภาพ ทำหน้าที่วิเคราะห์อาหารที่ผู้ใช้บริโภคในแต่ละวัน โดยมีแนวทางดังนี้:
+
+                    1. **วิเคราะห์:** ตรวจสอบสารอาหารหลัก เช่น คาร์โบไฮเดรต โปรตีน ไขมัน น้ำตาล และโซเดียม พร้อมผลกระทบต่อสุขภาพ  
+                    2. **สรุป:** เน้นจุดเด่นและข้อควรระวังของมื้ออาหารในวันนี้  
+                    3. **แนะนำ:** ให้คำแนะนำสั้น ๆ และปฏิบัติได้จริง เช่น ปรับสมดุลสารอาหาร เลือกอาหารที่ดีขึ้น หรือการบริโภคในวันถัดไป  
+
+                    **รูปแบบคำตอบ:**  
+                    - **📊 วิเคราะห์อาหารวันนี้:** (แยกเป็นรายการ)  
+                    - **✅ สรุป:** (กระชับแต่ครบถ้วน)  
+                    - **💡 แนะนำ:** (สั้น ๆ และนำไปใช้ได้จริง)  
+
+                    กรุณาใช้ภาษาที่เป็นมิตร กระชับ และสร้างแรงจูงใจให้ผู้ใช้ดูแลสุขภาพของตนเอง
+                EOT;
+                $question = <<<EOT
+                    วิเคราะห์และสรุปการกินอาหารในวันนี้ของฉัน
+                    ข้อมูลส่วนบุคคล: เพศ $gender, อายุ $age, น้ำหนัก $weight, ส่วนสูง $height
+                    เป้าหมาย: $target
+                    พลังงานที่ต้องการ: $cal_per_day ต่อวัน
+                    อาหารที่ทานในวันนี้: $meneText
+                EOT;
+    
+                $messageRoom = $this->messageRoomModel->getMessageRoomByUserID($user->id);
+                
+                $replyMessage = $chatGPT->askChatGPT($messageRoom->id, $question, $messageSetting);
+    
+                $line = new LineClient([
+                    'id' => '128',
+                    'accessToken' => 'mswad2W1OPrri9UQpAgNassH7G1hKIMq24ll7rDk0VgDTRCZhqQjhQKk7hwHub86Se3EtrO528RG3rNEsBtZzHVCtg4XTq/7fO1qfStVdOB7j4iHiP8SpQsdwgGT78Guqrwv+CmrwANtZSxG3EaAkI9PbdgDzCFqoOLOYbqAITQ=',
+                    'channelID' => '2006918518',
+                    'channelSecret' => '142d73fd0b359cafc31872a2e165d750',
+                ]);
+    
+                $line->pushMessage($user->uid, $replyMessage, 'text');
+                // หน่วงเวลาสุ่มระหว่าง 3-10 วินาที
+                sleep(rand(3, 10));
+                exit();
+            }
+
+        }
+
+        exit();
 
         $line = new LineClient([
             'id' => '128',
@@ -285,6 +169,57 @@ class TestController extends BaseController
 
         echo "Done!";
     }
+
+    // public function test()
+    // {
+    //     // $input = 'text';
+
+    //     $line = new LineClient([
+    //         'id' => '128',
+    //         'accessToken' => 'mswad2W1OPrri9UQpAgNassH7G1hKIMq24ll7rDk0VgDTRCZhqQjhQKk7hwHub86Se3EtrO528RG3rNEsBtZzHVCtg4XTq/7fO1qfStVdOB7j4iHiP8SpQsdwgGT78Guqrwv+CmrwANtZSxG3EaAkI9PbdgDzCFqoOLOYbqAITQ=',
+    //         'channelID' => '2006918518',
+    //         'channelSecret' => '142d73fd0b359cafc31872a2e165d750',
+    //     ]);
+
+    //     // // $repyleMessage = $messages[array_rand($messages)];
+
+    //     $UID = 'Ucac64382c185fd8acd69438c5af15935';
+    //     $line->startLoadingAnimation($UID, 15);
+    //     $line->pushMessage($UID, 'hi', 'text');
+    //     exit();
+
+    //     $user_id = 'Ucac64382c185fd8acd69438c5af15935'; // หรือเปลี่ยนเป็น event ที่รับมาจาก Webhook
+
+    //     // 🔹 1. ส่ง "..." ก่อน
+    //     $this->sendLineMessage($user_id, [
+    //         ["type" => "text", "text" => "..."]
+    //     ]);
+
+    //     // 🔹 2. รอ 2 วินาที
+    //     sleep(2);
+
+    //     // 🔹 3. ส่งข้อความจริง พร้อม Quick Reply (กดแล้ว "..." จะหายไป)
+    //     $this->sendLineMessage($user_id, [
+    //         [
+    //             "type" => "text",
+    //             "text" => "นี่คือข้อมูลของคุณ!",
+    //             "quickReply" => [
+    //                 "items" => [
+    //                     [
+    //                         "type" => "action",
+    //                         "action" => [
+    //                             "type" => "message",
+    //                             "label" => "เข้าใจแล้ว ✅",
+    //                             "text" => "เข้าใจแล้ว ✅"
+    //                         ]
+    //                     ]
+    //                 ]
+    //             ]
+    //         ]
+    //     ]);
+
+    //     echo "Done!";
+    // }
 
     // public function test()
     // {

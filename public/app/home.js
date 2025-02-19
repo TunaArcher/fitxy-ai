@@ -1,51 +1,201 @@
-document.addEventListener("DOMContentLoaded", function () {
-  // ดึงค่าจากตัวแปรที่ใช้ในระบบ
-  let calPerDay = window.calPerDay || 0; // ค่าแคลอรี่ที่สามารถรับได้ต่อวัน (ถ้าไม่มีให้ใช้ค่า default)
-  let calToDay = window.calToDay || 0; // ค่าแคลอรี่ที่ได้รับวันนี้
-  let calBurn = window.calBurn || 0; // ค่าแคลอรี่ที่เผาผลาญไปแล้ว
-  console.log(calPerDay)
-  console.log(calToDay)
-  console.log(calBurn)
+// document.addEventListener("DOMContentLoaded", function () {
+//   // ดึงค่าจากตัวแปรที่ใช้ในระบบ
+//   // let maintenance = window.maintenanceCal || 0; // ค่าที่ร่างกายต้องการเพื่อรักษาสมดุล
+//   // let target = window.calPerDay || 0; // เป้าหมาย (Target) สำหรับเพิ่มน้ำหนัก
+//   // let consumed = window.calToDay || 0; // แคลอรี่ที่บริโภค
+//   // let burned = window.calBurn || 0; // แคลอรี่ที่เผาผลาญ
 
-  // คำนวณข้อมูลให้ได้ค่าที่ถูกต้อง
-  let calConsumed = calToDay - calBurn; // แคลอรี่ที่กินไปจริง (หลังหักเผาผลาญ)
-  let calRemaining = calPerDay - calConsumed; // แคลอรี่ที่สามารถกินได้อีก
+//   let maintenance = 2500
+//   let target = 3000
+//   let consumed = 4000
+//   let burned = 1000
 
-  // ถ้าค่าแคลอรี่เหลือ < 0 ให้เป็น 0
-  if (calRemaining < 0) calRemaining = 0;
+//   // กำหนดค่า baseValue เป็น Target
+//   let baseValue = target;
 
-  // ตรวจสอบว่าแคลอรี่ที่กินไปไม่ติดลบ
-  if (calConsumed < 0) calConsumed = 0;
+//   // คำนวณค่าแคลอรี่ที่เหลือ
+//   let calRemaining = baseValue - consumed;
+//   if (calRemaining < 0) calRemaining = 0;
 
-  // กำหนดค่า target สำหรับแสดงในกราฟ
-  let chartData = [calConsumed, calRemaining, calBurn];
+//   // ตรวจสอบว่าค่า consumed และ burned ไม่ติดลบ
+//   if (consumed < 0) consumed = 0;
+//   if (burned < 0) burned = 0;
 
-  console.log(chartData)
+//   // กำหนดค่า chartData สำหรับแสดงในกราฟ
+//   let chartData = [consumed, calRemaining, burned];
 
-  // สร้าง Doughnut Chart
-  var ctx = document.getElementById("doughnutchart").getContext("2d");
-  new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: ["แคลอรี่ที่กินไป", "แคลอรี่ที่เหลือ", "เผาผลาญ"],
-      datasets: [
-        {
-          label: "แคลอรี่ที่ใช้ไป",
-          data: chartData,
-          backgroundColor: ["#03aed2", "#ffffff", "#fc7a1e"], // สีที่ใช้แสดงข้อมูล
-          borderWidth: 0,
-        },
-      ],
-    },
-    options: {
-      responsive: !0,
-      cutout: 60,
-      tooltips: { position: "nearest", yAlign: "bottom" },
-      plugins: {
-        legend: { display: !1, position: "top" },
-        title: { display: !1, text: "Chart.js Doughnut Chart" },
-      },
-      layout: { padding: 0 },
-    },
-  });
-});
+//   // สร้าง Doughnut Chart
+//   var ctx = document.getElementById("doughnutchart").getContext("2d");
+//   new Chart(ctx, {
+//     type: "doughnut",
+//     data: {
+//       labels: ["แคลอรี่ที่กินไป", "แคลอรี่ที่เหลือ", "เผาผลาญ"],
+//       datasets: [
+//         {
+//           label: "แคลอรี่ที่ใช้ไป",
+//           data: chartData,
+//           backgroundColor: ["rgba(66, 135, 245, 0.7)", "#e0e0e0", "rgba(245, 66, 135, 0.7)"],
+//           borderWidth: 0,
+//         },
+//       ],
+//     },
+//     options: {
+//       responsive: true,
+//       cutout: 60,
+//       plugins: {
+//         legend: { display: false },
+//         title: { display: false },
+//       },
+//       layout: { padding: 0 },
+//     },
+//   });
+
+//   // แสดงข้อมูลตัวเลขด้านล่างของกราฟ
+//   const labelsContainer = document.getElementById("labels");
+//   labelsContainer.innerHTML = `
+//       <div>รักษาสมดุล (Maintenance): ${maintenance} แคล</div>
+//       <div>เป้าหมาย (Target): ${target} แคล</div>
+//       <div>บริโภค (Consumed): ${consumed} แคล</div>
+//       <div>เผาผลาญ (Burned): ${burned} แคล</div>
+//     `;
+// });
+
+function renderCircle() {
+  const canvas = document.getElementById("calorieCanvas");
+  const ctx = canvas.getContext("2d");
+
+  // ขนาด canvas 300×300 (กำหนดใน <canvas width="300" height="300">)
+  const centerX = 300 / 2; // = 150
+  const centerY = 170 / 2; // = 150
+
+  // ตั้งรัศมีโดนัท
+  const outerR = 90; // อยากให้โตกว่านี้หรือเล็กกว่านี้ก็ปรับได้
+  const innerR = 60; // ต้องมากกว่า 60 (รัศมีรูป = 60) เพื่อจะได้ล้อมรูปพอดี
+
+  let maintenance = window.maintenanceCal || 0; // ค่าที่ร่างกายต้องการเพื่อรักษาสมดุล
+  let target = window.calPerDay || 0; // เป้าหมาย (Target) สำหรับเพิ่มน้ำหนัก
+  let consumed = window.calToDay || 0; // แคลอรี่ที่บริโภค
+  let burned = window.calBurn || 0; // แคลอรี่ที่เผาผลาญ
+
+  // let maintenance = 2500;
+  // let target = 3000;
+  // let consumed = 3000;
+  // let burned = 200;
+
+  // ใช้ baseValue เป็น Target
+  const baseValue = target;
+
+  // กำหนดมุมเริ่มต้นที่ -90° (ด้านบน)
+  const startAngle = -Math.PI / 2;
+
+  // ฟังก์ชันวาด Donut Segment
+  function drawDonutSegment(innerR, outerR, start, end, color) {
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, outerR, start, end, false);
+    ctx.arc(centerX, centerY, innerR, end, start, true);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+
+  // 1. วาดพื้นหลัง Donut (แสดงค่า baseValue) ด้วยสีเทา (วงเต็ม)
+  drawDonutSegment(innerR, outerR, 0, 2 * Math.PI, "#e0e0e0");
+
+  // 2. คำนวณมุมทั้งหมดสำหรับ Consumed
+  let totalConsumedAngle = (consumed / baseValue) * 2 * Math.PI;
+  // คำนวณจำนวนรอบเต็มและเศษที่เหลือ
+  const fullRounds = Math.floor(totalConsumedAngle / (2 * Math.PI));
+  let remainderAngle = totalConsumedAngle % (2 * Math.PI);
+  // หากเศษเหลือเป็น 0 แต่ consumed > 0 ให้ถือว่าเป็น 2π (กรณี consumed ครบรอบเต็ม)
+  if (remainderAngle === 0 && consumed > 0) {
+    remainderAngle = 2 * Math.PI;
+  }
+
+  // 3. วาดส่วน Consumed (สีฟ้า) สำหรับรอบเต็ม
+  for (let i = 0; i < fullRounds; i++) {
+    let roundStart = startAngle + i * 2 * Math.PI;
+    let roundEnd = roundStart + 2 * Math.PI;
+    drawDonutSegment(
+      innerR,
+      outerR,
+      roundStart,
+      roundEnd,
+      "rgba(66, 135, 245, 0.7)"
+    );
+  }
+  // วาดเศษส่วนที่เหลือ (ถ้ามี)
+  let lastSegmentStart = startAngle + fullRounds * 2 * Math.PI;
+  let lastSegmentEnd = lastSegmentStart + remainderAngle;
+  drawDonutSegment(
+    innerR,
+    outerR,
+    lastSegmentStart,
+    lastSegmentEnd,
+    "rgba(66, 135, 245, 0.7)"
+  );
+
+  // 4. คำนวณมุมสำหรับ Burned และวาดทับที่ปลายสุดของส่วน Consumed
+  let burnedAngle = (burned / baseValue) * 2 * Math.PI;
+  if (burnedAngle > 0) {
+    let burnedStartAngle = lastSegmentEnd - burnedAngle;
+    let burnedEndAngle = lastSegmentEnd;
+    drawDonutSegment(
+      innerR,
+      outerR,
+      burnedStartAngle,
+      burnedEndAngle,
+      "rgba(245, 66, 135, 0.7)"
+    );
+  }
+
+  // แสดงข้อมูลตัวเลขด้านล่างของกราฟ
+  //   const labelsContainer = document.getElementById("labels");
+  //   labelsContainer.innerHTML = `
+  //   <div>รักษาสมดุล (Maintenance): ${maintenance} แคล</div>
+  //   <div>เป้าหมาย (Target): ${target} แคล</div>
+  //   <div>บริโภค (Consumed): ${consumed} แคล</div>
+  //   <div>เผาผลาญ (Burned): ${burned} แคล</div>
+  // `;
+}
+
+function renderProgress() {
+  // กำหนดข้อมูลสำหรับกรณีเพิ่มน้ำหนัก
+  // const maintenance = 2000; // รักษาสมดุล
+  // const target = 2500; // เป้าหมายสำหรับเพิ่มน้ำหนัก
+  // const consumed = 1550; // บริโภค
+  // const burned = 0; // เผาผลาญ
+  let maintenance = window.maintenanceCal || 0; // ค่าที่ร่างกายต้องการเพื่อรักษาสมดุล
+  let target = window.calPerDay || 0; // เป้าหมาย (Target) สำหรับเพิ่มน้ำหนัก
+  let consumed = window.calToDay || 0; // แคลอรี่ที่บริโภค
+  let burned = window.calBurn || 0; // แคลอรี่ที่เผาผลาญ
+  const netConsumption = consumed - burned; // 2800 - 200 = 2600
+
+  // กำหนด baseValue เพื่อให้กราฟรองรับค่าที่มากที่สุด
+  const baseValue = Math.max(consumed, target, maintenance); // 2800
+
+  // คำนวณเปอร์เซ็นต์จาก baseValue
+  const netPerc = (netConsumption / baseValue) * 100; // 2600/2800*100 ≈ 92.86%
+  const burnedPerc = (burned / baseValue) * 100; // 200/2800*100 ≈ 7.14%
+  const maintenancePerc = (maintenance / baseValue) * 100; // 2000/2800*100 ≈ 71.43%
+  const targetPerc = (target / baseValue) * 100; // 2500/2800*100 ≈ 89.29%
+
+  // กำหนดความกว้างของแท่งในกราฟ
+  document.getElementById("netBar").style.width = netPerc + "%";
+  document.getElementById("burnedBar").style.width = burnedPerc + "%";
+  // วาง Marker ที่ตำแหน่งคำนวณได้
+  document.getElementById("maintenanceMarker").style.left =
+    maintenancePerc + "%";
+  document.getElementById("targetMarker").style.left = targetPerc + "%";
+
+  // แสดงข้อมูลตัวเลข
+  const labelsContainer = document.getElementById("labels");
+  labelsContainer.innerHTML = `
+      <div class="col-3 text-center"><span>ทาน ${consumed}</span></div>
+      <div class="col-3 text-center"><span>เป้าหมาย ${target}</span></div>
+      <div class="col-3 text-center"><span>สมดุล ${maintenance}</span></div>
+      <div class="col-3 text-center"><span>เผาผลาญ ${burned}</span></div>
+    `;
+}
+
+renderCircle();
+renderProgress();

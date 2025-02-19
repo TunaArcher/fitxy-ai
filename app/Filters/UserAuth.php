@@ -23,6 +23,8 @@ class UserAuth implements FilterInterface
         // ตรวจสอบการเข้าสู่ระบบ
         if (!session()->get('isUserLoggedIn')) {
 
+            session()->destroy();
+
             session()->setFlashdata(['session_expired' => 'เซ็นซันหมดอายุ กรุณาล็อคอินอีกครั้ง']);
 
             return redirect()->to('/');
@@ -31,6 +33,8 @@ class UserAuth implements FilterInterface
         // ตรวจสอบว่าผู้ใช้มีอยู่ในระบบหรือไม่
         $user = $this->userModel->getUserByID(session()->get('user')->id);
         if (!$user) {
+
+            session()->destroy();
 
             session()->setFlashdata(['session_expired' => 'เซ็นซันหมดอายุ กรุณาล็อคอินอีกครั้ง']);
 

@@ -66,6 +66,7 @@ class CalculateController extends BaseController
                                 'exercise' => $requestPayload->exercise,
                                 'target' => $requestPayload->target,
                                 'cal_per_day' => $requestPayload->calPerDay,
+                                'maintenanceCal' => $requestPayload->maintenanceCal,
                                 'updated_at' => date('Y-m-d H:i:s'),
                             ]);
 

@@ -116,3 +116,104 @@
     <div class="spinner"></div>
     <p class="processing-text">กำลังประมวลผล...</p>
 </div>
+
+
+<footer class="adminuiux-mobile-footer hide-on-scrolldown style-1">
+  <div class="container">
+    <ul class="nav nav-pills nav-justified">
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('/workout'); ?>"><span><svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="nav-icon"
+              viewBox="0 0 20 10">
+              <g id="workout-icon" transform="translate(-87 -157)">
+                <g
+                  id="Rectangle_32"
+                  data-name="Rectangle 32"
+                  transform="translate(87 159)"
+                  fill="none"
+                  stroke=""
+                  stroke-width="1">
+                  <rect width="4" height="8" rx="2" stroke="none" />
+                  <rect
+                    x="0.5"
+                    y="0.5"
+                    width="3"
+                    height="7"
+                    rx="1.5"
+                    fill="none" />
+                </g>
+                <g
+                  id="Rectangle_36"
+                  data-name="Rectangle 36"
+                  transform="translate(93 161)"
+                  fill="none"
+                  stroke=""
+                  stroke-width="1">
+                  <rect width="8" height="4" stroke="none" />
+                  <rect x="0.5" y="0.5" width="7" height="3" fill="none" />
+                </g>
+                <g
+                  id="Rectangle_34"
+                  data-name="Rectangle 34"
+                  transform="translate(90 157)"
+                  fill="none"
+                  stroke=""
+                  stroke-width="1">
+                  <rect width="4" height="12" rx="2" stroke="none" />
+                  <rect
+                    x="0.5"
+                    y="0.5"
+                    width="3"
+                    height="11"
+                    rx="1.5"
+                    fill="none" />
+                </g>
+                <g
+                  id="Rectangle_35"
+                  data-name="Rectangle 35"
+                  transform="translate(100 157)"
+                  fill="none"
+                  stroke=""
+                  stroke-width="1">
+                  <rect width="4" height="12" rx="2" stroke="none" />
+                  <rect
+                    x="0.5"
+                    y="0.5"
+                    width="3"
+                    height="11"
+                    rx="1.5"
+                    fill="none" />
+                </g>
+                <g
+                  id="Rectangle_33"
+                  data-name="Rectangle 33"
+                  transform="translate(103 159)"
+                  fill="none"
+                  stroke=""
+                  stroke-width="1">
+                  <rect width="4" height="8" rx="2" stroke="none" />
+                  <rect
+                    x="0.5"
+                    y="0.5"
+                    width="3"
+                    height="7"
+                    rx="1.5"
+                    fill="none" />
+                </g>
+              </g>
+            </svg>
+            <span class="nav-text">ออกกำลังกาย</span></span></a>
+      </li>
+      <li class="nav-item">
+        <a href="<?php echo base_url(); ?>" class="nav-link">
+          <i class="nav-icon bi bi-columns-gap"></i>
+          <span class="nav-text">หน้าแรก</span></span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('/menu'); ?>"><span><i class="nav-icon bi bi-graph-up-arrow"></i>
+            <span class="nav-text">กิน</span></span></a>
+      </li>
+    </ul>
+  </div>
+</footer>

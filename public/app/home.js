@@ -64,31 +64,25 @@ function renderCircle() {
   const canvas = document.getElementById("calorieCanvas");
   const ctx = canvas.getContext("2d");
 
-  // ขนาด canvas 300×300 (กำหนดใน <canvas width="300" height="300">)
-  const centerX = 300 / 2; // = 150
-  const centerY = 170 / 2; // = 150
+  // ใช้ขนาดจริงของ Canvas
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
 
-  // ตั้งรัศมีโดนัท
-  const outerR = 90; // อยากให้โตกว่านี้หรือเล็กกว่านี้ก็ปรับได้
-  const innerR = 60; // ต้องมากกว่า 60 (รัศมีรูป = 60) เพื่อจะได้ล้อมรูปพอดี
+  // กำหนดรัศมีให้สัมพันธ์กับขนาด Canvas
+  const outerR = Math.min(canvas.width, canvas.height) / 2 - 10;
+  const innerR = outerR - 30;
 
-  let maintenance = window.maintenanceCal || 0; // ค่าที่ร่างกายต้องการเพื่อรักษาสมดุล
-  let target = window.calPerDay || 0; // เป้าหมาย (Target) สำหรับเพิ่มน้ำหนัก
-  let consumed = window.calToDay || 0; // แคลอรี่ที่บริโภค
-  let burned = window.calBurn || 0; // แคลอรี่ที่เผาผลาญ
+  // ล้างค่าเดิมก่อนวาดใหม่
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // let maintenance = 2500;
-  // let target = 3000;
-  // let consumed = 3000;
-  // let burned = 200;
+  let maintenance = window.maintenanceCal || 0;
+  let target = window.calPerDay || 0;
+  let consumed = window.calToDay || 0;
+  let burned = window.calBurn || 0;
 
-  // ใช้ baseValue เป็น Target
   const baseValue = target;
-
-  // กำหนดมุมเริ่มต้นที่ -90° (ด้านบน)
   const startAngle = -Math.PI / 2;
 
-  // ฟังก์ชันวาด Donut Segment
   function drawDonutSegment(innerR, outerR, start, end, color) {
     ctx.beginPath();
     ctx.arc(centerX, centerY, outerR, start, end, false);
@@ -98,65 +92,33 @@ function renderCircle() {
     ctx.fill();
   }
 
-  // 1. วาดพื้นหลัง Donut (แสดงค่า baseValue) ด้วยสีเทา (วงเต็ม)
   drawDonutSegment(innerR, outerR, 0, 2 * Math.PI, "#e0e0e0");
 
-  // 2. คำนวณมุมทั้งหมดสำหรับ Consumed
   let totalConsumedAngle = (consumed / baseValue) * 2 * Math.PI;
-  // คำนวณจำนวนรอบเต็มและเศษที่เหลือ
   const fullRounds = Math.floor(totalConsumedAngle / (2 * Math.PI));
   let remainderAngle = totalConsumedAngle % (2 * Math.PI);
-  // หากเศษเหลือเป็น 0 แต่ consumed > 0 ให้ถือว่าเป็น 2π (กรณี consumed ครบรอบเต็ม)
   if (remainderAngle === 0 && consumed > 0) {
     remainderAngle = 2 * Math.PI;
   }
 
-  // 3. วาดส่วน Consumed (สีฟ้า) สำหรับรอบเต็ม
   for (let i = 0; i < fullRounds; i++) {
     let roundStart = startAngle + i * 2 * Math.PI;
     let roundEnd = roundStart + 2 * Math.PI;
-    drawDonutSegment(
-      innerR,
-      outerR,
-      roundStart,
-      roundEnd,
-      "rgba(66, 135, 245, 0.7)"
-    );
+    drawDonutSegment(innerR, outerR, roundStart, roundEnd, "rgba(66, 135, 245, 0.7)");
   }
-  // วาดเศษส่วนที่เหลือ (ถ้ามี)
+
   let lastSegmentStart = startAngle + fullRounds * 2 * Math.PI;
   let lastSegmentEnd = lastSegmentStart + remainderAngle;
-  drawDonutSegment(
-    innerR,
-    outerR,
-    lastSegmentStart,
-    lastSegmentEnd,
-    "rgba(66, 135, 245, 0.7)"
-  );
+  drawDonutSegment(innerR, outerR, lastSegmentStart, lastSegmentEnd, "rgba(66, 135, 245, 0.7)");
 
-  // 4. คำนวณมุมสำหรับ Burned และวาดทับที่ปลายสุดของส่วน Consumed
   let burnedAngle = (burned / baseValue) * 2 * Math.PI;
   if (burnedAngle > 0) {
     let burnedStartAngle = lastSegmentEnd - burnedAngle;
     let burnedEndAngle = lastSegmentEnd;
-    drawDonutSegment(
-      innerR,
-      outerR,
-      burnedStartAngle,
-      burnedEndAngle,
-      "rgba(245, 66, 135, 0.7)"
-    );
+    drawDonutSegment(innerR, outerR, burnedStartAngle, burnedEndAngle, "rgba(245, 66, 135, 0.7)");
   }
-
-  // แสดงข้อมูลตัวเลขด้านล่างของกราฟ
-  //   const labelsContainer = document.getElementById("labels");
-  //   labelsContainer.innerHTML = `
-  //   <div>รักษาสมดุล (Maintenance): ${maintenance} แคล</div>
-  //   <div>เป้าหมาย (Target): ${target} แคล</div>
-  //   <div>บริโภค (Consumed): ${consumed} แคล</div>
-  //   <div>เผาผลาญ (Burned): ${burned} แคล</div>
-  // `;
 }
+
 
 function renderProgress() {
   // กำหนดข้อมูลสำหรับกรณีเพิ่มน้ำหนัก

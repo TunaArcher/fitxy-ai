@@ -146,7 +146,8 @@
                     <img src="<?php echo session()->get('user')->profile; ?>" alt="" />
                   </figure>
                 </div>
-                <canvas style="" id="calorieCanvas" class="position-relative z-index-0 mx-auto"></canvas>
+                <canvas id="calorieCanvas" width="300" height="170" class="position-relative z-index-0 mx-auto"></canvas>
+
               </div>
 
               <div class="row mb-4 text-center">

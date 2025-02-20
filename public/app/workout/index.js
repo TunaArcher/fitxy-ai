@@ -226,7 +226,7 @@ $(document).ready(function () {
           $modalContent.data("workoutId", workoutId);
   
         } else {
-          alert('error')
+          alert('ไม่สามารถค้นหาค่า MET ของกิจกรรมออกกำลังกายของคุณได้')
         }
 
         $me.prop("disabled", false);

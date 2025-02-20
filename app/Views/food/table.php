@@ -213,7 +213,7 @@
 
       <div class="input-group mb-3"><input class="form-control" placeholder="ระบุความต้องการ เช่น ไม่เอาผัก, ไม่เอาเนื้อหมู, ไม่เอาเนื้อวัว " value="">
         <div class="dropdown input-group-text border-start-0 p-0">
-          <button class="btn btn-square btn-link caret-none" type="button" id="btnGenerateFood" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
+          <button class="btn btn-square btn-link caret-none gradient-badge" type="button" id="btnGenerateFood" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
             <i class="bi bi-robot"></i> วิเคาะห์
           </button>
         </div>

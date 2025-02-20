@@ -154,6 +154,30 @@
             font-size: 20px;
             color: #333;
         }
+
+        .gradient-badge {
+            background: linear-gradient(45deg, #6a11cb, #2575fc, #6a11cb);
+            background-size: 400% 400%;
+            animation: gradient-animation 5s ease infinite;
+            color: #fff;
+            border: none;
+            /* padding: 0.25em 0.5em; */
+            /* font-size: 0.8rem; */
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
     </style>
 </head>
 

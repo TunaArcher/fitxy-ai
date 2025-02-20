@@ -28,6 +28,31 @@
           ส่วน data-* เอาไว้ส่งข้อมูล Workout ไปใน Modal ผ่าน jQuery 
         -->
             <?php if ($workout->id == '12') { ?>
+                <style>
+                    .gradient-badge {
+                        background: linear-gradient(45deg, #6a11cb, #2575fc, #6a11cb);
+                        background-size: 400% 400%;
+                        animation: gradient-animation 5s ease infinite;
+                        color: #fff;
+                        border: none;
+                        /* padding: 0.25em 0.5em; */
+                        /* font-size: 0.8rem; */
+                    }
+
+                    @keyframes gradient-animation {
+                        0% {
+                            background-position: 0% 50%;
+                        }
+
+                        50% {
+                            background-position: 100% 50%;
+                        }
+
+                        100% {
+                            background-position: 0% 50%;
+                        }
+                    }
+                </style>
                 <a href="#"
                     class="text-decoration-none text-white open-workoutother-modal"
                     data-bs-toggle="modal"
@@ -36,12 +61,14 @@
                     data-workout-title="<?php echo $workout->title; ?>"
                     data-workout-icon="<?php echo base_url('assets/img/workout/' . $workout->icon); ?>"
                     data-workout-met="<?php echo $workout->MET; ?>">
-                    <img
-                        src="<?php echo base_url('assets/img/workout/' . $workout->icon); ?>"
-                        alt="<?php echo $workout->title; ?>"
-                        class="img-fluid" />
+
+                    <div class="position-relative d-inline-block">
+                        <img src="<?php echo base_url('assets/img/workout/' . $workout->icon); ?>" alt="<?php echo $workout->title; ?>" class="img-fluid">
+                        <span class="gradient-badge badge bg-info position-absolute" style="bottom: 5px; right: -7px; font-size: 0.8rem;">AI</span>
+                    </div>
                     <div><?php echo $workout->title; ?></div>
                 </a>
+
             <?php } else { ?>
                 <a href="#"
                     class="text-decoration-none text-white open-workout-modal"
@@ -163,7 +190,7 @@
 
                 <!-- ปุ่มวิเคราะห์การออกกำลังกายวันนี้ -->
                 <div class="mb-3">
-                    <button type="button" class="btn btn-info w-100" id="btn-analyze">
+                    <button type="button" class="btn btn-info w-100 gradient-badge" id="btn-analyze">
                         FitXy-AI วิเคราะห์
                     </button>
                 </div>

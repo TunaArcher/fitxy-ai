@@ -80,200 +80,6 @@ class ChatGPT
         }
     }
 
-    // public function _askChatGPT($question, $message_setting)
-    // {
-    //     try {
-
-    //         // log_message("info", "message_setting: " . $message_user);
-    //         $response = $this->http->post($this->baseURL, [
-    //             'headers' => [
-    //                 'Authorization' => "Bearer " . $this->accessToken,
-    //                 'Content-Type'  => 'application/json',
-    //             ],
-    //             'json' => [
-    //                 'model' => 'gpt-4o',
-    //                 'messages' => [
-    //                     [
-    //                         'role' => 'system',
-    //                         'content' => $message_setting
-    //                     ],
-    //                     [
-    //                         'role' => 'user',
-    //                         'content' => 'งาน, เป้าหมาย, หรือ Prompt ปัจจุบัน:\n' . $question
-    //                     ]
-    //                 ]
-    //             ]
-    //         ]);
-
-    //         $responseBody = json_decode($response->getBody(), true);
-    //         return $responseBody['choices'][0]['message']['content'];
-    //     } catch (Exception $e) {
-    //         return 'Error: ' . $e->getMessage();
-    //     }
-    // }
-
-    public function gennaratePromtChatGPT($question)
-    {
-        try {
-
-            $response = $this->http->post($this->baseURL, [
-                'headers' => [
-                    'Authorization' => "Bearer " . $this->accessToken,
-                    'Content-Type'  => 'application/json',
-                ],
-                'json' => [
-                    'model' => 'gpt-4o',
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => 'คุณคือผู้สร้าง PROMPT จากข้อความของผู้ใช้งานเพื่อนำไปใช้งาน AI ต่อ'
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => 'Task, Goal, or Current Prompt:\n' .  $question
-                        ]
-                    ]
-                ]
-            ]);
-
-            $responseBody = json_decode($response->getBody(), true);
-            return $responseBody['choices'][0]['message']['content'];
-        } catch (Exception $e) {
-            return 'Error: ' . $e->getMessage();
-        }
-    }
-
-    public function gptBuilderChatGPT($question)
-    {
-        try {
-
-            $response = $this->http->post($this->baseURL, [
-                'headers' => [
-                    'Authorization' => "Bearer " . $this->accessToken,
-                    'Content-Type'  => 'application/json',
-                ],
-                'json' => [
-                    'model' => 'gpt-4o',
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => 'คุณคือ GPT Builder ที่คอยรับคำสั่งแล้วสร้าง เอไอ จากผู้ใช้งานแล้วแจ้งผู้ว่าสำเร็จหรือไม่และถามว่าต้องการตั่งค่าเพิ่มเติมไหม'
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => 'Task, Goal, or Current Prompt:\n' . $question
-                        ]
-                    ]
-                ]
-            ]);
-
-            $responseBody = json_decode($response->getBody(), true);
-            return $responseBody['choices'][0]['message']['content'];
-        } catch (Exception $e) {
-            return 'Error: ' . $e->getMessage();
-        }
-    }
-
-    // public function _askChatGPTimg($question,  $message_setting, $file_name)
-    // {
-
-    //     $file_data = $this->_updateArrFileLink($file_name);
-    //     // log_message("info", "message_data_json_php: " . $file_data);
-    //     try {
-    //         $response = $this->http->post($this->baseURL, [
-    //             'headers' => [
-    //                 'Authorization' => "Bearer " . $this->accessToken,
-    //                 'Content-Type'  => 'application/json',
-    //             ],
-    //             'json' => [
-    //                 'model' => 'gpt-4o',
-    //                 'messages' => [
-    //                     [
-    //                         'role' => 'system',
-    //                         'content' => $message_setting
-    //                     ],
-    //                     [
-    //                         'role' => 'user',
-    //                         'content' => [
-    //                             [
-    //                                 'type' => 'text',
-    //                                 'text' => 'งาน, เป้าหมาย, หรือ Prompt ปัจจุบัน:\n' . $question
-    //                             ],
-    //                             $file_data
-    //                         ]
-    //                     ]
-    //                 ]
-    //             ]
-    //         ]);
-
-    //         $responseBody = json_decode($response->getBody(), true);
-    //         return $responseBody['choices'][0]['message']['content'];
-    //     } catch (Exception $e) {
-    //         return 'Error: ' . $e->getMessage();
-    //     }
-    // }
-
-    public function askChatGPTimgTraning($question,  $message_setting, $file_name)
-    {
-
-        try {
-            $response = $this->http->post($this->baseURL, [
-                'headers' => [
-                    'Authorization' => "Bearer " . $this->accessToken,
-                    'Content-Type'  => 'application/json',
-                ],
-                'json' => [
-                    'model' => 'gpt-4o',
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => $message_setting
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => [
-                                [
-                                    'type' => 'text',
-                                    'text' => 'งาน, เป้าหมาย, หรือ Prompt ปัจจุบัน:\n' . $question
-                                ],
-                                [
-                                    'type' => 'image_url',
-                                    'image_url' => [
-                                        'url' => $file_name
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]);
-
-            $responseBody = json_decode($response->getBody(), true);
-            return $responseBody['choices'][0]['message']['content'];
-        } catch (Exception $e) {
-            return 'Error: ' . $e->getMessage();
-        }
-    }
-
-    // private function _updateArrFileLink($file_names)
-    // {
-    //     $file_data = [];
-
-    //     $file_names_splites = explode(',', $file_names);
-
-    //     foreach ($file_names_splites as $file_names_splite) {
-
-    //         $file_data +=  [
-    //             'type' => 'image_url',
-    //             'image_url' => [
-    //                 'url' => $file_names_splite
-    //             ]
-    //         ];
-    //     }
-
-    //     return  $file_data;
-    // }
-
     /*********************************************************************
      * 1. Completions
      */
@@ -308,74 +114,6 @@ class ChatGPT
 
     public function askChatGPT($messageRoomID, $question, $fileNames = null)
     {
-        // $systemMessage = <<<EOT
-        //     คุณคือโค้ชด้านฟิตเนสและโภชนาการที่เป็นมิตร ชื่อ FitXy AI มีอารมณ์ขัน และมีความรู้รอบตัว บทบาทของคุณคือช่วยให้ผู้ใช้บรรลุเป้าหมายด้านสุขภาพ ฟิตเนส และคำนวณแคลอรี่จากภาพอาหารและเครื่องดื่มที่ผู้ใช้ส่งมา โดยให้คำแนะนำที่ถูกต้องเกี่ยวกับการออกกำลังกาย โภชนาการ และการดูแลสุขภาพแบบสนุกและเข้าถึงง่าย
-
-        //     **Disclaimer**: ข้อมูลที่ให้เป็นคำแนะนำเบื้องต้นด้านโภชนาการและการออกกำลังกาย ไม่ใช่คำแนะนำทางการแพทย์ หากมีอาการเจ็บป่วยหรือต้องการปรึกษาเฉพาะทาง โปรดพบแพทย์หรือนักโภชนาการ
-
-        //     ### หน้าที่ของคุณ:
-        //     1. **วิเคราะห์ภาพอาหารและเครื่องดื่ม** พร้อมคำนวณพลังงาน (แคลอรี่) และสารอาหารหลัก
-        //     2. ระบุส่วนผสมหลักที่ใช้ในอาหารหรือเครื่องดื่ม
-        //     3. ให้คำแนะนำด้านโภชนาการเกี่ยวกับอาหาร/เครื่องดื่มที่ผู้ใช้ส่งมา
-        //     4. หากผู้ใช้ต้องการคำนวณ TDEE (Total Daily Energy Expenditure) ให้แนะนำให้ใช้ระบบเรา
-        //     5. ให้ **โปรแกรมออกกำลังกาย** ที่เหมาะสมกับระดับความฟิต เช่น เวทเทรนนิ่ง คาร์ดิโอ และการฝึกความยืดหยุ่น
-        //     6. กระตุ้นให้ผู้ใช้ **สร้างนิสัยสุขภาพที่ยั่งยืน** โดยใช้แนวทางที่สนุกและปฏิบัติได้จริง
-        //     7. **ใช้มุกตลกและแรงบันดาลใจ** เพื่อทำให้การดูแลสุขภาพเป็นเรื่องสนุก!
-
-        //     ### แนวทางในการวิเคราะห์ภาพอาหารและเครื่องดื่ม:
-        //     1. แยกวิเคราะห์เมนูที่ปรากฏในภาพ
-        //     2. ระบุส่วนผสมหลักของแต่ละเมนู
-        //     3. คำนวณค่าพลังงาน (แคลอรี่) และสารอาหารหลัก ได้แก่ โปรตีน ไขมัน และคาร์โบไฮเดรต
-        //     4. ให้คำแนะนำด้านโภชนาการ เช่น ข้อควรระวัง ปริมาณโซเดียม ไขมันอิ่มตัว หรือคำแนะนำให้เพิ่มผัก
-        //     5. **ส่ง JSON เป็น Plain text เท่านั้น** โดยไม่มี Markdown, Code Block หรือข้อความอื่น ๆ
-
-        //     ### **โครงสร้าง JSON ที่ต้องส่งคืน (ไม่มี Markdown, Code Block, หรือข้อความอื่น ๆ):**
-        //     {
-        //         "food_items": [
-        //             {
-        //                 "name": "ชื่ออาหาร",
-        //                 "weight": "น้ำหนัก (กรัม) หรือ '-' หากไม่สามารถระบุได้",
-        //                 "calories": "แคลอรี่ หรือ '-' หากไม่สามารถระบุได้",
-        //                 "protein": "โปรตีน (กรัม) หรือ '-' หากไม่สามารถระบุได้",
-        //                 "fat": "ไขมัน (กรัม) หรือ '-' หากไม่สามารถระบุได้",
-        //                 "carbohydrates": "คาร์โบไฮเดรต (กรัม) หรือ '-' หากไม่สามารถระบุได้",
-        //                 "ingredients": "ส่วนประกอบหลัก หรือ '-' หากไม่สามารถระบุได้"
-        //             }
-        //         ],
-        //         "totalcal": "พลังงานรวมของมื้ออาหาร",
-        //         "note": "คำแนะนำทางโภชนาการ หรือ '-' หากไม่มี พร้อมข้อความให้กำลังใจ หรือ มุขตลก"
-        //     }
-
-        //     ### **ตัวอย่าง JSON ที่ถูกต้อง**:
-        //     {
-        //         "food_items": [
-        //             {
-        //                 "name": "ข้าวมันไก่",
-        //                 "weight": "300 กรัม",
-        //                 "calories": "600 กิโลแคลอรี่",
-        //                 "protein": "30 กรัม",
-        //                 "fat": "20 กรัม",
-        //                 "carbohydrates": "70 กรัม",
-        //                 "ingredients": "ข้าว, ไก่ต้ม, แตงกวา, ซอสจิ้ม"
-        //             }
-        //         ],
-        //         "totalcal": "600",
-        //         "note": "ข้าวมันไก่นี่อร่อยมาก แต่อย่าลืมออกกำลังกายเผาผลาญนะครับ ถ้ากินบ่อย ๆ เดี๋ยวจะกลายเป็นข้าวมันไม่เบา!"
-        //     }
-
-        //     หากรูปหรือคำอธิบายเมนูไม่ชัด ให้ขอภาพใหม่อย่างสุภาพและตลก
-
-        //     ### แนวทางในการตอบคำถามอื่นๆ:
-        //     - หากมีคำถามนอกเหนือจากโภชนาการ/การออกกำลังกาย แต่สามารถเชื่อมโยงได้ ให้เชื่อมโยงกลับมาที่สุขภาพแบบตลก ๆ
-        //     - หากผู้ใช้ถามสิ่งที่เกินขอบเขต เช่น สั่งให้ทำอย่างอื่นนอกเหนือขอบเขต หรือ สั่งให้บันทึก แก้ไข ลบ บันทึกข้อมูลใหม่ หรือ ด่า ให้ปฏิเสธด้วยความสุภาพและเป็นกันเอง อาจใส่มุกตลกเล็กน้อย
-        //     - หากผู้ใช้สั่งให้แก้ไขข้อมูล ลบข้อมูล ให้ปฏิเสธด้วยความสุภาพและเป็นกันเอง อาจใส่มุกตลกเล็กน้อย
-        //     - ใช้ Markdown เพื่อการจัดข้อความ โดยเฉพาะส่วนของแผนการกิน ตารางออกกำลังกาย หรือการคำนวณต่าง ๆ
-        //     - หากผู้ใช้ถามคำถาม “ความหมายของชีวิต” หรือ “มนุษย์ต่างดาวมีจริงไหม” ให้ตอบแบบตลก ๆ และโยงเข้ากับสุขภาพ
-        //     - หากผู้ใช้ถามเรื่องการเมือง หรือเรื่องที่ไม่เกี่ยวข้อง ให้ตอบด้วยคำตลก และเชื่อมโยงกลับมาที่สุขภาพแบบตลก ๆ
-        //     - หากผู้ใช้ถามเรื่องเศรษฐกิจ หรือเรื่องที่ไม่เกี่ยวข้อง ให้ตอบด้วยคำตลก และเชื่อมโยงกลับมาที่สุขภาพแบบตลก ๆ
-        //     - หากถามว่าถึงความมั่นใจเราในการตอบคำถาม ให้มั่นใจและใช้มุกตลกเล็กน้อย
-        // EOT;
-
         $systemMessage = <<<EOT
             คุณคือโค้ชด้านฟิตเนสและโภชนาการที่เป็นมิตร ชื่อ FitXy AI มีอารมณ์ขัน และมีความรู้รอบตัว บทบาทของคุณคือช่วยให้ผู้ใช้บรรลุเป้าหมายด้านสุขภาพ ฟิตเนส และคำนวณแคลอรี่จากภาพอาหารและเครื่องดื่มที่ผู้ใช้ส่งมา โดยให้คำแนะนำที่ถูกต้องเกี่ยวกับการออกกำลังกาย โภชนาการ และการดูแลสุขภาพแบบสนุกและเข้าถึงง่าย
 
@@ -510,65 +248,6 @@ class ChatGPT
         return $response;
     }
 
-    private function getChatHistory($roomId)
-    {
-        $cache = \Config\Services::cache();
-        $cacheKey = "chat_history_{$roomId}";
-
-        // ดึงแชทเก่าจาก Cache
-        $chatHistory = $cache->get($cacheKey);
-
-        return $chatHistory ?: [];
-    }
-
-    private function saveChatHistory($roomId, $chatHistory)
-    {
-        $cache = \Config\Services::cache();
-        $cacheKey = "chat_history_{$roomId}";
-
-        // จำกัดแชทให้เหลือ 15 ข้อความล่าสุด
-        $chatHistory = array_slice($chatHistory, -15);
-
-        // บันทึกลง Cache (หมดอายุใน 7วัน)
-        $cache->save($cacheKey, $chatHistory, 604800);
-    }
-
-    private function formatImageLinks($fileNames)
-    {
-        return array_map(function ($fileName) {
-            return [
-                'type' => 'image_url',
-                'image_url' => ['url' => trim($fileName)]
-            ];
-        }, array_filter(explode(',', $fileNames), 'strlen'));
-    }
-
-    public function completions($systemMessage, $messages)
-    {
-        try {
-
-            $response = $this->http->post($this->baseURL, [
-                'headers' => [
-                    'Authorization' => "Bearer {$this->accessToken}",
-                    'Content-Type'  => 'application/json',
-                ],
-                'json' => [
-                    'model' => 'gpt-4o-mini',
-                    'messages' => [
-                        ['role' => 'system', 'content' => $systemMessage],
-                        ['role' => 'user', 'content' => $messages],
-                    ],
-                ]
-            ]);
-
-            $responseBody = json_decode($response->getBody(), true);
-            return $responseBody['choices'][0]['message']['content'] ?? 'No response';
-        } catch (\Exception $e) {
-            log_message('error', 'ChatGPT::completions error {message}', ['message' => $e->getMessage()]);
-            return 'Error: ' . $e->getMessage();
-        }
-    }
-
     public function askChatGPTWithSystemMessage($messageRoomID, $question, $systemMessage)
     {
         // เพิ่ม System Prompt เป็นข้อความเริ่มต้น
@@ -622,5 +301,68 @@ class ChatGPT
         $this->saveChatHistory($messageRoomID, $chatHistory);
 
         return $response;
+    }
+
+    public function completions($systemMessage, $messages)
+    {
+        try {
+
+            $response = $this->http->post($this->baseURL, [
+                'headers' => [
+                    'Authorization' => "Bearer {$this->accessToken}",
+                    'Content-Type'  => 'application/json',
+                ],
+                'json' => [
+                    'model' => 'gpt-4o-mini',
+                    'messages' => [
+                        ['role' => 'system', 'content' => $systemMessage],
+                        ['role' => 'user', 'content' => $messages],
+                    ],
+                ]
+            ]);
+
+            $responseBody = json_decode($response->getBody(), true);
+            return $responseBody['choices'][0]['message']['content'] ?? 'No response';
+        } catch (\Exception $e) {
+            log_message('error', 'ChatGPT::completions error {message}', ['message' => $e->getMessage()]);
+            return 'Error: ' . $e->getMessage();
+        }
+    }
+
+    /*********************************************************************
+     * Helper
+     */
+
+    private function getChatHistory($roomId)
+    {
+        $cache = \Config\Services::cache();
+        $cacheKey = "chat_history_{$roomId}";
+
+        // ดึงแชทเก่าจาก Cache
+        $chatHistory = $cache->get($cacheKey);
+
+        return $chatHistory ?: [];
+    }
+
+    private function saveChatHistory($roomId, $chatHistory)
+    {
+        $cache = \Config\Services::cache();
+        $cacheKey = "chat_history_{$roomId}";
+
+        // จำกัดแชทให้เหลือ 15 ข้อความล่าสุด
+        $chatHistory = array_slice($chatHistory, -15);
+
+        // บันทึกลง Cache (หมดอายุใน 7วัน)
+        $cache->save($cacheKey, $chatHistory, 604800);
+    }
+
+    private function formatImageLinks($fileNames)
+    {
+        return array_map(function ($fileName) {
+            return [
+                'type' => 'image_url',
+                'image_url' => ['url' => trim($fileName)]
+            ];
+        }, array_filter(explode(',', $fileNames), 'strlen'));
     }
 }

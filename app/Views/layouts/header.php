@@ -109,6 +109,10 @@
             object-fit: cover;
             /* ปรับขนาดให้เต็มจอโดยไม่เสียอัตราส่วน */
         }
+        
+        .fixedbuttons {
+            padding-bottom: 65px !important;
+        }
     </style>
 </head>
 
@@ -145,5 +149,5 @@
     </div> -->
 
     <div class="pageloader">
-        <img src="https://cdn.discordapp.com/attachments/1089056066530197515/1341019279897919488/1739794300292.gif?ex=67b47907&amp;is=67b32787&amp;hm=08f43dd1533440ca0512b3b4dcdbfbf92b4d35ed57e0aff17d70d599e1435358&amp;">
+        <img src="<?php echo base_url('/assets/img/splash_screen.gif'); ?>">
     </div>

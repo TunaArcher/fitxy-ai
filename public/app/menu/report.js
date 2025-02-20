@@ -10,9 +10,9 @@ $(document).ready(function () {
     selectedMenuId = $(this).data("menu-id");
     // ดึงค่าแคลอรี่ปัจจุบันและลบ " แคลอรี่" กับ comma ออก
     var currentCal = $(this)
-      .find("h4")
+      .find(".menu-cal")
       .text()
-      .replace(" แคลอรี่", "")
+      .replace(" kcal", "")
       .replace(/,/g, "")
       .trim();
     // ถ้ามีค่า ให้ฟอร์แมทด้วย comma ก่อนแสดงใน input
@@ -29,9 +29,9 @@ $(document).ready(function () {
     var total = 0;
     $(".adminuiux-card").each(function () {
       var text = $(this)
-        .find("h4")
+        .find(".menu-cal")
         .text()
-        .replace(" แคลอรี่", "")
+        .replace(" kcal", "")
         .replace(/,/g, "")
         .trim();
       var calVal = parseInt(text, 10);
@@ -84,8 +84,8 @@ $(document).ready(function () {
           $(".adminuiux-card").each(function () {
             if ($(this).data("menu-id") == selectedMenuId) {
               $(this)
-                .find("h4")
-                .text(parseInt(newCalStr, 10).toLocaleString() + " แคลอรี่");
+                .find(".menu-cal")
+                .text(parseInt(newCalStr, 10).toLocaleString() + " kcal");
             }
           });
           // คำนวณยอดแคลอรี่รวมใหม่

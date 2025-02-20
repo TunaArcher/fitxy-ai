@@ -76,7 +76,7 @@
 
         var maintenanceCal = <?= session()->get('user')->maintenanceCal ?: '""'; ?>;
         var calPerDay = <?= session()->get('user')->cal_per_day ?: '""'; ?>;
-        
+
         var calToDay = <?= $calToDay ?: 0; ?>;
         var calBurn = <?= $calBurn ?: 0; ?>;
     </script>
@@ -109,9 +109,50 @@
             object-fit: cover;
             /* ปรับขนาดให้เต็มจอโดยไม่เสียอัตราส่วน */
         }
-        
+
         .fixedbuttons {
             padding-bottom: 65px !important;
+        }
+    </style>
+    <style>
+        /* สไตล์สำหรับ Processing Overlay (Circle Spinner) */
+        .processing-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #03aed2;
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            animation: spin 2s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .processing-text {
+            font-size: 20px;
+            color: #333;
         }
     </style>
 </head>

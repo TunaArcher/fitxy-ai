@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-9">
                         <h6 class="text-truncated">
-                            <?php echo $workout->title; ?>
+                            <?php echo $workout->user_workout_title; ?>
                         </h6>
                         <p class="text-secondary fs-14 mb-2">
                             <span class="me-1"><i class="bi bi-clock me-1"></i> <?php echo $workout->time; ?> นาที</span>

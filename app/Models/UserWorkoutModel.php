@@ -58,27 +58,45 @@ class UserWorkoutModel
         $builder = $this->db->table('user_workouts');
 
         return $builder
-            ->where('user_id', $userID) 
+            ->where('user_id', $userID)
             ->where('deleted_at', null)
             ->orderBy('created_at', 'DESC')
             ->get()
             ->getResult();
     }
-  
-    
+
+
     public function getUserWorkoutTodayByUserID($userID)
     {
+
+        // $sql = "
+        //     SELECT 
+        //         workouts.icon AS icon
+        //         user_workouts.id,
+        //         user_workouts.calories AS calories,
+        //         user_workouts.time AS time,
+        //         user_workouts.title AS title,
+        //         user_workouts.created_at 
+        //     FROM user_workouts 
+        //     JOIN workouts ON user_workouts.workout_id = workouts.id
+        //     WHERE user_workouts.user_id = '$userID' AND DATE(user_workouts.created_at) = CURDATE();
+        // ";
+
         $sql = "
             SELECT 
-                user_workouts.id,
-                user_workouts.calories AS calories,
-                user_workouts.time AS time,
-                workouts.title AS title,
-                workouts.icon AS icon
-            FROM user_workouts 
-            JOIN workouts ON user_workouts.workout_id = workouts.id
-            WHERE user_workouts.user_id = '$userID' AND DATE(user_workouts.created_at) = CURDATE();
+                workouts.id,
+                workouts.icon,
+                user_workouts.user_id,
+                user_workouts.workout_id,
+                user_workouts.title AS user_workout_title,
+                user_workouts.time,
+                user_workouts.calories,
+                user_workouts.created_at
+            FROM workouts 
+            JOIN user_workouts ON user_workouts.workout_id = workouts.id
+            WHERE user_workouts.user_id = '$userID' AND DATE(user_workouts.created_at) = CURDATE() ORDER BY user_workouts.created_at DESC;
         ";
+
 
         $builder = $this->db->query($sql);
 

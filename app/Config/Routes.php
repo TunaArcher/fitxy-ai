@@ -68,6 +68,7 @@ $routes->group('workout', ['filter' => 'userAuth'], function ($routes) {
     $routes->get('add', 'WorkoutController::add');
     $routes->post('save', 'WorkoutController::save');
     $routes->post('delete', 'WorkoutController::delete');
+    $routes->post('calculate', 'WorkoutController::calculate');
 });
 
 // -----------------------------------------------------------------------------

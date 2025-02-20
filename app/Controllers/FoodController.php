@@ -45,167 +45,167 @@ class FoodController extends BaseController
 
         try {
 
-            if (false) {
+            if (getenv('CI_ENVIRONMENT') === 'development') {
 
                 $response = [
                     'success' => 1,
                     'message' => 'สำเร็จ',
                     'data' => json_decode('{
-        "sun": {
-            "breakfast": {
-                "url": "url_to_image_sun_breakfast",
-                "menu_name": "ข้าวต้มปลากระพง",
-                "cal": "800"
-            },
-            "lunch": {
-                "url": "url_to_image_sun_lunch",
-                "menu_name": "ข้าวเหนียวไก่ย่างกับส้มตำ",
-                "cal": "1000"
-            },
-            "dinner": {
-                "url": "url_to_image_sun_dinner",
-                "menu_name": "ข้าวสวยกับแกงเขียวหวานไก่",
-                "cal": "900"
-            },
-            "snack": {
-                "url": "url_to_image_sun_snack",
-                "menu_name": "กล้วยหอมและถั่วลิสง",
-                "cal": "300"
-            }
-        },
-        "mon": {
-            "breakfast": {
-                "url": "url_to_image_mon_breakfast",
-                "menu_name": "ข้าวเหนียวหมูทอด",
-                "cal": "900"
-            },
-            "lunch": {
-                "url": "url_to_image_mon_lunch",
-                "menu_name": "ข้าวสวยกับไก่ผัดผงกะหรี่",
-                "cal": "1000"
-            },
-            "dinner": {
-                "url": "url_to_image_mon_dinner",
-                "menu_name": "สุกี้ไก่",
-                "cal": "800"
-            },
-            "snack": {
-                "url": "url_to_image_mon_snack",
-                "menu_name": "โยเกิร์ตและกราโนล่า",
-                "cal": "300"
-            }
-        },
-        "tue": {
-            "breakfast": {
-                "url": "url_to_image_tue_breakfast",
-                "menu_name": "แซนด์วิชไก่",
-                "cal": "700"
-            },
-            "lunch": {
-                "url": "url_to_image_tue_lunch",
-                "menu_name": "ข้าวผัดกุ้ง",
-                "cal": "1000"
-            },
-            "dinner": {
-                "url": "url_to_image_tue_dinner",
-                "menu_name": "ข้าวสวยกับปลาเผา",
-                "cal": "900"
-            },
-            "snack": {
-                "url": "url_to_image_tue_snack",
-                "menu_name": "ผลไม้รวม",
-                "cal": "300"
-            }
-        },
-        "wed": {
-            "breakfast": {
-                "url": "url_to_image_wed_breakfast",
-                "menu_name": "ข้าวต้มไก่",
-                "cal": "800"
-            },
-            "lunch": {
-                "url": "url_to_image_wed_lunch",
-                "menu_name": "ก๋วยเตี๋ยวไก่",
-                "cal": "900"
-            },
-            "dinner": {
-                "url": "url_to_image_wed_dinner",
-                "menu_name": "ข้าวสวยกับแกงส้มปลากะพง",
-                "cal": "900"
-            },
-            "snack": {
-                "url": "url_to_image_wed_snack",
-                "menu_name": "ชีสเค้ก",
-                "cal": "300"
-            }
-        },
-        "thu": {
-            "breakfast": {
-                "url": "url_to_image_thu_breakfast",
-                "menu_name": "โจ๊กไก่",
-                "cal": "700"
-            },
-            "lunch": {
-                "url": "url_to_image_thu_lunch",
-                "menu_name": "ข้าวผัดปลา",
-                "cal": "1000"
-            },
-            "dinner": {
-                "url": "url_to_image_thu_dinner",
-                "menu_name": "ข้าวสวยกับต้มยำไก่",
-                "cal": "900"
-            },
-            "snack": {
-                "url": "url_to_image_thu_snack",
-                "menu_name": "ขนมปังกับแยม",
-                "cal": "300"
-            }
-        },
-        "fri": {
-            "breakfast": {
-                "url": "url_to_image_fri_breakfast",
-                "menu_name": "ไข่เจียว",
-                "cal": "700"
-            },
-            "lunch": {
-                "url": "url_to_image_fri_lunch",
-                "menu_name": "ข้าวสวยกับแกงไก่",
-                "cal": "1000"
-            },
-            "dinner": {
-                "url": "url_to_image_fri_dinner",
-                "menu_name": "ชีสพาสต้า",
-                "cal": "900"
-            },
-            "snack": {
-                "url": "url_to_image_fri_snack",
-                "menu_name": "นมสด",
-                "cal": "300"
-            }
-        },
-        "sat": {
-            "breakfast": {
-                "url": "url_to_image_sat_breakfast",
-                "menu_name": "แพนเค้ก",
-                "cal": "800"
-            },
-            "lunch": {
-                "url": "url_to_image_sat_lunch",
-                "menu_name": "ข้าวสวยกับขาหมูย่าง (ใช้ไก่แทน)",
-                "cal": "1000"
-            },
-            "dinner": {
-                "url": "url_to_image_sat_dinner",
-                "menu_name": "ข้าวเย็นตาโฟ",
-                "cal": "900"
-            },
-            "snack": {
-                "url": "url_to_image_sat_snack",
-                "menu_name": "เครปผลไม้",
-                "cal": "300"
-            }
-        }
-    }', true)
+                        "sun": {
+                            "breakfast": {
+                                "url": "url_to_image_sun_breakfast",
+                                "menu_name": "ข้าวต้มปลากระพง",
+                                "cal": "800"
+                            },
+                            "lunch": {
+                                "url": "url_to_image_sun_lunch",
+                                "menu_name": "ข้าวเหนียวไก่ย่างกับส้มตำ",
+                                "cal": "1000"
+                            },
+                            "dinner": {
+                                "url": "url_to_image_sun_dinner",
+                                "menu_name": "ข้าวสวยกับแกงเขียวหวานไก่",
+                                "cal": "900"
+                            },
+                            "snack": {
+                                "url": "url_to_image_sun_snack",
+                                "menu_name": "กล้วยหอมและถั่วลิสง",
+                                "cal": "300"
+                            }
+                        },
+                        "mon": {
+                            "breakfast": {
+                                "url": "url_to_image_mon_breakfast",
+                                "menu_name": "ข้าวเหนียวหมูทอด",
+                                "cal": "900"
+                            },
+                            "lunch": {
+                                "url": "url_to_image_mon_lunch",
+                                "menu_name": "ข้าวสวยกับไก่ผัดผงกะหรี่",
+                                "cal": "1000"
+                            },
+                            "dinner": {
+                                "url": "url_to_image_mon_dinner",
+                                "menu_name": "สุกี้ไก่",
+                                "cal": "800"
+                            },
+                            "snack": {
+                                "url": "url_to_image_mon_snack",
+                                "menu_name": "โยเกิร์ตและกราโนล่า",
+                                "cal": "300"
+                            }
+                        },
+                        "tue": {
+                            "breakfast": {
+                                "url": "url_to_image_tue_breakfast",
+                                "menu_name": "แซนด์วิชไก่",
+                                "cal": "700"
+                            },
+                            "lunch": {
+                                "url": "url_to_image_tue_lunch",
+                                "menu_name": "ข้าวผัดกุ้ง",
+                                "cal": "1000"
+                            },
+                            "dinner": {
+                                "url": "url_to_image_tue_dinner",
+                                "menu_name": "ข้าวสวยกับปลาเผา",
+                                "cal": "900"
+                            },
+                            "snack": {
+                                "url": "url_to_image_tue_snack",
+                                "menu_name": "ผลไม้รวม",
+                                "cal": "300"
+                            }
+                        },
+                        "wed": {
+                            "breakfast": {
+                                "url": "url_to_image_wed_breakfast",
+                                "menu_name": "ข้าวต้มไก่",
+                                "cal": "800"
+                            },
+                            "lunch": {
+                                "url": "url_to_image_wed_lunch",
+                                "menu_name": "ก๋วยเตี๋ยวไก่",
+                                "cal": "900"
+                            },
+                            "dinner": {
+                                "url": "url_to_image_wed_dinner",
+                                "menu_name": "ข้าวสวยกับแกงส้มปลากะพง",
+                                "cal": "900"
+                            },
+                            "snack": {
+                                "url": "url_to_image_wed_snack",
+                                "menu_name": "ชีสเค้ก",
+                                "cal": "300"
+                            }
+                        },
+                        "thu": {
+                            "breakfast": {
+                                "url": "url_to_image_thu_breakfast",
+                                "menu_name": "โจ๊กไก่",
+                                "cal": "700"
+                            },
+                            "lunch": {
+                                "url": "url_to_image_thu_lunch",
+                                "menu_name": "ข้าวผัดปลา",
+                                "cal": "1000"
+                            },
+                            "dinner": {
+                                "url": "url_to_image_thu_dinner",
+                                "menu_name": "ข้าวสวยกับต้มยำไก่",
+                                "cal": "900"
+                            },
+                            "snack": {
+                                "url": "url_to_image_thu_snack",
+                                "menu_name": "ขนมปังกับแยม",
+                                "cal": "300"
+                            }
+                        },
+                        "fri": {
+                            "breakfast": {
+                                "url": "url_to_image_fri_breakfast",
+                                "menu_name": "ไข่เจียว",
+                                "cal": "700"
+                            },
+                            "lunch": {
+                                "url": "url_to_image_fri_lunch",
+                                "menu_name": "ข้าวสวยกับแกงไก่",
+                                "cal": "1000"
+                            },
+                            "dinner": {
+                                "url": "url_to_image_fri_dinner",
+                                "menu_name": "ชีสพาสต้า",
+                                "cal": "900"
+                            },
+                            "snack": {
+                                "url": "url_to_image_fri_snack",
+                                "menu_name": "นมสด",
+                                "cal": "300"
+                            }
+                        },
+                        "sat": {
+                            "breakfast": {
+                                "url": "url_to_image_sat_breakfast",
+                                "menu_name": "แพนเค้ก",
+                                "cal": "800"
+                            },
+                            "lunch": {
+                                "url": "url_to_image_sat_lunch",
+                                "menu_name": "ข้าวสวยกับขาหมูย่าง (ใช้ไก่แทน)",
+                                "cal": "1000"
+                            },
+                            "dinner": {
+                                "url": "url_to_image_sat_dinner",
+                                "menu_name": "ข้าวเย็นตาโฟ",
+                                "cal": "900"
+                            },
+                            "snack": {
+                                "url": "url_to_image_sat_snack",
+                                "menu_name": "เครปผลไม้",
+                                "cal": "300"
+                            }
+                        }
+                    }', true)
                 ];
 
                 $status = 200;
@@ -225,7 +225,7 @@ class FoodController extends BaseController
 
             // รับข้อมูล JSON จาก Request
             $data = $this->request->getJSON();
-            $query = $data->query;
+            $query = $data->description;
 
             $gender = session()->get('user')->gender;
             $age = session()->get('user')->age;

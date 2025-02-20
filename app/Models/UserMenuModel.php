@@ -71,7 +71,7 @@ class UserMenuModel
         $sql = "
             SELECT * 
             FROM user_menus 
-            WHERE user_id = '$userID' AND DATE(created_at) = CURDATE();
+            WHERE user_id = '$userID' AND DATE(created_at) = CURDATE() ORDER BY created_at DESC;
         ";
 
         $builder = $this->db->query($sql);

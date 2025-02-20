@@ -31,29 +31,42 @@ class TestController extends BaseController
         $this->userWorkoutModel = new UserWorkoutModel();
     }
 
-    public function index()
+    // public function index()
+    // {
+    //     $chatGPT = new ChatGPT(['GPTToken' => getenv('GPT_TOKEN')]);
+    //     $question = 'เมื่อกี้ฉันถามว่าอะไรนะ';
+    //     $messageSetting = 'บทสนทนานี้มุ่งเน้นไปที่การออกแบบและงานก่อสร้างในยุคปัจจุบันที่ขับเคลื่อนด้วยเทคโนโลยี คุณต้องการให้ฉันให้ข้อมูล คำแนะนำ หรือหารือเกี่ยวกับการใช้เทคโนโลยีใดในงานออกแบบและก่อสร้างปี 2024? เช่น การใช้ซอฟต์แวร์ CAD ล่าสุด การสร้างแบบจำลอง 3 มิติ ด้วย BIM หรือการใช้อุปกรณ์ IoT ในการจัดการไซต์ก่อสร้าง?';
+    //     $messageRoom = $this->messageRoomModel->getMessageRoomByID('121');
+    //     $messages = $this->messageModel->getHistoryMessageByRoomID($messageRoom->id, 4);
+
+    //     $fileNames = 'https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line/line_67a5f8154d0fc.jpg,https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line/line_67a5f83269382.jpg,';
+
+    //     $test = array_map(function ($fileName) {
+    //         return [
+    //             'type' => 'image_url',
+    //             'image_url' => ['url' => trim($fileName)]
+    //         ];
+    //     }, explode(',', $fileNames));
+
+    //     px($test);
+
+    //     echo $chatGPT->askChatGPT($messageRoom->id, $question, $messageSetting);
+    // }
+
+    public function test()
     {
         $chatGPT = new ChatGPT(['GPTToken' => getenv('GPT_TOKEN')]);
         $question = 'เมื่อกี้ฉันถามว่าอะไรนะ';
         $messageSetting = 'บทสนทนานี้มุ่งเน้นไปที่การออกแบบและงานก่อสร้างในยุคปัจจุบันที่ขับเคลื่อนด้วยเทคโนโลยี คุณต้องการให้ฉันให้ข้อมูล คำแนะนำ หรือหารือเกี่ยวกับการใช้เทคโนโลยีใดในงานออกแบบและก่อสร้างปี 2024? เช่น การใช้ซอฟต์แวร์ CAD ล่าสุด การสร้างแบบจำลอง 3 มิติ ด้วย BIM หรือการใช้อุปกรณ์ IoT ในการจัดการไซต์ก่อสร้าง?';
-        $messageRoom = $this->messageRoomModel->getMessageRoomByID('121');
+        $messageRoom = $this->messageRoomModel->getMessageRoomByID('27');
         $messages = $this->messageModel->getHistoryMessageByRoomID($messageRoom->id, 4);
 
-        $fileNames = 'https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line/line_67a5f8154d0fc.jpg,https://autoconx.sgp1.digitaloceanspaces.com/uploads/img/line/line_67a5f83269382.jpg,';
 
-        $test = array_map(function ($fileName) {
-            return [
-                'type' => 'image_url',
-                'image_url' => ['url' => trim($fileName)]
-            ];
-        }, explode(',', $fileNames));
-
-        px($test);
-
-        echo $chatGPT->askChatGPT($messageRoom->id, $question, $messageSetting);
+        echo $chatGPT->askChatGPT($messageRoom->id, $question);
+        exit();
     }
 
-    public function test()
+    public function _test()
     {
         // $input = 'text';
 

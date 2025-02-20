@@ -290,6 +290,12 @@ class ChatGPT
                 'json' => [
                     'model' => $model,
                     'messages' => $messages,
+                    "temperature" => 1.0, // ควบคุมความสร้างสรรค์
+                    "max_tokens" => 2048, // จำกัดความยาวของข้อความที่ตอบกลับ
+                    "top_p" => 1.0, // ใช้ค่าความน่าจะเป็นสูงสุด
+                    "frequency_penalty" => 0.0, // ไม่ปรับแต่งการใช้คำซ้ำ
+                    "presence_penalty" => 0.0, // ไม่ปรับแต่งการเพิ่มคำใหม่
+                    "response_format" => "text" // ตั้งค่าให้ตรงกับ Playground
                 ]
             ]);
 

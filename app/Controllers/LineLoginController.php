@@ -67,39 +67,41 @@ class LineLoginController extends Controller
             session()->set('user', $user);
             session()->set('isUserLoggedIn', true);
 
-            // ตรวจสอบว่ามี invite_code ใน session หรือไม่
-            $inviteCode = session()->get('invite_code');
+            if (session()->has('invite_code')) {
 
-            // แก้บัคเจ้าของลิงก์คลิกเอง
-            if ($inviteCode == $user->id) return redirect()->to('/');
+                // ตรวจสอบว่ามี invite_code ใน session หรือไม่
+                $inviteCode = session()->get('invite_code');
 
-            // แก้บัคเข้าแล้วเข้าอีก
-            $alreadyFriend = $this->friendModel->getAlreadyFriend($user->id, $inviteCode);
-            if ($alreadyFriend) return redirect()->to('/');
+                // แก้บัคเจ้าของลิงก์คลิกเอง
+                if ($inviteCode == $user->id) return redirect()->to('/');
 
-            if ($inviteCode != $user->id) {
+                // แก้บัคเข้าแล้วเข้าอีก
+                $alreadyFriend = $this->friendModel->getAlreadyFriend($user->id, $inviteCode);
+                if ($alreadyFriend) return redirect()->to('/');
 
-                $friendID = $inviteCode;
+                if ($inviteCode != $user->id) {
 
-                // หากมี invite_code แสดงว่ามาจากคำเชิญ ให้ redirect ไปหน้า /friends
+                    $friendID = $inviteCode;
 
-                $this->friendModel->insertFriend([
-                    'user_id' => $user->id,
-                    'friend_id' => $friendID,
-                ]);
+                    // หากมี invite_code แสดงว่ามาจากคำเชิญ ให้ redirect ไปหน้า /friends
 
-                $this->friendModel->insertFriend([
-                    'user_id' => $friendID,
-                    'friend_id' => $user->id,
-                ]);
+                    $this->friendModel->insertFriend([
+                        'user_id' => $user->id,
+                        'friend_id' => $friendID,
+                    ]);
 
-                session()->remove('invite_code'); // ล้าง session
+                    $this->friendModel->insertFriend([
+                        'user_id' => $friendID,
+                        'friend_id' => $user->id,
+                    ]);
 
-                return redirect()->to('/');
+                    session()->remove('invite_code'); // ล้าง session
+
+                    return redirect()->to('/');
+                }
             }
 
             // ถ้าไม่มี invite_code ให้ไปหน้าแรก
-
             return redirect()->to('/');
         }
 

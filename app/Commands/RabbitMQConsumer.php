@@ -85,6 +85,7 @@ class RabbitMQConsumer extends BaseCommand
     //     $handler->handleReplyByAI($UID, $messageRoom);
     // }
 
+
     private function processAIResponse($UID, $messageRoom)
     {
         helper('my_hashids');
@@ -93,45 +94,55 @@ class RabbitMQConsumer extends BaseCommand
         $messageRoomID = $messageRoom->id;
 
         $messageModel = new MessageModel();
-
-        // ตรวจสอบและรีเชื่อมต่อหากจำเป็น
         $db = \Config\Database::connect();
-        if (!$db->simpleQuery('SELECT 1')) {
-            log_message('error', 'Database connection lost. Reconnecting...');
-            $db->reconnect();
+
+        try {
+            // ตรวจสอบ Connection ก่อนใช้
+            if (!$db->simpleQuery('SELECT 1')) {
+                log_message('error', 'Database connection lost. Reconnecting...');
+                $db->close();
+                $db = \Config\Database::connect(true);
+            }
+        } catch (\Throwable $e) {
+            log_message('error', 'Database check error: ' . $e->getMessage());
+            $db->close();
+            $db = \Config\Database::connect(true);
         }
 
-        // ดึงข้อความล่าสุดของห้องแชท
         $lastContextTimestamp = $messageModel->lastContextTimestamp($messageRoomID);
-
         if (!$lastContextTimestamp) return;
 
-        // ใช้วิธีตรวจสอบระยะเวลาผ่าน Timestamp แทนการ sleep()
         $timeoutStart = time();
         $timeoutSeconds = 5;
 
         do {
-            sleep(1); // ลดภาระ CPU โดยใช้ sleep น้อย ๆ
+            usleep(500000); // 0.5 วินาที เพื่อลดภาระ CPU
 
-            // ตรวจสอบ Connection ก่อน Query
-            if (!$db->simpleQuery('SELECT 1')) {
-                log_message('error', 'Database connection lost during waiting. Reconnecting...');
-                $db->reconnect();
+            try {
+                if (!$db->simpleQuery('SELECT 1')) {
+                    log_message('error', 'Database connection lost during waiting. Reconnecting...');
+                    $db->close();
+                    $db = \Config\Database::connect(true);
+                }
+            } catch (\Throwable $e) {
+                log_message('error', 'Database check error: ' . $e->getMessage());
+                $db->close();
+                $db = \Config\Database::connect(true);
             }
 
-            // ตรวจสอบว่ามีข้อความใหม่หรือไม่
             $newContextCount = $messageModel->newContextCount($messageRoomID, $lastContextTimestamp->_time);
-
             log_message('info', "Debug lastContextTimestamp {$lastContextTimestamp->_time} newContextCount: " . json_encode($newContextCount, JSON_PRETTY_PRINT));
 
             if ($newContextCount->_count > 0) {
                 log_message('info', "Message arrived during timeout, skipping AI response.");
-                return; // ถ้ามีข้อความใหม่ ให้รอไปก่อน
+                return;
             }
         } while (time() - $timeoutStart < $timeoutSeconds);
 
-        // AI ตอบ และ ลบบริบทหลังจากใช้งาน
         $handler = new LineHandler();
         $handler->handleReplyByAI($UID, $messageRoom);
+
+        // ปิดการเชื่อมต่อ Database เมื่อใช้เสร็จ
+        $db->close();
     }
 }

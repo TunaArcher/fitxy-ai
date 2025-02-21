@@ -52,30 +52,30 @@
       </div>
       <div class="list-group adminuiux-list-group">
         <a
-          class="list-group-item list-group-item-action disabled"
+          class="list-group-item list-group-item-action"
           href="<?php echo base_url('/friends/' . session()->get('user')->id); ?>">
           <div class="row gx-0">
             <div class="col align-self-center">
               <i data-feather="layout" class="avatar avatar-18 me-1"></i> เพื่อนของฉัน
             </div>
             <?php
-// กำหนดจำนวนที่จะแสดงก่อนขึ้น "+x"
-$maxDisplay = 4;
-$extraCount = count($friends) - $maxDisplay;
-?>
+              // กำหนดจำนวนที่จะแสดงก่อนขึ้น "+x"
+              $maxDisplay = 4;
+              $extraCount = count($friends) - $maxDisplay;
+            ?>
             <div class="col-auto avatar-group">
-    <?php foreach (array_slice($friends, 0, $maxDisplay) as $friend): ?>
-        <figure class="avatar avatar-20 coverimg rounded-circle">
-            <img src="<?= htmlspecialchars($friend->profile) ?>" alt="User <?= $friend->id; ?>" />
-        </figure>
-    <?php endforeach; ?>
+              <?php foreach (array_slice($friends, 0, $maxDisplay) as $friend): ?>
+                <figure class="avatar avatar-20 coverimg rounded-circle">
+                  <img src="<?= htmlspecialchars($friend->profile) ?>" alt="User <?= $friend->id; ?>" />
+                </figure>
+              <?php endforeach; ?>
 
-    <?php if ($extraCount > 0): ?>
-        <div class="avatar avatar-20 bg-theme-1 rounded-circle text-center align-middle">
-            <small class="fs-10 align-middle"><?= $extraCount ?>+</small>
-        </div>
-    <?php endif; ?>
-</div>
+              <?php if ($extraCount > 0): ?>
+                <div class="avatar avatar-20 bg-theme-1 rounded-circle text-center align-middle">
+                  <small class="fs-10 align-middle"><?= $extraCount ?>+</small>
+                </div>
+              <?php endif; ?>
+            </div>
           </div>
         </a><a
           class="list-group-item list-group-item-action disabled"

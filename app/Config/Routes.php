@@ -43,6 +43,9 @@ $routes->get('/logout', 'HomeController::logout');
 
 $routes->get('/callback', 'LineLoginController::callback');
 
+$routes->get('/lets/go/(:any)/(:any)', 'FriendController::letsGo/$1/$2');
+$routes->get('/friends/ok/(:any)', 'FriendController::ok/$1');
+
 // -----------------------------------------------------------------------------
 // Calculate
 // -----------------------------------------------------------------------------
@@ -80,6 +83,24 @@ $routes->group('food', ['filter' => 'userAuth'], function ($routes) {
     $routes->post('generate', 'FoodController::foodGenerate');
     $routes->post('saveTable', 'FoodController::saveTable');
 });
+
+// -----------------------------------------------------------------------------
+// Profile
+// -----------------------------------------------------------------------------
+
+$routes->group('profile', ['filter' => 'userAuth'], function ($routes) {
+    $routes->get('/', 'ProfileController::index');
+});
+
+// -----------------------------------------------------------------------------
+// Friends
+// -----------------------------------------------------------------------------
+
+$routes->group('friends', ['filter' => 'userAuth'], function ($routes) {
+    $routes->get('/', 'FriendController::index');
+    $routes->get('(:any)', 'FriendController::show/$1');
+});
+
 
 // -----------------------------------------------------------------------------
 // Webhook

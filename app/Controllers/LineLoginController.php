@@ -2,17 +2,20 @@
 
 namespace App\Controllers;
 
+use App\Models\FriendModel;
 use App\Models\userModel;
 use CodeIgniter\Controller;
 
 class LineLoginController extends Controller
 {
 
+    private FriendModel $friendModel;
     private userModel $userModel;
 
     public function __construct()
     {
         $this->userModel = new userModel();
+        $this->friendModel = new FriendModel();
     }
 
     public function callback()
@@ -60,9 +63,42 @@ class LineLoginController extends Controller
         $user = $this->getOrCreateUser($userInfo);
 
         if ($user) {
-            
+
             session()->set('user', $user);
             session()->set('isUserLoggedIn', true);
+
+            // ตรวจสอบว่ามี invite_code ใน session หรือไม่
+            $inviteCode = session()->get('invite_code');
+
+            // แก้บัคเจ้าของลิงก์คลิกเอง
+            if ($inviteCode == $user->id) return redirect()->to('/');
+
+            // แก้บัคเข้าแล้วเข้าอีก
+            $alreadyFriend = $this->friendModel->getAlreadyFriend($user->id, $inviteCode);
+            if ($alreadyFriend) return redirect()->to('/');
+
+            if ($inviteCode != $user->id) {
+
+                $friendID = $inviteCode;
+
+                // หากมี invite_code แสดงว่ามาจากคำเชิญ ให้ redirect ไปหน้า /friends
+
+                $this->friendModel->insertFriend([
+                    'user_id' => $user->id,
+                    'friend_id' => $friendID,
+                ]);
+
+                $this->friendModel->insertFriend([
+                    'user_id' => $friendID,
+                    'friend_id' => $user->id,
+                ]);
+
+                session()->remove('invite_code'); // ล้าง session
+
+                return redirect()->to('/');
+            }
+
+            // ถ้าไม่มี invite_code ให้ไปหน้าแรก
 
             return redirect()->to('/');
         }

@@ -112,8 +112,6 @@
 
                   <?php
 
-
-
                   if (session()->get('user')->cal_per_day > session()->get('user')->maintenanceCal) {
                     $arr = [
                       "ทานอาหารเพิ่มอีกหน่อยนะ! 🍛",
@@ -237,11 +235,15 @@
       <div class="row">
         <div class="col-12">
           <div class="row gx-3">
+
             <div class="col-6">
               <a href="<?php echo base_url('/calculate'); ?>">
-                <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">
+                <div class="card adminuiux-card border-0 height-150 mb-3 overflow-hidden hover-action">
+                  <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg z-index-0" style="background-image: url(&quot;assets/img/fitness/image-10.jpg&quot;);">
+                    <img src="<?php echo base_url('/assets/img/dashboard/tdee.png'); ?>" alt="" style="display: none;">
+                  </figure>
                   <div class="card-body position-relative">
-                    <h4 class="mb-0">คำนวน</h4>
+                    <h4 class="mb-0">คำนวน TEDD</h4>
                     <p class="opacity-75 mb-4">TEDD</p>
                   </div>
                 </div>
@@ -252,7 +254,7 @@
               <a href="<?php echo base_url('/menu'); ?>">
                 <div class="card adminuiux-card border-0 height-150 mb-3 overflow-hidden hover-action">
                   <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg z-index-0" style="background-image: url(&quot;assets/img/fitness/image-10.jpg&quot;);">
-                    <img src="assets/img/fitness/image-10.jpg" alt="" style="display: none;">
+                    <img src="<?php echo base_url('/assets/img/dashboard/eat.png'); ?>" alt="" style="display: none;">
                   </figure>
                   <div class="card-body position-relative">
                     <h4 class="mb-0">การกิน</h4>
@@ -266,7 +268,7 @@
               <a href="<?php echo base_url('/workout'); ?>">
                 <div class="card adminuiux-card border-0 height-150 mb-3 overflow-hidden hover-action">
                   <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg z-index-0" style="background-image: url(&quot;assets/img/modern-ai-image/user-4.jpg&quot;);">
-                    <img src="assets/img/modern-ai-image/user-4.jpg" alt="" style="display: none;">
+                    <img src="<?php echo base_url('/assets/img/dashboard/workout.png'); ?>" alt="" style="display: none;">
                   </figure>
                   <div class="card-body position-relative">
                     <h4 class="mb-0">ออกกำลังกาย</h4>
@@ -278,7 +280,10 @@
 
             <div class="col-6">
               <a href="<?php echo base_url('/food/table'); ?>">
-                <div class="card adminuiux-card border-0 height-150 bg-theme-l-gradient mb-3 hover-action">
+                <div class="card adminuiux-card border-0 height-150 mb-3 overflow-hidden hover-action">
+                  <figure class="position-absolute start-0 top-0 w-100 h-100 coverimg z-index-0" style="background-image: url(&quot;assets/img/modern-ai-image/user-4.jpg&quot;);">
+                    <img src="<?php echo base_url('/assets/img/dashboard/table.png'); ?>" alt="" style="display: none;">
+                  </figure>
                   <div class="card-body position-relative">
                     <h4 class="mb-0">ตารางอาหาร</h4>
                     <p class="opacity-75 mb-4">กำหนดตารางอาชีพจากมืออาชีพโดย <span class="badge badge-light text-bg-theme-1 theme-black">🤖 AI</span></p>
@@ -286,6 +291,7 @@
                 </div>
               </a>
             </div>
+
           </div>
         </div>
       </div>

@@ -138,19 +138,21 @@
                         </svg>
                         <span class="nav-text">ออกกำลังกาย</span></span></a>
             </li>
-            <!-- <li class="nav-item disabled">
+            <li class="nav-item disabled">
                 <a class="nav-link" href="<?php echo base_url('4'); ?>"><span><i class="nav-icon bi bi-graph-up-arrow"></i>
                         <span class="nav-text">วิเคราะห์</span></span></a>
             </li>
-            <li class="nav-item disabled">
-                <a class="nav-link" href="<?php echo base_url('5'); ?>"><span>
+            <li class="nav-item">
+                <a class="nav-link" href="<?php echo base_url('/profile'); ?>">
+                    <span>
                         <figure
                             class="avatar avatar-20 rounded-circle coverimg align-middle mb-2">
                             <img src="<?php echo session()->get('user')->profile; ?>" alt="" />
                         </figure>
-                        <br /><span class="nav-text">ตั้งค่า</span>
-                    </span></a>
-            </li> -->
+                        <br /><span class="nav-text">หาเพื่อนร่วมฟิต</span>
+                    </span>
+                </a>
+            </li>
         </ul>
     </div>
 </footer>

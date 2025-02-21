@@ -106,6 +106,6 @@ class FriendController extends BaseController
 
         session()->set('invite_code', $inviteCode);
 
-        $this->Auth();
+        return redirect()->to($this->Auth());
     }
 }

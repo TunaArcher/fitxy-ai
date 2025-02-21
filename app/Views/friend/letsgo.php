@@ -5,7 +5,18 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <title>APP</title>
+  <title>FitXy-AI | APP</title>
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="ฟิตสิ- แอปพลิเคชันเพื่อคนรักสุขภาพที่ดีที่สุด">
+  <meta property="og:description" content="ร่วมออกกำลังกายกับเพื่อน ๆ และค้นหาคลับออกกำลังกายที่ใช่สำหรับคุณ">
+  <!-- <meta property="og:image" content="<?php echo base_url('/assets/images/preview.jpg'); ?>"> -->
+  <meta property="og:url" content="<?php echo current_url(); ?>">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ฟิตสิเพื่อน">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ฟิตสิเพื่อน - แอปพลิเคชันฟิตเนสที่ดีที่สุด">
+  <meta name="twitter:description" content="ร่วมออกกำลังกายกับเพื่อน ๆ และค้นหาคลับออกกำลังกายที่ใช่สำหรับคุณ">
+  <meta name="twitter:image" content="<?php echo base_url('/assets/images/preview.jpg'); ?>">
   <link rel="shortcut icon" href="<?php echo base_url('/assets/images/logo72x72.png'); ?>">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

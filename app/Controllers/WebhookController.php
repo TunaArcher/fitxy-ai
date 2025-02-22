@@ -66,7 +66,7 @@ class WebhookController extends BaseController
     //     }
     // }
 
-        public function webhook($slug)
+    public function webhook($slug)
     {
         $input = $this->request->getJSON();
 

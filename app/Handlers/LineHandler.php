@@ -127,6 +127,10 @@ class LineHandler
             'channelSecret' =>  $this->account->line_channel_secret,
         ]);
 
+        log_message('info', "ข้อความตอบกลับจาก GPT  " . json_encode($repyleMessage, JSON_PRETTY_PRINT));
+
+        $repyleMessage = $this->extractJsonFromText($repyleMessage);
+
         $this->messageModel->insertMessage([
             'room_id' => $messageRoom->id,
             'send_by' => 'ADMIN',
@@ -438,6 +442,28 @@ class LineHandler
                 'carbohydrates' => $carbohydrates
             ]
         ];
+    }
+
+    private function extractJsonFromText($text)
+    {
+        // ลบโค้ดบล็อก JSON ออกถ้ามี
+        $text = preg_replace('/```json\s*([\s\S]+?)\s*```/', '$1', $text);
+
+        // ใช้ regex ค้นหา JSON
+        preg_match('/\{.*\}/s', $text, $matches);
+
+        if (!empty($matches)) {
+            $json = trim($matches[0]);
+
+            // ตรวจสอบว่าเป็น JSON ที่ถูกต้องหรือไม่
+            json_decode($json);
+            if (json_last_error() == JSON_ERROR_NONE) {
+                return $json;
+            }
+        }
+
+        // ถ้าไม่พบ JSON ที่ถูกต้อง ให้คืนข้อความเดิม
+        return $text;
     }
 
     private function getMockLineWebhookData()

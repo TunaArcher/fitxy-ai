@@ -263,6 +263,137 @@ document.addEventListener("DOMContentLoaded", function () {
   showStep(currentStep);
 });
 
+// function calculateTDEE(formData) {
+//   let gender = formData.gender;
+//   let age = formData.age;
+//   let weight = formData.weight;
+//   let height = formData.height;
+//   let activity = 0;
+
+//   switch (formData.exercise) {
+//     // ไม่ออกกำลังกายเลยหรือน้อยมาก
+//     case "Sedentary":
+//       activity = 1.2;
+//       break;
+
+//     // ออกกำลังกายเบา ๆ 1-3 ครั้ง/สัปดาห์
+//     case "Lightly Active":
+//       activity = 1.375;
+//       break;
+
+//     // ออกกำลังกายระดับปานกลาง 4-5 ครั้ง/สัปดาห์
+//     case "Moderately Active":
+//       activity = 1.55;
+//       break;
+
+//     // ออกกำลังกายทุกวันหรือหนัก 3-4 ครั้ง/สัปดาห์
+//     case "Very Active":
+//       activity = 1.725;
+//       break;
+
+//     // ออกกำลังกายหนักมากทุกวันหรือทำงานหนัก
+//     case "Athlete":
+//       activity = 2.2;
+//       break;
+//   }
+
+//   let bmr =
+//     gender === "male"
+//       ? 10 * weight + 6.25 * height - 5 * age + 5
+//       : 10 * weight + 6.25 * height - 5 * age - 161;
+
+//   tdee = bmr * activity;
+
+//   document.getElementById("tdee-result").innerHTML = `<strong>${Math.round(
+//     tdee
+//   )} แคลอรี่ต่อวัน</strong>`;
+
+//   goals = {
+//     ลดน้ำหนักอย่างมาก: {
+//       cal: tdee - 1000,
+//       weight: -1,
+//       badge: "badge badge-light text-bg-danger",
+//     },
+//     ลดน้ำหนัก: {
+//       cal: tdee - 500,
+//       weight: -0.5,
+//       badge: "badge badge-light text-bg-warning",
+//     },
+//     ลดน้ำหนักเล็กน้อย: {
+//       cal: tdee - 250,
+//       weight: -0.25,
+//       badge: "badge badge-light text-bg-success",
+//     },
+//     รักษาน้ำหนัก: {
+//       cal: tdee,
+//       weight: 0,
+//       badge: "badge badge-light text-bg-secondary",
+//     },
+//     เพิ่มน้ำหนักเล็กน้อย: {
+//       cal: tdee + 250,
+//       weight: 0.25,
+//       badge: "badge badge-light text-bg-success",
+//     },
+//     เพิ่มน้ำหนัก: {
+//       cal: tdee + 500,
+//       weight: 0.5,
+//       badge: "badge badge-light text-bg-warning",
+//     },
+//     เพิ่มน้ำหนักอย่างมาก: {
+//       cal: tdee + 1000,
+//       weight: 1,
+//       badge: "badge badge-light text-bg-danger",
+//     },
+//   };
+
+//   let wrapperResultTdee = document.getElementById("wrapper-result-tdee");
+//   wrapperResultTdee.style.display = "block";
+
+//   Object.keys(goals).forEach((goal, index) => {
+//     let percentage = ((goals[goal].cal / tdee) * 100).toFixed(0);
+//     let target = `${goal} ${goals[goal].weight} กิโล/อาทิตย์`;
+//     let gradientClass = `bg-gradient-${index + 1}`; // เปลี่ยนเลขต่อท้าย
+
+//     let html = `
+//     <div class="card adminuiux-card border-0 ${gradientClass} mt-2">
+//         <div class="card-body">
+//             <div class="row">
+//                 <div class="col-4">
+//                     <figure class="height-90 w-100 rounded coverimg mb-0" style="background-image: url(&quot;assets/img/fitness/image-${
+//                       index + 1
+//                     }.jpg&quot;);">
+//                         <img src="assets/img/fitness/image-${
+//                           index + 1
+//                         }.jpg" alt="" style="display: none;">
+//                     </figure>
+//                     </div>
+//                     <div class="col-8">
+//                     <h6 class="text-truncated"><span class="${
+//                       goals[goal].badge
+//                     }">${goal}</span> | ${Math.round(
+//       goals[goal].cal
+//     )} แคล/วัน</h6>
+//                     <p class="text-secondary fs-14 mb-2">
+//                         <span class="me-1"><i class="bi bi-clock me-1"></i> ${
+//                           goals[goal].weight
+//                         } กิโล/อาทิตย์</span>
+//                         <span class="me-1"><i class="bi bi-fire me-1"></i> ${percentage}%</span>
+//                     </p>
+//                     <button class="btn btn-sm btn-primary w-100 btn-select-target" data-title="${target}" data-cal="${Math.round(
+//       goals[goal].cal
+//     )}">
+//                         <i class="bi bi-play me-1"></i> เลือก
+//                     </button>
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+//     `;
+
+//     wrapperResultTdee.innerHTML += html;
+//   });
+// }
+
 function calculateTDEE(formData) {
   let gender = formData.gender;
   let age = formData.age;
@@ -270,98 +401,93 @@ function calculateTDEE(formData) {
   let height = formData.height;
   let activity = 0;
 
+  // ใช้ lifestyle แทน exercise
   switch (formData.exercise) {
-    // ไม่ออกกำลังกายเลยหรือน้อยมาก
-    case "Sedentary":
+    case "Office-Based":
       activity = 1.2;
       break;
-
-    // ออกกำลังกายเบา ๆ 1-3 ครั้ง/สัปดาห์
-    case "Lightly Active":
+    case "Active Commuter":
       activity = 1.375;
       break;
-
-    // ออกกำลังกายระดับปานกลาง 4-5 ครั้ง/สัปดาห์
-    case "Moderately Active":
+    case "Active & Health":
       activity = 1.55;
       break;
-
-    // ออกกำลังกายทุกวันหรือหนัก 3-4 ครั้ง/สัปดาห์
-    case "Very Active":
-      activity = 1.725;
+    case "High-Performance":
+      activity = 1.9;
       break;
-
-    // ออกกำลังกายหนักมากทุกวันหรือทำงานหนัก
-    case "Athlete":
-      activity = 2.2;
+    case "Athlete & High-Intensity":
+      activity = 2.4;
       break;
+    default:
+      activity = 1.2; // เผื่อกรณีไม่มีค่า
   }
 
+  // คำนวณ BMR ตามเพศ
   let bmr =
     gender === "male"
       ? 10 * weight + 6.25 * height - 5 * age + 5
       : 10 * weight + 6.25 * height - 5 * age - 161;
 
-  tdee = bmr * activity;
+  // คำนวณ TDEE
+  let tdee = bmr * activity;
 
   document.getElementById("tdee-result").innerHTML = `<strong>${Math.round(
     tdee
   )} แคลอรี่ต่อวัน</strong>`;
 
+  // ตั้งเป้าหมายแคลอรี่สำหรับลด/เพิ่มน้ำหนัก
   goals = {
     ลดน้ำหนักอย่างมาก: {
       cal: tdee - 1000,
       weight: -1,
-      badge: "badge badge-light text-bg-danger",
+      badge: "badge text-bg-danger",
     },
     ลดน้ำหนัก: {
       cal: tdee - 500,
       weight: -0.5,
-      badge: "badge badge-light text-bg-warning",
+      badge: "badge text-bg-warning",
     },
     ลดน้ำหนักเล็กน้อย: {
       cal: tdee - 250,
       weight: -0.25,
-      badge: "badge badge-light text-bg-success",
+      badge: "badge text-bg-success",
     },
-    รักษาน้ำหนัก: {
-      cal: tdee,
-      weight: 0,
-      badge: "badge badge-light text-bg-secondary",
-    },
+    รักษาน้ำหนัก: { cal: tdee, weight: 0, badge: "badge text-bg-secondary" },
     เพิ่มน้ำหนักเล็กน้อย: {
       cal: tdee + 250,
       weight: 0.25,
-      badge: "badge badge-light text-bg-success",
+      badge: "badge text-bg-success",
     },
     เพิ่มน้ำหนัก: {
       cal: tdee + 500,
       weight: 0.5,
-      badge: "badge badge-light text-bg-warning",
+      badge: "badge text-bg-warning",
     },
     เพิ่มน้ำหนักอย่างมาก: {
       cal: tdee + 1000,
       weight: 1,
-      badge: "badge badge-light text-bg-danger",
+      badge: "badge text-bg-danger",
     },
   };
 
   let wrapperResultTdee = document.getElementById("wrapper-result-tdee");
   wrapperResultTdee.style.display = "block";
+  wrapperResultTdee.innerHTML = ""; // ล้างค่าก่อนแสดงใหม่
 
+  // แสดงผลลัพธ์เป้าหมาย
   Object.keys(goals).forEach((goal, index) => {
     let percentage = ((goals[goal].cal / tdee) * 100).toFixed(0);
     let target = `${goal} ${goals[goal].weight} กิโล/อาทิตย์`;
-    let gradientClass = `bg-gradient-${index + 1}`; // เปลี่ยนเลขต่อท้าย
+    let gradientClass = `bg-gradient-${index + 1}`;
 
     let html = `
     <div class="card adminuiux-card border-0 ${gradientClass} mt-2">
         <div class="card-body">
             <div class="row">
                 <div class="col-4">
-                    <figure class="height-90 w-100 rounded coverimg mb-0" style="background-image: url(&quot;assets/img/fitness/image-${
+                    <figure class="height-90 w-100 rounded coverimg mb-0" style="background-image: url('assets/img/fitness/image-${
                       index + 1
-                    }.jpg&quot;);">
+                    }.jpg');">
                         <img src="assets/img/fitness/image-${
                           index + 1
                         }.jpg" alt="" style="display: none;">
@@ -402,6 +528,7 @@ $wrapperResultTdee.on("click", ".btn-select-target", function () {
   formData.target = $me.data("title");
   formData.calPerDay = $me.data("cal");
 
+  console.log(goals["รักษาน้ำหนัก"].cal);
   // เพิ่มค่า cal สำหรับการรักษาน้ำหนัก
   formData.maintenanceCal = goals["รักษาน้ำหนัก"].cal;
 

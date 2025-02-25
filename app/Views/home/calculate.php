@@ -191,10 +191,10 @@
   .social-txt,
   .activity-details h3 {
     /* color: var(--4, #12151C); */
-    font-size: 18px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 700;
-    line-height: 24px;
+    /* line-height: 24px; */
   }
 
   .activity-details p {
@@ -205,7 +205,7 @@
   .account-back span,
   .activity-details p {
     color: var(--5, #555658);
-    font-size: 14px;
+    font-size: 12px;
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
@@ -338,16 +338,16 @@
         </div>
         <!-- Step 5: เลือกระดับการออกกำลังกาย (ใช้ Option) -->
         <div class="step text-center" data-step="5">
-          <h2>เลือกระดับการออกกำลังกาย</h2>
-          <p>Please select your level of physical activity.</p>
+          <h2>เลือก Lifestyle</h2>
+          <p>Please select your Lifestyle.</p>
           <div id="exerciseOptions" class="mt-4">
             <div class="option text-start" id="activity1">
               <div class="activity-icon">
                 <img src="https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/activity1.png" alt="activity-img">
               </div>
               <div class="activity-details text-start">
-                <h3>Sedentary</h3>
-                <p>ไม่ออกกำลังกายเลยหรือน้อยมาก</p>
+                <h3>Office-Based (ชีวิตประจำวันนั่งเป็นหลัก)</h3>
+                <p>🏢 คนที่เหมาะสม: พนักงานออฟฟิศ, นักเรียน, คนทำงานจากบ้าน (WFH), คนที่เดินน้อย</p>
               </div>
             </div>
             <div class="option mt-2 text-start" id="activity2">
@@ -355,8 +355,8 @@
                 <img src="https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/activity2.png" alt="activity-img">
               </div>
               <div class="activity-details text-start">
-                <h3>Lightly Active</h3>
-                <p>ออกกำลังกายเบา ๆ 1-3 ครั้ง/สัปดาห์</p>
+                <h3>Active Commuter (เดินเยอะระหว่างวัน)</h3>
+                <p>🚶 คนที่เหมาะสม: พนักงานที่เดินไป-มาบ้าง, คนเดินทางเยอะ,</p>
               </div>
             </div>
             <div class="option mt-2 text-start selected" id="activity3">
@@ -364,8 +364,8 @@
                 <img src="https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/activity3.png" alt="activity-img">
               </div>
               <div class="activity-details text-start">
-                <h3>Moderately Active</h3>
-                <p>ออกกำลังกายระดับปานกลาง 4-5 ครั้ง/สัปดาห์</p>
+                <h3>Active & Health (เคลื่อนไหวเยอะ)</h3>
+                <p>💪 คนที่เหมาะสม: ทำงานที่ต้องยืน/เดินต่อเนื่องหลายชั่วโมง (เช่น พนักงานร้านอาหาร, พยาบาล)</p>
               </div>
             </div>
             <div class="option mt-2 text-start" id="activity4">
@@ -373,8 +373,8 @@
                 <img src="https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/activity4.png" alt="activity-img">
               </div>
               <div class="activity-details text-start">
-                <h3>Very Active</h3>
-                <p>ออกกำลังกายทุกวันหรือหนัก 3-4 ครั้ง/สัปดาห์</p>
+                <h3>High-Performance (ทำงานหนักและต่อเนื่อง)</h3>
+                <p>🔥 คนที่เหมาะสม:ทำงานที่ใช้แรงกายหนัก (เช่น ก่อสร้าง, งานฟาร์ม, เกษตรกรรม)</p>
               </div>
             </div>
             <div class="option mt-2 text-start" id="activity5">
@@ -382,8 +382,8 @@
                 <img src="https://up2client.com/envato/vigor-pwa/main-file/assets/images/select-gender/activity5.png" alt="activity-img">
               </div>
               <div class="activity-details text-start">
-                <h3>Athlete</h3>
-                <p>ออกกำลังกายหนักมากทุกวันหรือทำงานหนัก</p>
+                <h3>Athlete & High-Intensity (นักกีฬา หรือคนที่ใช้ร่างกายหนักสุด)</h3>
+                <p>🏆 คนที่เหมาะสม: นักกีฬาอาชีพ, ทหาร, คนที่ฝึกซ้อมหนักทุกวัน</p>
               </div>
             </div>
           </div>

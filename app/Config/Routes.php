@@ -43,8 +43,21 @@ $routes->get('/logout', 'HomeController::logout');
 
 $routes->get('/callback', 'LineLoginController::callback');
 
+// -----------------------------------------------------------------------------
+// Friend
+// -----------------------------------------------------------------------------
+
 $routes->get('/lets/go/(:any)/(:any)', 'FriendController::letsGo/$1/$2');
 $routes->get('/friends/ok/(:any)', 'FriendController::ok/$1');
+
+// -----------------------------------------------------------------------------
+// Summary
+// -----------------------------------------------------------------------------
+
+$routes->group('summary', ['filter' => 'userAuth'], function ($routes) {
+    $routes->get('/', 'SummaryController::index');
+    $routes->post('byDate', 'SummaryController::byDate');
+});
 
 // -----------------------------------------------------------------------------
 // Calculate
@@ -60,6 +73,7 @@ $routes->group('menu', ['filter' => 'userAuth'], function ($routes) {
     $routes->get('/', 'MenuController::report');
     $routes->post('update', 'MenuController::update');
     $routes->post('delete', 'MenuController::delete');
+    $routes->post('data', 'MenuController::data');
 });
 
 // -----------------------------------------------------------------------------
@@ -72,6 +86,7 @@ $routes->group('workout', ['filter' => 'userAuth'], function ($routes) {
     $routes->post('save', 'WorkoutController::save');
     $routes->post('delete', 'WorkoutController::delete');
     $routes->post('calculate', 'WorkoutController::calculate');
+    $routes->post('data', 'WorkoutController::data');
 });
 
 // -----------------------------------------------------------------------------

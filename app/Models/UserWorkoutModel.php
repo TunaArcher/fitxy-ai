@@ -115,4 +115,42 @@ class UserWorkoutModel
 
         return $builder->getRow();
     }
+
+    public function getWorkoutSummaryByUserIDAndDate($userID, $date)
+    {
+        $sql = "
+            SELECT 
+                COALESCE(SUM(time), 0) AS time,
+                COALESCE(SUM(calories), 0) AS calories
+            FROM user_workouts 
+            WHERE user_id = '$userID' AND DATE(created_at) = '$date';
+        ";
+
+        $builder = $this->db->query($sql);
+
+        return $builder->getRow();
+    }
+
+    public function getUserWorkoutByUserIDAndDate($userID, $date)
+    {
+
+        $sql = "
+            SELECT 
+                workouts.id,
+                workouts.icon,
+                user_workouts.user_id,
+                user_workouts.workout_id,
+                user_workouts.title AS user_workout_title,
+                user_workouts.time,
+                user_workouts.calories,
+                user_workouts.created_at
+            FROM workouts 
+            JOIN user_workouts ON user_workouts.workout_id = workouts.id
+            WHERE user_workouts.user_id = '$userID' AND DATE(user_workouts.created_at) = '$date' ORDER BY user_workouts.created_at DESC;
+        ";
+
+        $builder = $this->db->query($sql);
+
+        return $builder->getResult();
+    }
 }

@@ -138,9 +138,9 @@
                         </svg>
                         <span class="nav-text">ออกกำลังกาย</span></span></a>
             </li>
-            <li class="nav-item disabled">
-                <a class="nav-link" href="<?php echo base_url('4'); ?>"><span><i class="nav-icon bi bi-graph-up-arrow"></i>
-                        <span class="nav-text">วิเคราะห์</span></span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="<?php echo base_url('/summary'); ?>"><span><i class="nav-icon bi bi-graph-up-arrow"></i>
+                        <span class="nav-text">สรุป</span></span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="<?php echo base_url('/profile'); ?>">

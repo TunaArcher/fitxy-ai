@@ -33,6 +33,29 @@ class TestController extends BaseController
 
     public function test()
     {
+        $test = '{
+    "food_items": [
+        {
+            "name": "วิงแซ่บ KFC",
+            "weight": "150 กรัม",
+            "calories": "400",
+            "protein": "24 กรัม",
+            "fat": "28 กรัม",
+            "carbohydrates": "15 กรัม",
+            "ingredients": "เนื้อไก่, แป้ง, เครื่องเทศ"
+        }
+    ],
+    "totalcal": "400",
+    "note": "วิงแซ่บเข้ามาเติมความเผ็ดในชีวิต! แต่ระวังแคลอรี่สูงด้วยนะครับ ถ้าไม่อยากให้แซ่บค้างในกระเพาะ ออกไปเต้นแซมบ้าบ้างก็ได้นะ!"
+}';
+
+
+$renderFlexMessage = $this->renderFlexMessage($test, $img);
+
+    }
+
+    public function __test()
+    {
         $example1 = '{
      "food_items": [
          {

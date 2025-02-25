@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Integrations\Line\LineClient;
 use App\Libraries\ChatGPT;
 use App\Models\AccountModel;
+use App\Models\AnalyzeModel;
 use App\Models\MessageRoomModel;
 use App\Models\UserMenuModel;
 use App\Models\UserModel;
@@ -30,6 +31,7 @@ class Notification extends BaseController
             $userModel = new UserModel();
             $userMenuModel = new UserMenuModel();
             $userWorkoutModel = new UserWorkoutModel();
+            $analyzeModel = new AnalyzeModel();
 
             $users = $userModel->getUserAll();
             $account = $accountModel->getAccountByID('128');
@@ -85,6 +87,11 @@ class Notification extends BaseController
                         'accessToken' =>  $account->line_channel_access_token,
                         'channelID' =>  $account->line_channel_id,
                         'channelSecret' =>  $account->line_channel_secret,
+                    ]);
+
+                    $analyzeModel->insertAnalyze([
+                        'user_id' => $user->id,
+                        'content' => $replyMessage,
                     ]);
 
                     $line->pushMessage($user->uid, $replyMessage, 'text');

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\UserMenuModel;
 use App\Models\UserWorkoutModel;
+use DateTime;
 
 class MenuController extends BaseController
 {
@@ -109,6 +110,40 @@ class MenuController extends BaseController
                 ->setContentType('application/json')
                 ->setJSON($response);
         } catch (\Exception $e) {
+        }
+    }
+
+    public function data()
+    {
+
+        try {
+
+            $response = [
+                'success' => 0,
+                'message' => '',
+            ];
+
+            $status = 500;
+
+            $data = $this->request->getJSON();
+            $dateFormatted = DateTime::createFromFormat('d/m/Y', $data->date)->format('Y-m-d');
+
+            $data = $this->userMenuModel->getUserMenuByUserIDAndDate(session()->get('user')->id, $dateFormatted);
+
+            $response = [
+                'success' => 1,
+                'message' => 'สำเร็จ',
+                'data' => $data
+            ];
+
+            $status = 200;
+
+            return $this->response
+                ->setStatusCode($status)
+                ->setContentType('application/json')
+                ->setJSON($response);
+        } catch (\Exception $e) {
+            // px($e->getMessage() . ' ' . $e->getLine());
         }
     }
 }

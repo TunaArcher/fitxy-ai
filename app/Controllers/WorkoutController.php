@@ -7,6 +7,7 @@ use App\Models\WorkoutModel;
 use App\Models\UserMenuModel;
 use App\Models\UserModel;
 use App\Models\UserWorkoutModel;
+use DateTime;
 
 class WorkoutController extends BaseController
 {
@@ -37,7 +38,7 @@ class WorkoutController extends BaseController
         ];
 
         $data['workouts'] = $this->workoutModel->getWorkoutAll();
-        
+
         $data['userWorkouts'] = $this->userWorkoutModel->getUserWorkoutTodayByUserID(session()->get('user')->id);
         $data['caloriesToDay'] = $this->userWorkoutModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
         $data['calToDay'] = $this->userMenuModel->getTotalCaloriesTodayByUserID(session()->get('user')->id)->calories_today;
@@ -263,6 +264,40 @@ class WorkoutController extends BaseController
                 'success' => 1,
                 'message' => 'สำเร็จ',
                 'data' =>  json_decode($aws, true)
+            ];
+
+            $status = 200;
+
+            return $this->response
+                ->setStatusCode($status)
+                ->setContentType('application/json')
+                ->setJSON($response);
+        } catch (\Exception $e) {
+            // px($e->getMessage() . ' ' . $e->getLine());
+        }
+    }
+
+    public function data()
+    {
+
+        try {
+
+            $response = [
+                'success' => 0,
+                'message' => '',
+            ];
+
+            $status = 500;
+
+            $data = $this->request->getJSON();
+            $dateFormatted = DateTime::createFromFormat('d/m/Y', $data->date)->format('Y-m-d');
+
+            $data = $this->userWorkoutModel->getUserWorkoutByUserIDAndDate(session()->get('user')->id, $dateFormatted);
+
+            $response = [
+                'success' => 1,
+                'message' => 'สำเร็จ',
+                'data' => $data
             ];
 
             $status = 200;

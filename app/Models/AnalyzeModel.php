@@ -71,7 +71,7 @@ class AnalyzeModel
 
         return $builder
             ->where('user_id', $userID)
-            ->where('created_at', $date)
+            ->where("DATE(created_at) =", $date)
             ->where('deleted_at', null)
             ->orderBy('created_at', 'DESC')
             ->get()

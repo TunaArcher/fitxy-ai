@@ -33,6 +33,7 @@ class SummaryController extends BaseController
                 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
+                <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
                 <script src="' . base_url('/app/summary/index.js') . '"></script>
             '
         ];

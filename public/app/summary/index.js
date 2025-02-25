@@ -138,12 +138,13 @@ $(document).ready(function () {
         window.myChart = new Chart(ctx, chartConfig);
 
         // ----- วิเคราะห์ -----
+        const textData = data.analyze;
         if  (data.analyze == '') {
           $("#wrapperAnalyze").hide()
-          $("#analyze").html(data.analyze);
+          $("#analyze").html(marked.parse(textData));
         } else {
           $("#wrapperAnalyze").show()
-          $("#analyze").html(data.analyze);
+          $("#analyze").html(marked.parse(textData));
         }
         
 

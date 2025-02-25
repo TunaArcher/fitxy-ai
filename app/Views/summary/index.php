@@ -1,3 +1,51 @@
+<style>
+  /* Container หลัก */
+  #analyze {
+    font-family: 'Helvetica', Arial, sans-serif;
+    max-width: 600px;
+    margin: 20px auto;
+    border-radius: 6px;
+    padding: 15px;
+    font-size: 14px;
+    /* ปรับลดขนาด font */
+    line-height: 1.5;
+  }
+
+  /* ลบ Bullet ของรายการหลัก */
+  #analyze>ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* สไตล์สำหรับรายการ (li) */
+  #analyze li {
+    margin-bottom: 12px;
+  }
+
+  /* สไตล์สำหรับข้อความใน p */
+  #analyze p {
+    margin: 0 0 8px;
+  }
+
+  /* เน้นข้อความที่เป็น strong */
+  #analyze strong {
+    color: #007bff;
+    font-weight: 600;
+  }
+
+  /* รายการย่อย */
+  #analyze ul ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-top: 8px;
+  }
+
+  /* ปรับระยะห่างรายการสุดท้าย */
+  #analyze li:last-child {
+    margin-bottom: 0;
+  }
+</style>
 <header class="adminuiux-header">
   <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
@@ -35,16 +83,36 @@
         </div>
       </div>
 
-      <div class="col-12 col-lg-6" id="wrapperAnalyze" style="display: none;">
-        <div class="card adminuiux-card bg-theme-1-subtle mb-3">
-          <div class="card-body">
-            <h5 class="mb-3">ผลการวิเคราะห์</h5>
-            <div id="analyze"></div>
+      <div class="row gx-3 align-items-center">
+        <div class="col-12 col-lg-4">
+          <div
+            class="card adminuiux-card bg-theme-1-subtle border-0 theme-yellow mb-3" data-bs-toggle="modal" data-bs-target="#menuModal">
+            <div class="card-body">
+              <div class="row gx-3 align-items-center">
+                <div class="col-auto">
+                  <figure class="avatar avatar-60 rounded coverimg">
+                    <img src="<?php echo base_url('/assets/img/splash_screen.gif'); ?>" alt="" />
+                  </figure>
+                </div>
+                <div class="col">
+                  <h6 id="cal_per_day">การทานแคลอรี่</h6>
+                  <div
+                    class="progress height-dynamic bg-theme-1-subtle mb-1"
+                    role="progressbar"
+                    aria-label="Basic example"
+                    aria-valuenow="0"
+                    aria-valuemin="0"
+                    aria-valuemax="100">
+                    <div
+                      class="progress-bar height-dynamic rounded m-1 bg-theme-1"
+                      style="width: 75%; --h-dynamic: 4px"></div>
+                  </div>
+                  <p class="small opacity-75" id="calDone">สำเร็จ 75%</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="row gx-3 align-items-center">
         <div class="col-6 col-md-6 col-lg-4">
           <div
             class="card adminuiux-card bg-theme-1-subtle border-0 theme-green mb-3">
@@ -81,35 +149,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 col-lg-4">
-          <div
-            class="card adminuiux-card bg-theme-1-subtle border-0 theme-yellow mb-3" data-bs-toggle="modal" data-bs-target="#menuModal">
-            <div class="card-body">
-              <div class="row gx-3 align-items-center">
-                <div class="col-auto">
-                  <figure class="avatar avatar-60 rounded coverimg">
-                    <img src="<?php echo base_url('/assets/img/splash_screen.gif'); ?>" alt="" />
-                  </figure>
-                </div>
-                <div class="col">
-                  <h6 id="cal_per_day">การทานแคลอรี่</h6>
-                  <div
-                    class="progress height-dynamic bg-theme-1-subtle mb-1"
-                    role="progressbar"
-                    aria-label="Basic example"
-                    aria-valuenow="0"
-                    aria-valuemin="0"
-                    aria-valuemax="100">
-                    <div
-                      class="progress-bar height-dynamic rounded m-1 bg-theme-1"
-                      style="width: 75%; --h-dynamic: 4px"></div>
-                  </div>
-                  <p class="small opacity-75" id="calDone">สำเร็จ 75%</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
 
       </div>
 
@@ -165,6 +205,15 @@
                 </div> -->
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-lg-6" id="wrapperAnalyze" style="display: none;">
+        <div class="card adminuiux-card bg-theme-1-subtle mb-3">
+          <div class="card-body">
+            <h5 class="mb-3">ผลการวิเคราะห์</h5>
+            <div id="analyze"></div>
           </div>
         </div>
       </div>
